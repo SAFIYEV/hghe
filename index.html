@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,38 +12,37 @@
             background-size: cover;
             color: #fff;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-end;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
             touch-action: manipulation;
         }
 
         .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container {
             width: 100%;
-            max-width: 400px;
-            margin: 10px;
-            padding: 15px;
-            background: rgba(20, 20, 30, 0.8);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(8px);
+            max-width: 360px;
+            margin: 8px;
+            padding: 10px;
+            background: rgba(20, 20, 30, 0.85);
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(6px);
             box-sizing: border-box;
             position: fixed;
-            bottom: 10px;
+            bottom: 8px;
             z-index: 1;
             display: none;
             flex-direction: column;
-            min-height: 300px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            min-height: 250px;
+            transition: opacity 0.2s ease, transform 0.2s ease;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(15px);
         }
 
         .shop-container {
-            border: 2px solid #FFD700; /* Distinct border for shop */
-            background: rgba(30, 30, 40, 0.85); /* Slightly different background */
+            border: 2px solid #FFD700;
+            background: rgba(30, 30, 40, 0.9);
         }
 
         .active {
@@ -53,33 +52,31 @@
         }
 
         h1 {
-            font-size: 1.8em;
-            margin: 10px 0;
+            font-size: 1.5em;
+            margin: 8px 0;
             text-align: center;
             color: #FFD700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
         }
 
         .stats {
             display: flex;
             justify-content: space-between;
-            margin: 15px 0;
-            font-size: 1em;
-        }
-
-        .stats-left, .stats-right {
-            display: flex;
-            flex-direction: column;
-            width: 48%;
+            margin: 8px 0;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+            gap: 5px;
         }
 
         .stat {
-            margin: 5px 0;
+            flex: 1;
+            text-align: center;
             color: #E0E0E0;
         }
 
         .stat span {
             color: #FFD700;
+            font-weight: bold;
         }
 
         .tabs {
@@ -87,83 +84,82 @@
             flex-wrap: wrap;
             justify-content: center;
             margin-top: auto;
-            padding: 10px 0;
-            gap: 8px;
+            padding: 8px 0;
+            gap: 6px;
         }
 
         .tab-button {
-            flex: 0 0 calc(33.33% - 8px);
-            padding: 8px;
-            font-size: 0.85em;
-            background: rgba(255, 255, 255, 0.1);
+            flex: 0 0 calc(25% - 6px);
+            padding: 6px;
+            font-size: 0.8em;
+            background: rgba(255, 255, 255, 0.15);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             color: #E0E0E0;
             cursor: pointer;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s;
+            transition: background 0.2s, transform 0.1s;
             text-align: center;
         }
 
         .tab-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
         }
 
         .tab-button.active {
-            background: rgba(255, 215, 0, 0.3); /* Highlight active tab */
+            background: rgba(255, 215, 0, 0.4);
         }
 
         .shop-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            padding: 10px 0;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            padding: 8px 0;
             overflow-y: auto;
-            max-height: 400px; /* Scrollable shop */
+            max-height: 60vh;
         }
 
         .shop-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 8px;
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .shop-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+            transform: scale(1.04);
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
         }
 
         .shop-item img {
-            width: 64px;
-            height: 64px;
+            width: 48px;
+            height: 48px;
             object-fit: contain;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .shop-item button {
             width: 100%;
-            padding: 8px;
-            font-size: 0.9em;
+            padding: 6px;
+            font-size: 0.8em;
             background: linear-gradient(135deg, #FFD700, #DAA520);
             color: #1A1A1A;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
+            transition: transform 0.2s, background 0.2s;
         }
 
         .shop-item button:disabled {
-            background: #4B4B4B;
-            color: #888;
+            background: #444;
+            color: #777;
             cursor: not-allowed;
         }
 
         .shop-item button:hover:not(:disabled) {
             background: linear-gradient(135deg, #FFE066, #FFD700);
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .shop-item.purchased {
@@ -173,54 +169,53 @@
         .job-list, .task-list, .inventory-list, .casino, .business {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 0;
+            gap: 6px;
+            padding: 8px 0;
         }
 
         .job-list button, .task-list button, .casino button, .business button {
             width: 100%;
-            padding: 12px;
-            font-size: 1em;
+            padding: 8px;
+            font-size: 0.9em;
             background: linear-gradient(135deg, #6B7280, #4B5563);
             color: #E0E0E0;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
+            transition: transform 0.2s, background 0.2s;
         }
 
         .job-list button:disabled, .task-list button:disabled, .casino button:disabled, .business button:disabled {
-            background: #4B4B4B;
+            background: #444;
             cursor: not-allowed;
         }
 
         .job-list button:hover:not(:disabled), .task-list button:hover:not(:disabled), .casino button:hover:not(:disabled), .business button:hover:not(:disabled) {
             background: linear-gradient(135deg, #9CA3AF, #6B7280);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .inventory-list {
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #D1D5DB;
             text-align: center;
         }
 
         .notification {
             position: fixed;
-            bottom: 20px;
+            bottom: 16px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #FFD700;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 20px;
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 8px 16px;
+            border-radius: 10px;
             opacity: 0;
-            transition: opacity 0.5s;
+            transition: opacity 0.4s;
             max-width: 90%;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
             z-index: 2000;
         }
 
@@ -230,51 +225,47 @@
 
         .coin-animation {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             background: url('coin.png') no-repeat center;
             background-size: contain;
-            animation: collectCoin 1s ease-out forwards;
+            animation: collectCoin 0.8s ease-out forwards;
         }
 
         @keyframes purchase {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.08); }
             100% { transform: scale(1); }
         }
 
         @keyframes collectCoin {
             0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-80px); opacity: 0; }
+            100% { transform: translateY(-60px); opacity: 0; }
         }
 
-        @media (max-width: 400px) {
-            h1 { font-size: 1.6em; }
+        @media (max-width: 360px) {
+            h1 { font-size: 1.3em; }
             .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container {
-                margin: 5px;
-                padding: 10px;
+                margin: 4px;
+                padding: 8px;
+                max-width: 320px;
             }
-            .stat { font-size: 0.9em; }
-            .tab-button { font-size: 0.75em; padding: 6px; }
-            .shop-item img { width: 48px; height: 48px; }
+            .stat { font-size: 0.8em; }
+            .tab-button { font-size: 0.7em; padding: 5px; }
+            .shop-item img { width: 40px; height: 40px; }
             .shop-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Main Game Container -->
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
         <div class="stats">
-            <div class="stats-left">
-                <div class="stat">Статус: <span id="status">Бомж</span></div>
-                <div class="stat">Баланс: $<span id="balance">0</span></div>
-            </div>
-            <div class="stats-right">
-                <div class="stat">Энергия: <span id="energy">100</span>/100</div>
-                <div class="stat">Голод: <span id="hunger">100</span>/100</div>
-                <div class="stat">Настроение: <span id="mood">100</span>/100</div>
-            </div>
+            <div class="stat">Статус: <span id="status">Бомж</span></div>
+            <div class="stat">Баланс: $<span id="balance">0</span></div>
+            <div class="stat">Энергия: <span id="energy">100</span></div>
+            <div class="stat">Голод: <span id="hunger">100</span></div>
+            <div class="stat">Настр: <span id="mood">100</span></div>
         </div>
         <div class="tabs">
             <button class="tab-button active" onclick="showSection('mainContainer')">Главная</button>
@@ -287,7 +278,6 @@
         </div>
     </div>
 
-    <!-- Job Container -->
     <div class="job-container" id="jobContainer">
         <h1>Работа</h1>
         <div class="job-list" id="jobList"></div>
@@ -303,7 +293,6 @@
         </div>
     </div>
 
-    <!-- Social Tasks Container -->
     <div class="task-container" id="taskContainer">
         <h1>Задания</h1>
         <div class="task-list" id="socialTaskList"></div>
@@ -318,7 +307,6 @@
         </div>
     </div>
 
-    <!-- Shop Container -->
     <div class="shop-container" id="shopContainer">
         <h1>Магазин</h1>
         <div class="shop-list" id="shopList"></div>
@@ -333,7 +321,6 @@
         </div>
     </div>
 
-    <!-- Business Container -->
     <div class="business-container" id="businessContainer">
         <h1>Бизнес</h1>
         <div class="business" id="businessSection"></div>
@@ -348,7 +335,6 @@
         </div>
     </div>
 
-    <!-- Inventory Container -->
     <div class="inventory-container" id="inventoryContainer">
         <h1>Инвентарь</h1>
         <div class="inventory-list" id="inventoryList"></div>
@@ -363,7 +349,6 @@
         </div>
     </div>
 
-    <!-- Casino Container -->
     <div class="casino-container" id="casinoContainer">
         <h1>Казино</h1>
         <div class="casino" id="casinoSection"></div>
@@ -383,7 +368,6 @@
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
-        // Game state
         let state = {
             balance: 0,
             energy: 100,
@@ -400,7 +384,6 @@
             lastSave: Date.now()
         };
 
-        // Game data
         const statuses = [
             { name: "Бомж", minBalance: 0 },
             { name: "Работяга", minBalance: 1000 },
@@ -490,12 +473,12 @@
 
         const socialTasks = [
             {
-                name: "Подписаться на Telegram канал",
+                name: "Подписаться на Telegram",
                 pay: 50,
                 energy: 5,
-                cooldown: 300000, // 5 minutes
+                cooldown: 300000,
                 action: () => {
-                    if (window.Telegram && window.Telegram.WebApp) {
+                    if (window.Telegram?.WebApp) {
                         window.Telegram.WebApp.openTelegramLink('https://t.me/it2009');
                     } else {
                         window.open('https://t.me/it2009', '_blank');
@@ -506,7 +489,7 @@
                 name: "Поделиться в соцсетях",
                 pay: 100,
                 energy: 10,
-                cooldown: 600000 // 10 minutes
+                cooldown: 600000
             }
         ];
 
@@ -527,12 +510,10 @@
             { name: "Частный самолет", price: 5000000, desc: "Полеты без границ", effect: { mood: 60 }, image: "jet.png" }
         ];
 
-        // Initialize Telegram Web App
-        if (window.Telegram && window.Telegram.WebApp) {
+        if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.expand();
         }
 
-        // Load game state
         function loadGame() {
             const savedState = localStorage.getItem('riseToRichesState');
             if (savedState) {
@@ -547,7 +528,6 @@
             state.lastSave = Date.now();
         }
 
-        // Save game state
         function saveGame() {
             if (Date.now() - state.lastSave > 1000) {
                 localStorage.setItem('riseToRichesState', JSON.stringify(state));
@@ -555,36 +535,29 @@
             }
         }
 
-        // Show section
         function showSection(sectionId) {
-            const sections = ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer'];
-            sections.forEach(id => {
-                document.getElementById(id).classList.remove('active');
-                Array.from(document.getElementById(id).querySelectorAll('.tab-button')).forEach(btn => btn.classList.remove('active'));
+            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer'].forEach(id => {
+                const section = document.getElementById(id);
+                section.classList.toggle('active', id === sectionId);
+                Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
             });
-            document.getElementById(sectionId).classList.add('active');
-            const activeButton = document.getElementById(sectionId).querySelector(`.tab-button[onclick="showSection('${sectionId}')"]`);
-            if (activeButton) activeButton.classList.add('active');
             playSound("clickSound");
             render();
         }
 
-        // Render UI
         function render() {
-            // Main stats
             document.getElementById("balance").textContent = state.balance.toLocaleString();
             document.getElementById("status").textContent = state.status;
             document.getElementById("energy").textContent = Math.floor(state.energy);
             document.getElementById("hunger").textContent = Math.floor(state.hunger);
             document.getElementById("mood").textContent = Math.floor(state.mood);
 
-            // Jobs
             const jobList = document.getElementById("jobList");
-            if (jobList.children.length === 0) {
+            if (!jobList.children.length) {
                 for (const key in jobs) {
                     const job = jobs[key];
                     const button = document.createElement("button");
-                    button.textContent = `${job.name} ($${job.pay}/задание${job.unlock > 0 ? `, нужно $${job.unlock.toLocaleString()}` : ""})`;
+                    button.textContent = `${job.name} ($${job.pay}${job.unlock > 0 ? `, $${job.unlock.toLocaleString()}` : ""})`;
                     button.onclick = () => takeJob(key);
                     jobList.appendChild(button);
                 }
@@ -594,12 +567,11 @@
                 button.disabled = state.balance < jobs[jobKey].unlock || state.isWorking;
             });
 
-            // Job tasks
             const taskList = document.getElementById("jobTaskList");
             taskList.innerHTML = "";
             if (state.currentJob) {
                 if (state.isWorking) {
-                    taskList.textContent = `Вы работаете как ${state.currentJob.name}. Ожидайте завершения...`;
+                    taskList.textContent = `Работа: ${state.currentJob.name}...`;
                 } else {
                     state.currentJob.tasks.forEach(task => {
                         const button = document.createElement("button");
@@ -610,12 +582,11 @@
                     });
                 }
             } else {
-                taskList.textContent = "Выберите работу, чтобы увидеть задания";
+                taskList.textContent = "Выберите работу";
             }
 
-            // Social tasks
             const socialTaskList = document.getElementById("socialTaskList");
-            if (socialTaskList.children.length === 0) {
+            if (!socialTaskList.children.length) {
                 socialTasks.forEach(task => {
                     const button = document.createElement("button");
                     button.onclick = () => doSocialTask(task);
@@ -627,14 +598,13 @@
                 const isOnCooldown = state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name];
                 const timeLeft = isOnCooldown ? Math.ceil((state.socialTaskCooldowns[task.name] - Date.now()) / 1000) : 0;
                 button.textContent = isOnCooldown
-                    ? `${task.name} ($${task.pay}, ${task.energy} энергии, ожидание ${timeLeft} сек)`
+                    ? `${task.name} ($${task.pay}, ${task.energy} энергии, ${timeLeft}с)`
                     : `${task.name} ($${task.pay}, ${task.energy} энергии)`;
                 button.disabled = state.energy < task.energy || isOnCooldown;
             });
 
-            // Shop
             const shopList = document.getElementById("shopList");
-            if (shopList.children.length === 0) {
+            if (!shopList.children.length) {
                 shopItems.forEach(item => {
                     const itemDiv = document.createElement("div");
                     itemDiv.className = "shop-item";
@@ -657,9 +627,8 @@
                 button.disabled = state.balance < item.price || state.inventory.some(i => i.name === item.name);
             });
 
-            // Business
             const businessSection = document.getElementById("businessSection");
-            if (businessSection.children.length === 0) {
+            if (!businessSection.children.length) {
                 const buyButton = document.createElement("button");
                 buyButton.textContent = "Открыть бизнес ($50,000)";
                 buyButton.onclick = buyBusiness;
@@ -673,15 +642,13 @@
             buyButton.disabled = state.balance < 50000 || state.businessOwned;
             upgradeButton.disabled = !state.businessOwned || state.balance < 100000 || state.businessLevel >= 1;
 
-            // Inventory
             const inventoryList = document.getElementById("inventoryList");
             inventoryList.innerHTML = state.inventory.length === 0
                 ? "Пусто"
                 : state.inventory.map(item => `${item.name} (${item.desc})`).join("<br>");
 
-            // Casino
             const casinoSection = document.getElementById("casinoSection");
-            if (casinoSection.children.length === 0) {
+            if (!casinoSection.children.length) {
                 [100, 1000, 10000].forEach(bet => {
                     const button = document.createElement("button");
                     button.textContent = `Ставка $${bet.toLocaleString()}`;
@@ -694,7 +661,6 @@
                 button.disabled = state.balance < bet;
             });
 
-            // Background
             let bgImage;
             if (state.balance >= 10000000) bgImage = "bg4.jpg";
             else if (state.balance >= 1000000) bgImage = "bg3.jpg";
@@ -704,7 +670,6 @@
             document.body.style.backgroundImage = `url(${bgImage})`;
         }
 
-        // Update status
         function updateStatus() {
             const newStatus = statuses.reduce((acc, s) => state.balance >= s.minBalance ? s.name : acc, "Бомж");
             if (state.status !== newStatus) {
@@ -713,24 +678,22 @@
                 playSound("cashSound");
             }
             if (state.balance >= 10000000) {
-                showNotification("Поздравляем! Вы стали миллионером с $10,000,000!");
+                showNotification("Ты миллионер! $10,000,000!");
             }
         }
 
-        // Select job
         function takeJob(jobKey) {
             state.currentJob = jobs[jobKey];
-            showNotification(`Вы устроились на работу: ${state.currentJob.name}`);
+            showNotification(`Работа: ${state.currentJob.name}`);
             playSound("clickSound");
             showSection('jobContainer');
             saveGame();
             render();
         }
 
-        // Do job task
         function doJobTask(task) {
             if (state.energy < task.energy || state.isWorking) {
-                showNotification(state.isWorking ? "Вы уже выполняете задание!" : "Недостаточно энергии!");
+                showNotification(state.isWorking ? "Уже работаешь!" : "Мало энергии!");
                 return;
             }
             state.isWorking = true;
@@ -743,12 +706,12 @@
                 if (item.job && state.currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === state.currentJob)) {
                     if (item.effect.payMultiplier) {
                         pay *= item.effect.payMultiplier;
-                        showNotification(`Бонус от ${item.name}: +${((item.effect.payMultiplier - 1) * 100).toFixed(0)}% к оплате!`);
+                        showNotification(`Бонус от ${item.name}: +${((item.effect.payMultiplier - 1) * 100).toFixed(0)}%!`);
                     }
                     if (item.effect.tipChance && Math.random() < item.effect.tipChance) {
                         const tip = pay * (item.effect.tipMultiplier - 1);
                         pay *= item.effect.tipMultiplier;
-                        showNotification(`Чаевые $${Math.floor(tip)} благодаря ${item.name}!`);
+                        showNotification(`Чаевые $${Math.floor(tip)} за ${item.name}!`);
                     }
                 }
                 if (item.effect.taskPayMultiplier) {
@@ -766,7 +729,7 @@
             const maxDuration = 300000;
             const maxPay = Math.max(...Object.values(jobs).map(j => j.pay));
             const duration = minDuration + (maxDuration - minDuration) * (state.currentJob.pay / maxPay);
-            showNotification(`Начато задание "${task.name}". Завершится через ${Math.floor(duration/1000)} сек.`);
+            showNotification(`Задание "${task.name}" начато (${Math.floor(duration/1000)}с)`);
 
             setTimeout(() => {
                 state.isWorking = false;
@@ -777,7 +740,7 @@
                     pay -= repayment;
                 }
                 state.balance += pay;
-                showNotification(`Задание "${task.name}" выполнено! Вы заработали $${pay}`);
+                showNotification(`Задание "${task.name}" готово! +$${pay}`);
                 playSound("cashSound");
                 createCoinAnimation();
                 updateStatus();
@@ -789,14 +752,13 @@
             render();
         }
 
-        // Do social task
         function doSocialTask(task) {
             if (state.energy < task.energy) {
-                showNotification("Недостаточно энергии!");
+                showNotification("Мало энергии!");
                 return;
             }
             if (state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name]) {
-                showNotification("Задание на перезарядке!");
+                showNotification("Задание на кулдауне!");
                 return;
             }
             if (task.action) task.action();
@@ -810,7 +772,7 @@
             }
             state.balance += pay;
             state.socialTaskCooldowns[task.name] = Date.now() + task.cooldown;
-            showNotification(`Задание "${task.name}" выполнено! Вы заработали $${pay}`);
+            showNotification(`Задание "${task.name}" выполнено! +$${pay}`);
             playSound("cashSound");
             createCoinAnimation();
             updateStatus();
@@ -818,19 +780,18 @@
             render();
         }
 
-        // Buy item
         function buyItem(item) {
             if (state.balance < item.price) {
-                showNotification("Недостаточно средств!");
+                showNotification("Не хватает бабла!");
                 return;
             }
             if (state.inventory.some(i => i.name === item.name)) {
-                showNotification("Вы уже владеете этим предметом!");
+                showNotification("Уже куплено!");
                 return;
             }
             state.balance -= item.price;
             state.inventory.push(item);
-            showNotification(`Вы купили ${item.name} за $${item.price.toLocaleString()}!`);
+            showNotification(`Куплено: ${item.name} за $${item.price.toLocaleString()}!`);
             if (item.effect) {
                 if (item.effect.energy) {
                     state.energy = Math.min(state.energy + item.effect.energy, 100);
@@ -842,7 +803,7 @@
                 }
                 if (item.effect.mood) {
                     state.mood = Math.min(state.mood + item.effect.mood, 100);
-                    showNotification(`Настроение +${item.effect.mood}!`);
+                    showNotification(`Настр +${item.effect.mood}!`);
                 }
             }
             playSound("cashSound");
@@ -854,41 +815,38 @@
             render();
         }
 
-        // Buy business
         function buyBusiness() {
             if (state.balance < 50000 || state.businessOwned) {
-                showNotification(state.businessOwned ? "Бизнес уже открыт!" : "Недостаточно средств!");
+                showNotification(state.businessOwned ? "Бизнес уже есть!" : "Мало бабла!");
                 return;
             }
             state.balance -= 50000;
             state.businessOwned = true;
             state.businessLevel = 1;
-            showNotification("Вы открыли бизнес! Зарабатываете $1,000/сек!");
+            showNotification("Бизнес открыт! +$1,000/сек!");
             playSound("cashSound");
             updateStatus();
             saveGame();
             render();
         }
 
-        // Upgrade business
         function upgradeBusiness() {
             if (!state.businessOwned || state.balance < 100000 || state.businessLevel >= 1) {
-                showNotification(!state.businessOwned ? "Сначала откройте бизнес!" : state.balance < 100000 ? "Недостаточно средств!" : "Бизнес уже улучшен!");
+                showNotification(!state.businessOwned ? "Открой бизнес!" : state.balance < 100000 ? "Мало бабла!" : "Уже улучшено!");
                 return;
             }
             state.balance -= 100000;
             state.businessLevel = 2;
-            showNotification("Бизнес улучшен! Теперь вы зарабатываете $2,000/сек!");
+            showNotification("Бизнес прокачан! +$2,000/сек!");
             playSound("cashSound");
             updateStatus();
             saveGame();
             render();
         }
 
-        // Play casino
         function playCasino(bet) {
             if (state.balance < bet) {
-                showNotification("Недостаточно средств!");
+                showNotification("Мало бабла!");
                 return;
             }
             state.balance -= bet;
@@ -897,15 +855,15 @@
             if (rand < 40) {
                 const winAmount = bet * 2;
                 state.balance += winAmount;
-                outcome = `Вы выиграли $${winAmount.toLocaleString()}!`;
+                outcome = `Выграл $${winAmount.toLocaleString()}!`;
             } else if (rand < 90) {
-                outcome = `Вы проиграли $${bet.toLocaleString()}!`;
+                outcome = `Проебал $${bet.toLocaleString()}!`;
             } else if (rand < 95) {
                 state.balance = 0;
-                outcome = "Ваш баланс обнулен!";
+                outcome = "Всё проебал!";
             } else {
                 state.balance += bet;
-                outcome = "Ничего не произошло!";
+                outcome = "Без изменений!";
             }
             showNotification(outcome);
             playSound("cashSound");
@@ -914,18 +872,16 @@
             render();
         }
 
-        // Check debt
         function checkDebt() {
             if (state.balance < 0 && !state.debtRepaymentActive) {
                 state.debtRepaymentActive = true;
-                showNotification("У вас долг! Заработки идут на его погашение.");
+                showNotification("Долг! Заработок на его погашение.");
             } else if (state.balance >= 0 && state.debtRepaymentActive) {
                 state.debtRepaymentActive = false;
                 showNotification("Долг погашен!");
             }
         }
 
-        // Show notification
         function showNotification(message) {
             const notification = document.getElementById("notification");
             notification.textContent = message;
@@ -933,27 +889,24 @@
             setTimeout(() => {
                 notification.classList.remove("show");
                 notification.textContent = "";
-            }, 4000);
+            }, 3000);
         }
 
-        // Play sound
         function playSound(soundId) {
             const sound = document.getElementById(soundId);
             sound.currentTime = 0;
             sound.play().catch(() => {});
         }
 
-        // Create coin animation
         function createCoinAnimation() {
             const coin = document.createElement("div");
             coin.className = "coin-animation";
-            coin.style.left = `${Math.random() * (window.innerWidth - 40)}px`;
-            coin.style.top = `${window.innerHeight - 80}px`;
+            coin.style.left = `${Math.random() * (window.innerWidth - 32)}px`;
+            coin.style.top = `${window.innerHeight - 64}px`;
             document.body.appendChild(coin);
-            setTimeout(() => coin.remove(), 1000);
+            setTimeout(() => coin.remove(), 800);
         }
 
-        // Game loop
         function gameTick() {
             if (state.energy < 100) {
                 state.energy += state.mood >= 50 ? 1 : 0.5;
@@ -963,7 +916,7 @@
                 state.hunger -= 0.0167;
                 if (state.hunger < 0) state.hunger = 0;
                 if (state.hunger < 50) {
-                    showNotification("Вы голодны! Купите еду.");
+                    showNotification("Голоден! Купи еду.");
                 }
             }
             if (state.businessOwned) {
@@ -982,7 +935,6 @@
             render();
         }
 
-        // Initialize
         loadGame();
         render();
         setInterval(gameTick, 1000);
