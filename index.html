@@ -133,10 +133,16 @@
         }
 
         .shop-item img {
-            width: 48px;
-            height: 48px;
+            width: 64px;
+            height: 64px;
             object-fit: contain;
             margin-bottom: 4px;
+        }
+
+        .shop-item p {
+            font-size: 0.8em;
+            color: #D1D5DB;
+            margin: 4px 0;
         }
 
         .shop-item button {
@@ -252,7 +258,7 @@
             }
             .stat { font-size: 0.8em; }
             .tab-button { font-size: 0.7em; padding: 5px; }
-            .shop-item img { width: 40px; height: 40px; }
+            .shop-item img { width: 48px; height: 48px; }
             .shop-list { grid-template-columns: 1fr; }
         }
     </style>
@@ -381,7 +387,8 @@
             debtRepaymentActive: false,
             isWorking: false,
             socialTaskCooldowns: {},
-            lastSave: Date.now()
+            lastSave: Date.now(),
+            achievements: []
         };
 
         const statuses = [
@@ -399,10 +406,10 @@
                 pay: 50,
                 unlock: 0,
                 tasks: [
-                    { name: "Убрать улицу", pay: 50, energy: 10 },
-                    { name: "Помыть окна", pay: 60, energy: 10 },
-                    { name: "Почистить ковры", pay: 70, energy: 10 },
-                    { name: "Вынести мусор", pay: 40, energy: 10 }
+                    { name: "Убрать улицу", pay: 50, energy: 10, duration: 60000 },
+                    { name: "Помыть окна", pay: 60, energy: 10, duration: 70000 },
+                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000 },
+                    { name: "Вынести мусор", pay: 40, energy: 10, duration: 50000 }
                 ]
             },
             courier: {
@@ -410,9 +417,9 @@
                 pay: 100,
                 unlock: 0,
                 tasks: [
-                    { name: "Доставить посылку", pay: 100, energy: 10 },
-                    { name: "Развести еду", pay: 120, energy: 10 },
-                    { name: "Доставить пиццу", pay: 110, energy: 10 }
+                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 60000 },
+                    { name: "Развести еду", pay: 120, energy: 10, duration: 70000 },
+                    { name: "Доставить пиццу", pay: 110, energy: 10, duration: 65000 }
                 ]
             },
             postman: {
@@ -420,10 +427,10 @@
                 pay: 80,
                 unlock: 1000,
                 tasks: [
-                    { name: "Разнести письма", pay: 80, energy: 10 },
-                    { name: "Доставить посылку", pay: 100, energy: 10 },
-                    { name: "Раздать газеты", pay: 70, energy: 10 },
-                    { name: "Отправить заказное письмо", pay: 90, energy: 10 }
+                    { name: "Разнести письма", pay: 80, energy: 10, duration: 60000 },
+                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 70000 },
+                    { name: "Раздать газеты", pay: 70, energy: 10, duration: 55000 },
+                    { name: "Отправить заказное письмо", pay: 90, energy: 10, duration: 65000 }
                 ]
             },
             taxi: {
@@ -431,10 +438,10 @@
                 pay: 150,
                 unlock: 5000,
                 tasks: [
-                    { name: "Отвезти пассажира", pay: 150, energy: 10 },
-                    { name: "Доехать до аэропорта", pay: 200, energy: 10 },
-                    { name: "Подвезти в центр", pay: 170, energy: 10 },
-                    { name: "Ночной рейс", pay: 250, energy: 15 }
+                    { name: "Отвезти пассажира", pay: 150, energy: 10, duration: 80000 },
+                    { name: "Доехать до аэропорта", pay: 200, energy: 10, duration: 90000 },
+                    { name: "Подвезти в центр", pay: 170, energy: 10, duration: 85000 },
+                    { name: "Ночной рейс", pay: 250, energy: 15, duration: 100000 }
                 ]
             },
             freelancer: {
@@ -442,9 +449,9 @@
                 pay: 300,
                 unlock: 10000,
                 tasks: [
-                    { name: "Написать статью", pay: 300, energy: 10 },
-                    { name: "Сделать логотип", pay: 350, energy: 10 },
-                    { name: "Создать сайт", pay: 400, energy: 10 }
+                    { name: "Написать статью", pay: 300, energy: 10, duration: 90000 },
+                    { name: "Сделать логотип", pay: 350, energy: 10, duration: 95000 },
+                    { name: "Создать сайт", pay: 400, energy: 10, duration: 100000 }
                 ]
             },
             influencer: {
@@ -452,10 +459,10 @@
                 pay: 1000,
                 unlock: 50000,
                 tasks: [
-                    { name: "Опубликовать пост", pay: 1000, energy: 10 },
-                    { name: "Снять сторис", pay: 800, energy: 10 },
-                    { name: "Провести прямой эфир", pay: 1200, energy: 10 },
-                    { name: "Поделиться ссылкой", pay: 500, energy: 5 }
+                    { name: "Опубликовать пост", pay: 1000, energy: 10, duration: 80000 },
+                    { name: "Снять сторис", pay: 800, energy: 10, duration: 70000 },
+                    { name: "Провести прямой эфир", pay: 1200, energy: 10, duration: 90000 },
+                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000 }
                 ]
             },
             crypto: {
@@ -463,10 +470,10 @@
                 pay: 5000,
                 unlock: 100000,
                 tasks: [
-                    { name: "Купить биткоин", pay: 5000, energy: 10 },
-                    { name: "Продать NFT", pay: 6000, energy: 10 },
-                    { name: "Майнить эфир", pay: 5500, energy: 10 },
-                    { name: "Проанализировать рынок", pay: 4500, energy: 10 }
+                    { name: "Купить биткоин", pay: 5000, energy: 10, duration: 100000 },
+                    { name: "Продать NFT", pay: 6000, energy: 10, duration: 110000 },
+                    { name: "Майнить эфир", pay: 5500, energy: 10, duration: 105000 },
+                    { name: "Проанализировать рынок", pay: 4500, energy: 10, duration: 95000 }
                 ]
             }
         };
@@ -489,29 +496,50 @@
                 name: "Поделиться в соцсетях",
                 pay: 100,
                 energy: 10,
-                cooldown: 600000
+                cooldown: 600000,
+                action: () => {
+                    window.open('https://t.me/share/url?url=RiseToRiches', '_blank');
+                }
+            },
+            {
+                name: "Пригласить друга",
+                pay: 200,
+                energy: 15,
+                cooldown: 86400000,
+                action: () => {
+                    showNotification("Приглашайте друзей через Telegram!");
+                }
             }
         ];
 
         const shopItems = [
-            { name: "Хлеб", price: 5, desc: "Простая еда", effect: { hunger: 20 }, image: "bread.png" },
-            { name: "Энергетик", price: 20, desc: "Восстанавливает энергию", effect: { energy: 50 }, image: "energy_drink.png" },
-            { name: "Метла", price: 100, desc: "Уборка эффективнее", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
-            { name: "Кроссовки", price: 200, desc: "Стильная обувь", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
-            { name: "Велосипед", price: 500, desc: "Быстрее доставлять", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
-            { name: "Машина (Лада)", price: 5000, desc: "Бюджетный автомобиль", effect: { taskPayMultiplier: 1.5 }, job: "taxi", image: "lada.png" },
-            { name: "Ноутбук", price: 10000, desc: "Работа быстрее", effect: { payMultiplier: 1.3 }, job: "freelancer", image: "laptop.png" },
-            { name: "Камера", price: 20000, desc: "Контент лучше", effect: { payMultiplier: 1.4 }, job: "influencer", image: "camera.png" },
-            { name: "Машина (BMW)", price: 50000, desc: "Стильный транспорт", effect: { taskPayMultiplier: 2 }, job: "taxi", image: "bmw.png" },
-            { name: "Квартира", price: 50000, desc: "Уютное жилье", effect: { mood: 20 }, image: "apartment.png" },
-            { name: "Дом", price: 200000, desc: "Просторный коттедж", effect: { mood: 30 }, image: "house.png" },
-            { name: "Бассейн", price: 500000, desc: "Личная зона отдыха", effect: { mood: 40 }, image: "pool.png" },
-            { name: "Яхта", price: 1000000, desc: "Морские приключения", effect: { mood: 50 }, image: "yacht.png" },
-            { name: "Частный самолет", price: 5000000, desc: "Полеты без границ", effect: { mood: 60 }, image: "jet.png" }
+            { name: "Хлеб", price: 5, desc: "Восполняет голод", effect: { hunger: 20 }, image: "bread.png", reusable: true },
+            { name: "Энергетик", price: 20, desc: "Восстанавливает энергию", effect: { energy: 50 }, image: "energy_drink.png", reusable: true },
+            { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
+            { name: "Кроссовки", price: 200, desc: "Задания +10% дохода", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
+            { name: "Велосипед", price: 500, desc: "Доставка +50% чаевых", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
+            { name: "Машина (Лада)", price: 5000, desc: "Такси +50% дохода", effect: { taskPayMultiplier: 1.5 }, job: "taxi", image: "lada.png" },
+            { name: "Ноутбук", price: 10000, desc: "Фриланс +30% дохода", effect: { payMultiplier: 1.3 }, job: "freelancer", image: "laptop.png" },
+            { name: "Камера", price: 20000, desc: "Контент +40% дохода", effect: { payMultiplier: 1.4 }, job: "influencer", image: "camera.png" },
+            { name: "Машина (BMW)", price: 50000, desc: "Такси +100% дохода", effect: { taskPayMultiplier: 2 }, job: "taxi", image: "bmw.png" },
+            { name: "Квартира", price: 50000, desc: "Настроение +20", effect: { mood: 20 }, image: "apartment.png" },
+            { name: "Дом", price: 200000, desc: "Настроение +30", effect: { mood: 30 }, image: "house.png" },
+            { name: "Бассейн", price: 500000, desc: "Настроение +40", effect: { mood: 40 }, image: "pool.png" },
+            { name: "Яхта", price: 1000000, desc: "Настроение +50", effect: { mood: 50 }, image: "yacht.png" },
+            { name: "Частный самолет", price: 5000000, desc: "Настроение +60", effect: { mood: 60 }, image: "jet.png" }
+        ];
+
+        const achievements = [
+            { name: "Первый заработок", desc: "Заработай $100", condition: () => state.balance >= 100, reward: { balance: 50 } },
+            { name: "Работяга", desc: "Стань Работягой", condition: () => state.status === "Работяга", reward: { energy: 20 } },
+            { name: "Бизнесмен", desc: "Открой бизнес", condition: () => state.businessOwned, reward: { balance: 1000 } },
+            { name: "Миллионер", desc: "Стань Миллионером", condition: () => state.status === "Миллионер", reward: { balance: 100000 } },
+            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } }
         ];
 
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.expand();
+            window.Telegram.WebApp.enableClosingConfirmation();
         }
 
         function loadGame() {
@@ -545,6 +573,18 @@
             render();
         }
 
+        function checkAchievements() {
+            achievements.forEach(ach => {
+                if (!state.achievements.includes(ach.name) && ach.condition()) {
+                    state.achievements.push(ach.name);
+                    showNotification(`Достижение: ${ach.name}! Награда: ${Object.keys(ach.reward).map(key => `${key === 'balance' ? '$' : ''}${ach.reward[key]} ${key}`).join(', ')}`);
+                    if (ach.reward.balance) state.balance += ach.reward.balance;
+                    if (ach.reward.energy) state.energy = Math.min(state.energy + ach.reward.energy, 100);
+                    playSound("cashSound");
+                }
+            });
+        }
+
         function render() {
             document.getElementById("balance").textContent = state.balance.toLocaleString();
             document.getElementById("status").textContent = state.status;
@@ -553,19 +593,15 @@
             document.getElementById("mood").textContent = Math.floor(state.mood);
 
             const jobList = document.getElementById("jobList");
-            if (!jobList.children.length) {
-                for (const key in jobs) {
-                    const job = jobs[key];
-                    const button = document.createElement("button");
-                    button.textContent = `${job.name} ($${job.pay}${job.unlock > 0 ? `, $${job.unlock.toLocaleString()}` : ""})`;
-                    button.onclick = () => takeJob(key);
-                    jobList.appendChild(button);
-                }
+            jobList.innerHTML = "";
+            for (const key in jobs) {
+                const job = jobs[key];
+                const button = document.createElement("button");
+                button.textContent = `${job.name} ($${job.pay}${job.unlock > 0 ? `, $${job.unlock.toLocaleString()}` : ""})`;
+                button.disabled = state.balance < job.unlock || state.isWorking;
+                button.onclick = () => takeJob(key);
+                jobList.appendChild(button);
             }
-            Array.from(jobList.children).forEach(button => {
-                const jobKey = Object.keys(jobs).find(k => jobs[k].name === button.textContent.split(' (')[0]);
-                button.disabled = state.balance < jobs[jobKey].unlock || state.isWorking;
-            });
 
             const taskList = document.getElementById("jobTaskList");
             taskList.innerHTML = "";
@@ -586,61 +622,52 @@
             }
 
             const socialTaskList = document.getElementById("socialTaskList");
-            if (!socialTaskList.children.length) {
-                socialTasks.forEach(task => {
-                    const button = document.createElement("button");
-                    button.onclick = () => doSocialTask(task);
-                    socialTaskList.appendChild(button);
-                });
-            }
-            Array.from(socialTaskList.children).forEach((button, index) => {
-                const task = socialTasks[index];
+            socialTaskList.innerHTML = "";
+            socialTasks.forEach(task => {
+                const button = document.createElement("button");
                 const isOnCooldown = state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name];
                 const timeLeft = isOnCooldown ? Math.ceil((state.socialTaskCooldowns[task.name] - Date.now()) / 1000) : 0;
                 button.textContent = isOnCooldown
                     ? `${task.name} ($${task.pay}, ${task.energy} энергии, ${timeLeft}с)`
                     : `${task.name} ($${task.pay}, ${task.energy} энергии)`;
                 button.disabled = state.energy < task.energy || isOnCooldown;
+                button.onclick = () => doSocialTask(task);
+                socialTaskList.appendChild(button);
             });
 
             const shopList = document.getElementById("shopList");
-            if (!shopList.children.length) {
-                shopItems.forEach(item => {
-                    const itemDiv = document.createElement("div");
-                    itemDiv.className = "shop-item";
-                    const img = document.createElement("img");
-                    img.src = item.image;
-                    img.alt = item.name;
-                    img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
-                    const button = document.createElement("button");
-                    button.textContent = `${item.name} ($${item.price.toLocaleString()})`;
-                    button.onclick = () => buyItem(item);
-                    itemDiv.appendChild(img);
-                    itemDiv.appendChild(button);
-                    shopList.appendChild(itemDiv);
-                });
-            }
-            Array.from(shopList.children).forEach(itemDiv => {
-                const button = itemDiv.querySelector("button");
-                const itemName = button.textContent.split(' (')[0];
-                const item = shopItems.find(i => i.name === itemName);
-                button.disabled = state.balance < item.price || state.inventory.some(i => i.name === item.name);
+            shopList.innerHTML = "";
+            shopItems.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "shop-item";
+                const img = document.createElement("img");
+                img.src = item.image;
+                img.alt = item.name;
+                img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
+                const desc = document.createElement("p");
+                desc.textContent = item.desc;
+                const button = document.createElement("button");
+                button.textContent = `${item.name} ($${item.price.toLocaleString()})`;
+                button.disabled = state.balance < item.price || (!item.reusable && state.inventory.some(i => i.name === item.name));
+                button.onclick = () => buyItem(item);
+                itemDiv.appendChild(img);
+                itemDiv.appendChild(desc);
+                itemDiv.appendChild(button);
+                shopList.appendChild(itemDiv);
             });
 
             const businessSection = document.getElementById("businessSection");
-            if (!businessSection.children.length) {
-                const buyButton = document.createElement("button");
-                buyButton.textContent = "Открыть бизнес ($50,000)";
-                buyButton.onclick = buyBusiness;
-                const upgradeButton = document.createElement("button");
-                upgradeButton.textContent = "Улучшить бизнес ($100,000)";
-                upgradeButton.onclick = upgradeBusiness;
-                businessSection.appendChild(buyButton);
-                businessSection.appendChild(upgradeButton);
-            }
-            const [buyButton, upgradeButton] = businessSection.children;
+            businessSection.innerHTML = "";
+            const buyButton = document.createElement("button");
+            buyButton.textContent = "Открыть бизнес ($50,000)";
             buyButton.disabled = state.balance < 50000 || state.businessOwned;
-            upgradeButton.disabled = !state.businessOwned || state.balance < 100000 || state.businessLevel >= 1;
+            buyButton.onclick = buyBusiness;
+            const upgradeButton = document.createElement("button");
+            upgradeButton.textContent = `Улучшить бизнес ($${100000 * state.businessLevel})`;
+            upgradeButton.disabled = !state.businessOwned || state.balance < (100000 * state.businessLevel) || state.businessLevel >= 5;
+            upgradeButton.onclick = upgradeBusiness;
+            businessSection.appendChild(buyButton);
+            businessSection.appendChild(upgradeButton);
 
             const inventoryList = document.getElementById("inventoryList");
             inventoryList.innerHTML = state.inventory.length === 0
@@ -648,17 +675,13 @@
                 : state.inventory.map(item => `${item.name} (${item.desc})`).join("<br>");
 
             const casinoSection = document.getElementById("casinoSection");
-            if (!casinoSection.children.length) {
-                [100, 1000, 10000].forEach(bet => {
-                    const button = document.createElement("button");
-                    button.textContent = `Ставка $${bet.toLocaleString()}`;
-                    button.onclick = () => playCasino(bet);
-                    casinoSection.appendChild(button);
-                });
-            }
-            Array.from(casinoSection.children).forEach(button => {
-                const bet = parseInt(button.textContent.match(/\d+/)[0].replace(/,/g, ''));
+            casinoSection.innerHTML = "";
+            [100, 1000, 10000, 100000].forEach(bet => {
+                const button = document.createElement("button");
+                button.textContent = `Ставка $${bet.toLocaleString()}`;
                 button.disabled = state.balance < bet;
+                button.onclick = () => playCasino(bet);
+                casinoSection.appendChild(button);
             });
 
             let bgImage;
@@ -668,6 +691,8 @@
             else if (state.balance >= 10000) bgImage = "bg1.jpg";
             else bgImage = "bg0.jpg";
             document.body.style.backgroundImage = `url(${bgImage})`;
+
+            checkAchievements();
         }
 
         function updateStatus() {
@@ -677,7 +702,7 @@
                 showNotification(`Новый статус: ${state.status}!`);
                 playSound("cashSound");
             }
-            if (state.balance >= 10000000) {
+            if (state.balance >= 10000000 && !state.achievements.includes("Миллионер")) {
                 showNotification("Ты миллионер! $10,000,000!");
             }
         }
@@ -725,11 +750,7 @@
             }
             pay = Math.floor(pay);
 
-            const minDuration = 60000;
-            const maxDuration = 300000;
-            const maxPay = Math.max(...Object.values(jobs).map(j => j.pay));
-            const duration = minDuration + (maxDuration - minDuration) * (state.currentJob.pay / maxPay);
-            showNotification(`Задание "${task.name}" начато (${Math.floor(duration/1000)}с)`);
+            showNotification(`Задание "${task.name}" начато (${Math.floor(task.duration/1000)}с)`);
 
             setTimeout(() => {
                 state.isWorking = false;
@@ -746,7 +767,7 @@
                 updateStatus();
                 saveGame();
                 render();
-            }, duration);
+            }, task.duration);
 
             saveGame();
             render();
@@ -782,10 +803,10 @@
 
         function buyItem(item) {
             if (state.balance < item.price) {
-                showNotification("Не хватает бабла!");
+                showNotification("Не хватает денег!");
                 return;
             }
-            if (state.inventory.some(i => i.name === item.name)) {
+            if (!item.reusable && state.inventory.some(i => i.name === item.name)) {
                 showNotification("Уже куплено!");
                 return;
             }
@@ -817,7 +838,7 @@
 
         function buyBusiness() {
             if (state.balance < 50000 || state.businessOwned) {
-                showNotification(state.businessOwned ? "Бизнес уже есть!" : "Мало бабла!");
+                showNotification(state.businessOwned ? "Бизнес уже есть!" : "Не хватает денег!");
                 return;
             }
             state.balance -= 50000;
@@ -831,13 +852,14 @@
         }
 
         function upgradeBusiness() {
-            if (!state.businessOwned || state.balance < 100000 || state.businessLevel >= 1) {
-                showNotification(!state.businessOwned ? "Открой бизнес!" : state.balance < 100000 ? "Мало бабла!" : "Уже улучшено!");
+            const cost = 100000 * state.businessLevel;
+            if (!state.businessOwned || state.balance < cost || state.businessLevel >= 5) {
+                showNotification(!state.businessOwned ? "Открой бизнес!" : state.balance < cost ? "Не хватает денег!" : "Максимальный уровень!");
                 return;
             }
-            state.balance -= 100000;
-            state.businessLevel = 2;
-            showNotification("Бизнес прокачан! +$2,000/сек!");
+            state.balance -= cost;
+            state.businessLevel += 1;
+            showNotification(`Бизнес прокачан! +$${state.businessLevel * 1000}/сек!`);
             playSound("cashSound");
             updateStatus();
             saveGame();
@@ -846,24 +868,24 @@
 
         function playCasino(bet) {
             if (state.balance < bet) {
-                showNotification("Мало бабла!");
+                showNotification("Не хватает денег!");
                 return;
             }
             state.balance -= bet;
             const rand = Math.random() * 100;
             let outcome;
-            if (rand < 40) {
+            if (rand < 45) {
                 const winAmount = bet * 2;
                 state.balance += winAmount;
-                outcome = `Выграл $${winAmount.toLocaleString()}!`;
-            } else if (rand < 90) {
-                outcome = `Проебал $${bet.toLocaleString()}!`;
+                outcome = `Выиграл $${winAmount.toLocaleString()}!`;
+            } else if (rand < 85) {
+                outcome = `Проиграл $${bet.toLocaleString()}!`;
             } else if (rand < 95) {
-                state.balance = 0;
-                outcome = "Всё проебал!";
+                state.balance = Math.max(0, state.balance - bet * 2);
+                outcome = "Крупный проигрыш!";
             } else {
-                state.balance += bet;
-                outcome = "Без изменений!";
+                state.balance += bet * 5;
+                outcome = `Джекпот! +$${bet * 5}!`;
             }
             showNotification(outcome);
             playSound("cashSound");
@@ -915,12 +937,16 @@
             if (state.hunger > 0) {
                 state.hunger -= 0.0167;
                 if (state.hunger < 0) state.hunger = 0;
-                if (state.hunger < 50) {
+                if (state.hunger < 30) {
                     showNotification("Голоден! Купи еду.");
                 }
             }
+            if (state.mood < 100) {
+                state.mood += 0.1;
+                if (state.mood > 100) state.mood = 100;
+            }
             if (state.businessOwned) {
-                let income = state.businessLevel === 1 ? 1000 : 2000;
+                let income = state.businessLevel * 1000;
                 if (state.balance < 0) {
                     const repayment = Math.min(income, -state.balance);
                     state.balance += repayment;
