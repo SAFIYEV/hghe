@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rise to Riches</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: url('bg0.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 10px;
+            padding: 15px;
+            background: rgba(20, 20, 30, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            box-sizing: border-box;
+            position: fixed;
+            bottom: 10px;
+            z-index: 1;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 300px;
+        }
+
+        .game-container.active, .shop-container.active, .job-container.active, .task-container.active, .business-container.active, .inventory-container.active, .casino-container.active {
+            display: flex;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 10px 0;
+            text-align: center;
+            color: #FFD700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .stats-left, .stats-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 48%;
+        }
+
+        .stat {
+            font-size: 1.1em;
+            margin: 5px 0;
+            color: #E0E0E0;
+        }
+
+        .stat span {
+            color: #FFD700;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: auto;
+            padding: 10px 0;
+            gap: 10px;
+        }
+
+        .tab-button {
+            flex: 0 0 calc(33.33% - 10px);
+            padding: 8px 12px;
+            font-size: 0.85em;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 12px;
+            color: #E0E0E0;
+            cursor: pointer;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, transform 0.2s;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .shop-list, .job-list, .task-list, .inventory-list, .casino, .business {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .shop-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .shop-item img {
+            width: 64px;
+            height: 64px;
+            margin-right: 10px;
+            object-fit: contain;
+        }
+
+        .shop-item button {
+            flex: 1;
+            padding: 12px;
+            font-size: 1em;
+            background: linear-gradient(135deg, #6B7280, #4B5563);
+            color: #E0E0E0;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background 0.3s;
+            touch-action: manipulation;
+        }
+
+        .shop-item button:disabled {
+            background: #4B4B4B;
+            cursor: not-allowed;
+        }
+
+        .shop-item button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #9CA3AF, #6B7280);
+        }
+
+        .inventory-list {
+            font-size: 0.9em;
+            color: #D1D5DB;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9em;
+            color: #FFD700;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .coin-animation {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('coin.png') no-repeat center;
+            background-size: contain;
+            animation: collectCoin 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes collectCoin {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-80px); opacity: 0; }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .shop-item button {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container {
+                margin: 5px;
+                padding: 10px;
+            }
+            .stat {
+                font-size: 1em;
+            }
+            .tab-button {
+                flex: 0 0 calc(33.33% - 8px);
+                padding: 6px 8px;
+                font-size: 0.8em;
+            }
+            .tabs {
+                gap: 8px;
+            }
+            .shop-item img {
+                width: 48px;
+                height: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Game Container -->
+    <div class="game-container active" id="mainContainer">
+        <h1>Rise to Riches</h1>
+        <div class="stats">
+            <div class="stats-left">
+                <div class="stat">Статус: <span id="status">Бомж</span></div>
+                <div class="stat">Баланс: $<span id="balance">0</span></div>
+            </div>
+            <div class="stats-right">
+                <div class="stat">Энергия: <span id="energy">100</span>/100</div>
+                <div class="stat">Голод: <span id="hunger">100</span>/100</div>
+                <div class="stat">Настроение: <span id="mood">100</span>/100</div>
+            </div>
+        </div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа (Задания)</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+        </div>
+    </div>
+
+    <!-- Job Container -->
+    <div class="job-container" id="jobContainer">
+        <h1>Работа</h1>
+        <div class="job-list" id="jobList"></div>
+        <div class="task-list" id="jobTaskList"></div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа (Задания)</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+        </div>
+    </div>
+
+    <!-- Social Tasks Container -->
+    <div class="task-container" id="taskContainer">
+        <h1>Задания</h1>
+        <div class="task-list" id="socialTaskList"></div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа (Задания)</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+        </div>
+    </div>
+
+    <!-- Shop Container -->
+    <div class="shop-container" id="shopContainer">
+        <h1>Магазин</h1>
+        <div class="shop-list" id="shopList"></div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа (Задания)</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+        </div>
+    </div>
+
+    <!-- Business Container -->
+    <div class="business-container" id="businessContainer">
+        <h1>Бизнес</h1>
+        <div class="business">
+            <button onclick="buyBusiness()" disabled id="businessButton">Открыть бизнес ($50,000)</button>
+            <button onclick="upgradeBusiness()" disabled id="upgradeBusinessButton">Улучшить бизнес ($100,000)</button>
+        </div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа (Задания)</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+        </div>
+    </div>
+
+    <!-- Inventory Container -->
+    <div class="inventory-container" id="inventoryContainer">
+        <h1>Инвентарь</h1>
+        <div class="inventory-list" id="inventoryList">Пусто</div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа (Задания)</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+        </div>
+    </div>
+
+    <!-- Casino Container -->
+    <div class="casino-container" id="casinoContainer">
+        <h1>Казино</h1>
+        <div class="casino">
+            <button onclick="playCasino(100)">Ставка $100</button>
+            <button onclick="playCasino(1000)">Ставка $1,000</button>
+            <button onclick="playCasino(10000)">Ставка $10,000</button>
+        </div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа (Задания)</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+    <audio id="clickSound" src="click.mp3"></audio>
+    <audio id="cashSound" src="cash.mp3"></audio>
+
+    <script>
+        // Initialize Telegram Web App for fullscreen
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.expand();
+        }
+
+        let balance = 0;
+        let energy = 100;
+        let hunger = 100;
+        let mood = 100;
+        let currentJob = null;
+        let businessOwned = false;
+        let businessLevel = 0;
+        let inventory = [];
+        let status = "Бомж";
+        let debtRepaymentActive = false;
+        let isWorking = false;
+        let workTimeout = null;
+        let socialTaskCooldowns = {};
+
+        const statuses = [
+            { name: "Бомж", minBalance: 0 },
+            { name: "Работяга", minBalance: 1000 },
+            { name: "Середняк", minBalance: 10000 },
+            { name: "Бизнесмен", minBalance: 50000 },
+            { name: "Богач", minBalance: 1000000 },
+            { name: "Миллионер", minBalance: 10000000 }
+        ];
+
+        const jobs = {
+            cleaner: { 
+                name: "Уборщик", 
+                pay: 50, 
+                unlock: 0, 
+                tasks: [
+                    { name: "Убрать улицу", pay: 50, energy: 10 },
+                    { name: "Помыть окна", pay: 60, energy: 10 },
+                    { name: "Почистить ковры", pay: 70, energy: 10 },
+                    { name: "Вынести мусор", pay: 40, energy: 10 }
+                ] 
+            },
+            courier: { 
+                name: "Курьер", 
+                pay: 100, 
+                unlock: 0, 
+                tasks: [
+                    { name: "Доставить посылку", pay: 100, energy: 10 },
+                    { name: "Развести еду", pay: 120, energy: 10 },
+                    { name: "Доставить пиццу", pay: 110, energy: 10 }
+                ] 
+            },
+            postman: { 
+                name: "Почтальон", 
+                pay: 80, 
+                unlock: 1000, 
+                tasks: [
+                    { name: "Разнести письма", pay: 80, energy: 10 },
+                    { name: "Доставить посылку", pay: 100, energy: 10 },
+                    { name: "Раздать газеты", pay: 70, energy: 10 },
+                    { name: "Отправить заказное письмо", pay: 90, energy: 10 }
+                ] 
+            },
+            taxi: { 
+                name: "Таксист", 
+                pay: 150, 
+                unlock: 5000, 
+                tasks: [
+                    { name: "Отвезти пассажира", pay: 150, energy: 10 },
+                    { name: "Доехать до аэропорта", pay: 200, energy: 10 },
+                    { name: "Подвезти в центр", pay: 170, energy: 10 },
+                    { name: "Ночной рейс", pay: 250, energy: 15 }
+                ] 
+            },
+            freelancer: { 
+                name: "Фрилансер", 
+                pay: 300, 
+                unlock: 10000, 
+                tasks: [
+                    { name: "Написать статью", pay: 300, energy: 10 },
+                    { name: "Сделать логотип", pay: 350, energy: 10 },
+                    { name: "Создать сайт", pay: 400, energy: 10 }
+                ] 
+            },
+            influencer: { 
+                name: "Инфлюенсер", 
+                pay: 1000, 
+                unlock: 50000, 
+                tasks: [
+                    { name: "Опубликовать пост", pay: 1000, energy: 10 },
+                    { name: "Снять сторис", pay: 800, energy: 10 },
+                    { name: "Провести прямой эфир", pay: 1200, energy: 10 },
+                    { name: "Поделиться ссылкой", pay: 500, energy: 5 }
+                ] 
+            },
+            crypto: { 
+                name: "Криптотрейдер", 
+                pay: 5000, 
+                unlock: 100000, 
+                tasks: [
+                    { name: "Купить биткоин", pay: 5000, energy: 10 },
+                    { name: "Продать NFT", pay: 6000, energy: 10 },
+                    { name: "Майнить эфир", pay: 5500, energy: 10 },
+                    { name: "Проанализировать рынок", pay: 4500, energy: 10 }
+                ] 
+            }
+        };
+
+        const socialTasks = [
+            { name: "Подписаться на Telegram канал", pay: 50, energy: 5, cooldown: 300000 }, // 5 minutes
+            { name: "Поделиться в соцсетях", pay: 100, energy: 10, cooldown: 600000 } // 10 minutes
+        ];
+
+        const shopItems = [
+            { name: "Хлеб", price: 5, desc: "Простая еда", effect: { hunger: 20 }, image: "bread.png" },
+            { name: "Энергетик", price: 20, desc: "Восстанавливает энергию", effect: { energy: 50 }, image: "energy_drink.png" },
+            { name: "Метла", price: 100, desc: "Уборка эффективнее", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
+            { name: "Кроссовки", price: 200, desc: "Стильная обувь", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
+            { name: "Велосипед", price: 500, desc: "Быстрее доставлять", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
+            { name: "Машина (Лада)", price: 5000, desc: "Бюджетный автомобиль", effect: { taskPayMultiplier: 1.5 }, job: "taxi", image: "lada.png" },
+            { name: "Ноутбук", price: 10000, desc: "Работа быстрее", effect: { payMultiplier: 1.3 }, job: "freelancer", image: "laptop.png" },
+            { name: "Камера", price: 20000, desc: "Контент лучше", effect: { payMultiplier: 1.4 }, job: "influencer", image: "camera.png" },
+            { name: "Машина (BMW)", price: 50000, desc: "Стильный транспорт", effect: { taskPayMultiplier: 2 }, job: "taxi", image: "bmw.png" },
+            { name: "Квартира", price: 50000, desc: "Уютное жилье", effect: { mood: 20 }, image: "apartment.png" },
+            { name: "Дом", price: 200000, desc: "Просторный коттедж", effect: { mood: 30 }, image: "house.png" },
+            { name: "Бассейн", price: 500000, desc: "Личная зона отдыха", effect: { mood: 40 }, image: "pool.png" },
+            { name: "Яхта", price: 1000000, desc: "Морские приключения", effect: { mood: 50 }, image: "yacht.png" },
+            { name: "Частный самолет", price: 5000000, desc: "Полеты без границ", effect: { mood: 60 }, image: "jet.png" }
+        ];
+
+        // Save game state to localStorage
+        function saveGame() {
+            const gameState = {
+                balance,
+                energy,
+                hunger,
+                mood,
+                inventory,
+                currentJob: currentJob ? currentJob.name : null,
+                businessOwned,
+                businessLevel,
+                status,
+                debtRepaymentActive,
+                socialTaskCooldowns
+            };
+            localStorage.setItem('riseToRichesState', JSON.stringify(gameState));
+        }
+
+        // Load game state from localStorage
+        function loadGame() {
+            const savedState = localStorage.getItem('riseToRichesState');
+            if (savedState) {
+                const gameState = JSON.parse(savedState);
+                balance = gameState.balance || 0;
+                energy = gameState.energy || 100;
+                hunger = gameState.hunger || 100;
+                mood = gameState.mood || 100;
+                inventory = gameState.inventory || [];
+                currentJob = gameState.currentJob ? Object.values(jobs).find(job => job.name === gameState.currentJob) : null;
+                businessOwned = gameState.businessOwned || false;
+                businessLevel = gameState.businessLevel || 0;
+                status = gameState.status || "Бомж";
+                debtRepaymentActive = gameState.debtRepaymentActive || false;
+                socialTaskCooldowns = gameState.socialTaskCooldowns || {};
+            }
+        }
+
+        // Show specific section
+        function showSection(sectionId) {
+            const sections = ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer'];
+            sections.forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            playSound("clickSound");
+            if (sectionId === 'jobContainer') {
+                updateJobAvailability();
+                updateJobTaskList();
+            } else if (sectionId === 'taskContainer') {
+                updateSocialTaskList();
+            } else if (sectionId === 'shopContainer') {
+                updateShopAvailability();
+            } else if (sectionId === 'businessContainer') {
+                updateBusinessAvailability();
+            } else if (sectionId === 'casinoContainer') {
+                updateCasinoAvailability();
+            }
+        }
+
+        // Update balance and status
+        function updateBalance() {
+            document.getElementById("balance").textContent = balance.toLocaleString();
+            updateStatus();
+            updateBackground();
+            updateJobAvailability();
+            updateBusinessAvailability();
+            updateShopAvailability();
+            updateCasinoAvailability();
+            checkDebt();
+            saveGame();
+        }
+
+        // Update status based on balance
+        function updateStatus() {
+            let newStatus = "Бомж";
+            for (let i = statuses.length - 1; i >= 0; i--) {
+                if (balance >= statuses[i].minBalance) {
+                    newStatus = statuses[i].name;
+                    break;
+                }
+            }
+            if (balance < 0) {
+                newStatus = "Бомж";
+            }
+            if (status !== newStatus) {
+                status = newStatus;
+                showNotification(`Новый статус: ${status}!`);
+                playSound("cashSound");
+            }
+            document.getElementById("status").textContent = status;
+            saveGame();
+        }
+
+        // Change background based on balance
+        function updateBackground() {
+            let bgImage;
+            if (balance >= 10000000) {
+                bgImage = "bg4.jpg"; // Yacht
+            } else if (balance >= 1000000) {
+                bgImage = "bg3.jpg"; // Mansion
+            } else if (balance >= 100000) {
+                bgImage = "bg2.jpg"; // House
+            } else if (balance >= 10000) {
+                bgImage = "bg1.jpg"; // Apartment
+            } else {
+                bgImage = "bg0.jpg"; // Slums
+            }
+            document.body.style.backgroundImage = `url(${bgImage})`;
+
+            // Check win condition
+            if (balance >= 10000000) {
+                showNotification("Поздравляем! Вы стали миллионером с $10,000,000!");
+            }
+        }
+
+        // Update energy, hunger, and mood displays
+        function updateEnergy() {
+            document.getElementById("energy").textContent = Math.floor(energy);
+            updateJobTaskList();
+            updateSocialTaskList();
+            saveGame();
+        }
+
+        function updateHunger() {
+            document.getElementById("hunger").textContent = Math.floor(hunger);
+            updateJobTaskList();
+            saveGame();
+        }
+
+        function updateMood() {
+            document.getElementById("mood").textContent = Math.floor(mood);
+            saveGame();
+        }
+
+        // Regenerate energy (affected by mood)
+        setInterval(() => {
+            if (energy < 100) {
+                energy += mood >= 50 ? 1 : 0.5;
+                if (energy > 100) energy = 100;
+                updateEnergy();
+            }
+        }, 1000);
+
+        // Decrease hunger over time
+        setInterval(() => {
+            if (hunger > 0) {
+                hunger -= 1;
+                if (hunger < 0) hunger = 0;
+                updateHunger();
+                if (hunger < 50) {
+                    showNotification("Вы голодны! Купите еду в магазине.");
+                }
+            }
+        }, 60000);
+
+        // Update job availability
+        function updateJobAvailability() {
+            const jobList = document.getElementById("jobList");
+            jobList.innerHTML = "";
+            for (const key in jobs) {
+                const job = jobs[key];
+                const button = document.createElement("button");
+                button.textContent = `${job.name} ($${job.pay}/задание${job.unlock > 0 ? `, нужно $${job.unlock.toLocaleString()}` : ""})`;
+                button.disabled = balance < job.unlock || isWorking;
+                button.onclick = () => takeJob(key);
+                jobList.appendChild(button);
+            }
+        }
+
+        // Update job-specific task list
+        function updateJobTaskList() {
+            const taskList = document.getElementById("jobTaskList");
+            if (!taskList) return;
+            taskList.innerHTML = "";
+            if (currentJob) {
+                if (isWorking) {
+                    taskList.textContent = `Вы работаете как ${currentJob.name}. Ожидайте завершения...`;
+                } else {
+                    currentJob.tasks.forEach(task => {
+                        const button = document.createElement("button");
+                        button.textContent = `${task.name} ($${task.pay}, ${task.energy} энергии)`;
+                        button.disabled = energy < task.energy || isWorking;
+                        button.onclick = () => doJobTask(task);
+                        taskList.appendChild(button);
+                    });
+                }
+            } else {
+                taskList.textContent = "Выберите работу, чтобы увидеть задания";
+            }
+        }
+
+        // Update social task list
+        function updateSocialTaskList() {
+            const taskList = document.getElementById("socialTaskList");
+            taskList.innerHTML = "";
+            socialTasks.forEach(task => {
+                const button = document.createElement("button");
+                const isOnCooldown = socialTaskCooldowns[task.name] && Date.now() < socialTaskCooldowns[task.name];
+                const timeLeft = isOnCooldown ? Math.ceil((socialTaskCooldowns[task.name] - Date.now()) / 1000) : 0;
+                button.textContent = isOnCooldown 
+                    ? `${task.name} ($${task.pay}, ${task.energy} энергии, ожидание ${timeLeft} сек)`
+                    : `${task.name} ($${task.pay}, ${task.energy} энергии)`;
+                button.disabled = energy < task.energy || isOnCooldown;
+                button.onclick = () => doSocialTask(task);
+                taskList.appendChild(button);
+            });
+        }
+
+        // Update shop availability
+        function updateShopAvailability() {
+            const shopList = document.getElementById("shopList");
+            shopList.innerHTML = "";
+            shopItems.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "shop-item";
+                const img = document.createElement("img");
+                img.src = item.image;
+                img.alt = item.name;
+                const button = document.createElement("button");
+                button.textContent = `${item.name} ($${item.price.toLocaleString()})`;
+                button.disabled = balance < item.price;
+                button.onclick = () => buyItem(item);
+                itemDiv.appendChild(img);
+                itemDiv.appendChild(button);
+                shopList.appendChild(itemDiv);
+            });
+        }
+
+        // Update casino availability
+        function updateCasinoAvailability() {
+            const casinoButtons = document.querySelectorAll('#casinoContainer button:not(.tab-button)');
+            casinoButtons.forEach(button => {
+                const bet = parseInt(button.textContent.match(/\d+/)[0].replace(/,/g, ''));
+                button.disabled = balance < bet;
+            });
+        }
+
+        // Update inventory display
+        function updateInventory() {
+            const inventoryList = document.getElementById("inventoryList");
+            if (inventory.length === 0) {
+                inventoryList.textContent = "Пусто";
+            } else {
+                inventoryList.innerHTML = inventory.map(item => `${item.name} (${item.desc})`).join("<br>");
+            }
+            saveGame();
+        }
+
+        // Update business availability
+        function updateBusinessAvailability() {
+            const businessButton = document.getElementById("businessButton");
+            const upgradeButton = document.getElementById("upgradeBusinessButton");
+            businessButton.disabled = balance < 50000 || businessOwned;
+            upgradeButton.disabled = !businessOwned || balance < 100000 || businessLevel >= 1;
+        }
+
+        // Select a job
+        function takeJob(jobKey) {
+            currentJob = jobs[jobKey];
+            updateJobTaskList();
+            showNotification(`Вы устроились на работу: ${currentJob.name}`);
+            playSound("clickSound");
+            showSection('jobContainer');
+            saveGame();
+        }
+
+        // Complete a job-specific task
+        function doJobTask(task) {
+            if (energy >= task.energy && !isWorking) {
+                isWorking = true;
+                energy -= task.energy;
+                mood -= 5;
+                if (mood < 0) mood = 0;
+                let pay = task.pay;
+
+                // Apply job-specific item bonuses
+                inventory.forEach(item => {
+                    if (item.job && currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === currentJob)) {
+                        if (item.effect.payMultiplier) {
+                            pay *= item.effect.payMultiplier;
+                            showNotification(`Бонус от ${item.name}: +${((item.effect.payMultiplier - 1) * 100).toFixed(0)}% к оплате!`);
+                        }
+                        if (item.effect.tipChance && Math.random() < item.effect.tipChance) {
+                            const tip = pay * (item.effect.tipMultiplier - 1);
+                            pay *= item.effect.tipMultiplier;
+                            showNotification(`Получены чаевые $${Math.floor(tip)} благодаря ${item.name}!`);
+                        }
+                    }
+                    if (item.effect && item.effect.taskPayMultiplier) {
+                        pay *= item.effect.taskPayMultiplier;
+                    }
+                });
+
+                if (hunger < 50) {
+                    pay *= 0.5;
+                    showNotification("Голод снижает доход! Купите еду.");
+                }
+                pay = Math.floor(pay);
+
+                // Calculate job duration (1 to 5 minutes)
+                const minDuration = 60000; // 1 minute
+                const maxDuration = 300000; // 5 minutes
+                const maxPay = Math.max(...Object.values(jobs).map(j => j.pay));
+                const duration = minDuration + (maxDuration - minDuration) * (currentJob.pay / maxPay);
+                showNotification(`Начато задание "${task.name}". Завершится через ${Math.floor(duration/1000)} сек.`);
+
+                // Disable task buttons during work
+                updateJobTaskList();
+
+                // Complete task after duration
+                workTimeout = setTimeout(() => {
+                    isWorking = false;
+                    if (balance < 0) {
+                        const repayment = Math.min(pay, -balance);
+                        balance += repayment;
+                        showNotification(`Погашено долга: $${repayment}`);
+                        pay -= repayment;
+                    }
+                    balance += pay;
+                    showNotification(`Задание "${task.name}" выполнено! Вы заработали $${pay}`);
+                    playSound("cashSound");
+                    createCoinAnimation();
+                    updateBalance();
+                    updateEnergy();
+                    updateMood();
+                    updateJobTaskList();
+                }, duration);
+
+                updateEnergy();
+                updateMood();
+                showSection('jobContainer');
+            } else if (isWorking) {
+                showNotification("Вы уже выполняете задание!");
+            } else {
+                showNotification("Недостаточно энергии! Купите энергетик в магазине.");
+            }
+        }
+
+        // Complete a social task
+        function doSocialTask(task) {
+            if (energy >= task.energy && (!socialTaskCooldowns[task.name] || Date.now() >= socialTaskCooldowns[task.name])) {
+                energy -= task.energy;
+                let pay = task.pay;
+                if (balance < 0) {
+                    const repayment = Math.min(pay, -balance);
+                    balance += repayment;
+                    showNotification(`Погашено долга: $${repayment}`);
+                    pay -= repayment;
+                }
+                balance += pay;
+                socialTaskCooldowns[task.name] = Date.now() + task.cooldown;
+                showNotification(`Задание "${task.name}" выполнено! Вы заработали $${pay}`);
+                playSound("cashSound");
+                createCoinAnimation();
+                updateBalance();
+                updateEnergy();
+                updateSocialTaskList();
+                saveGame();
+            } else if (socialTaskCooldowns[task.name] && Date.now() < socialTaskCooldowns[task.name]) {
+                showNotification("Задание на перезарядке! Подождите.");
+            } else {
+                showNotification("Недостаточно энергии! Купите энергетик в магазине.");
+            }
+        }
+
+        // Buy an item from the shop
+        function buyItem(item) {
+            if (balance >= item.price) {
+                balance -= item.price;
+                inventory.push(item);
+                showNotification(`Вы купили ${item.name} за $${item.price.toLocaleString()}!`);
+                if (item.effect) {
+                    if (item.effect.energy) {
+                        energy += item.effect.energy;
+                        if (energy > 100) energy = 100;
+                        showNotification(`Энергия восстановлена на ${item.effect.energy}!`);
+                        updateEnergy();
+                    }
+                    if (item.effect.hunger) {
+                        hunger += item.effect.hunger;
+                        if (hunger > 100) hunger = 100;
+                        showNotification(`Голод уменьшен на ${item.effect.hunger}!`);
+                        updateHunger();
+                    }
+                    if (item.effect.mood) {
+                        mood += item.effect.mood;
+                        if (mood > 100) mood = 100;
+                        showNotification(`Настроение улучшено на ${item.effect.mood}!`);
+                        updateMood();
+                    }
+                }
+                playSound("cashSound");
+                updateBalance();
+                updateInventory();
+                updateShopAvailability();
+            }
+        }
+
+        // Buy business
+        function buyBusiness() {
+            if (balance >= 50000 && !businessOwned) {
+                balance -= 50000;
+                businessOwned = true;
+                businessLevel = 1;
+                showNotification("Вы открыли бизнес! Зарабатываете $1,000/сек!");
+                startBusinessIncome();
+                playSound("cashSound");
+                updateBalance();
+                showSection('businessContainer');
+            }
+        }
+
+        // Upgrade business
+        function upgradeBusiness() {
+            if (balance >= 100000 && businessOwned && businessLevel < 1) {
+                balance -= 100000;
+                businessLevel = 2;
+                showNotification("Бизнес улучшен! Теперь вы зарабатываете $2,000/сек!");
+                playSound("cashSound");
+                updateBalance();
+                showSection('businessContainer');
+            }
+        }
+
+        // Start passive business income
+        function startBusinessIncome() {
+            setInterval(() => {
+                if (businessOwned) {
+                    let income = businessLevel === 1 ? 1000 : 2000;
+                    if (balance < 0) {
+                        const repayment = Math.min(income, -balance);
+                        balance += repayment;
+                        showNotification(`Погашено долга: $${repayment}`);
+                        income -= repayment;
+                    }
+                    balance += income;
+                    updateBalance();
+                }
+            }, 1000);
+        }
+
+        // Play casino
+        function playCasino(bet) {
+            if (balance >= bet) {
+                balance -= bet;
+                const rand = Math.random() * 100;
+                let outcome = "";
+                if (rand < 40) {
+                    const winAmount = bet * 2;
+                    balance += winAmount;
+                    outcome = `Вы выиграли $${winAmount.toLocaleString()}!`;
+                } else if (rand < 90) {
+                    outcome = `Вы проиграли $${bet.toLocaleString()}!`;
+                } else if (rand < 95) {
+                    balance = 0;
+                    outcome = "Ваш баланс обнулен!";
+                } else {
+                    balance += bet;
+                    outcome = "Ничего не произошло!";
+                }
+                showNotification(outcome);
+                playSound("cashSound");
+                updateBalance();
+                showSection('casinoContainer');
+            } else {
+                showNotification("Недостаточно средств для ставки!");
+            }
+        }
+
+        // Check and handle debt
+        function checkDebt() {
+            if (balance < 0 && !debtRepaymentActive) {
+                debtRepaymentActive = true;
+                showNotification("У вас долг! Заработки идут на его погашение.");
+            } else if (balance >= 0 && debtRepaymentActive) {
+                debtRepaymentActive = false;
+                showNotification("Долг погашен!");
+            }
+            saveGame();
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById("notification");
+            notification.textContent = message;
+            notification.classList.add("show");
+            setTimeout(() => {
+                notification.classList.remove("show");
+                notification.textContent = "";
+            }, 3000);
+        }
+
+        // Play sound
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            sound.currentTime = 0;
+            sound.play().catch(() => {});
+        }
+
+        // Create coin animation
+        function createCoinAnimation() {
+            const coin = document.createElement("div");
+            coin.className = "coin-animation";
+            coin.style.left = `${Math.random() * (window.innerWidth - 40)}px`;
+            coin.style.top = `${window.innerHeight - 80}px`;
+            document.body.appendChild(coin);
+            setTimeout(() => coin.remove(), 1000);
+        }
+
+        // Initialize game
+        loadGame();
+        updateBalance();
+        updateJobTaskList();
+        updateSocialTaskList();
+        updateShopAvailability();
+        updateInventory();
+        updateEnergy();
+        updateHunger();
+        updateMood();
+        if (businessOwned) {
+            startBusinessIncome();
+        }
+    </script>
+</body>
+</html>
