@@ -201,6 +201,11 @@
             transform: translateY(-1px);
         }
 
+        .task-list button.active {
+            background: linear-gradient(135deg, #FFD700, #DAA520);
+            color: #1A1A1A;
+        }
+
         .inventory-list {
             font-size: 0.8em;
             color: #D1D5DB;
@@ -380,6 +385,7 @@
             hunger: 100,
             mood: 100,
             currentJob: null,
+            currentTask: null,
             businessOwned: false,
             businessLevel: 0,
             inventory: [],
@@ -389,8 +395,7 @@
             socialTaskCooldowns: {},
             lastSave: Date.now(),
             achievements: [],
-            hungerSatisfiedUntil: 0,
-            currentTask: null
+            hungerSatisfiedUntil: 0
         };
 
         const statuses = [
@@ -539,9 +544,21 @@
             { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } }
         ];
 
+        // Инициализация Telegram Web App
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.expand();
             window.Telegram.WebApp.enableClosingConfirmation();
+            window.Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
+            window.Telegram.WebApp.BackButton.show();
+        }
+
+        // Активация полноэкранного режима
+        function enterFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.warn(`Fullscreen error: ${err.message}`);
+                });
+            }
         }
 
         function loadGame() {
@@ -554,14 +571,23 @@
                         delete state.socialTaskCooldowns[task];
                     }
                 }
+                // Сброс некорректного состояния работы
+                if (state.isWorking && !state.currentTask) {
+                    state.isWorking = false;
+                }
             }
             state.lastSave = Date.now();
+            saveGame();
         }
 
         function saveGame() {
-            if (Date.now() - state.lastSave > 1000) {
-                localStorage.setItem('riseToRichesState', JSON.stringify(state));
-                state.lastSave = Date.now();
+            if (Date.now() - state.lastSave >= 1000) {
+                try {
+                    localStorage.setItem('riseToRichesState', JSON.stringify(state));
+                    state.lastSave = Date.now();
+                } catch (e) {
+                    console.warn("Ошибка сохранения: ", e);
+                }
             }
         }
 
@@ -571,6 +597,9 @@
                 section.classList.toggle('active', id === sectionId);
                 Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
             });
+            if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.BackButton[sectionId === 'mainContainer' ? 'hide' : 'show']();
+            }
             playSound("clickSound");
             render();
         }
@@ -608,13 +637,14 @@
             const taskList = document.getElementById("jobTaskList");
             taskList.innerHTML = "";
             if (state.currentJob) {
-                if (state.isWorking) {
-                    taskList.innerHTML = `<div style="text-align: center;">Выполняется: ${state.currentTask.name}...</div>`;
+                if (state.isWorking && state.currentTask) {
+                    taskList.innerHTML = `<div style="text-align: center; color: #FFD700;">Выполняется: ${state.currentTask.name}...</div>`;
                 } else {
                     state.currentJob.tasks.forEach(task => {
                         const button = document.createElement("button");
                         button.textContent = `${task.name} ($${task.pay}, ${task.energy} энергии)`;
-                        button.disabled = state.energy < task.energy || state.isWorking;
+                        button.disabled = state.energy < task.energy || state.isWorking || state.hunger < 30;
+                        button.classList.toggle('active', state.currentTask && state.currentTask.name === task.name);
                         button.onclick = () => startJobTask(task);
                         taskList.appendChild(button);
                     });
@@ -714,6 +744,10 @@
                 showNotification("Эта работа уже выбрана!");
                 return;
             }
+            if (state.isWorking) {
+                showNotification("Дождитесь завершения текущего задания!");
+                return;
+            }
             state.currentJob = jobs[jobKey];
             state.currentTask = null;
             showNotification(`Работа выбрана: ${state.currentJob.name}`);
@@ -740,7 +774,7 @@
             state.isWorking = true;
             state.currentTask = task;
             state.energy -= task.energy;
-            state.mood = Math.max(0, state.mood - 3); // Снижение настроения уменьшено
+            state.mood = Math.max(0, state.mood - 3);
 
             showNotification(`Начато: ${task.name} (${Math.floor(task.duration / 1000)}с)`);
             playSound("clickSound");
@@ -754,7 +788,13 @@
         }
 
         function completeJobTask(task) {
-            if (!state.isWorking || state.currentTask !== task) return; // Предотвращает дублирование
+            if (!state.isWorking || state.currentTask !== task) {
+                state.isWorking = false;
+                state.currentTask = null;
+                saveGame();
+                render();
+                return;
+            }
 
             let pay = task.pay;
             state.inventory.forEach(item => {
@@ -775,7 +815,7 @@
             });
 
             if (state.hunger < 50 && Date.now() > state.hungerSatisfiedUntil) {
-                pay *= 0.75; // Штраф за голод снижен
+                pay *= 0.75;
                 showNotification("Голод снижает доход!");
             }
             pay = Math.floor(pay);
@@ -995,9 +1035,13 @@
             render();
         }
 
-        loadGame();
-        render();
-        setInterval(gameTick, 1000);
+        // Запуск игры
+        document.addEventListener('DOMContentLoaded', () => {
+            enterFullscreen();
+            loadGame();
+            render();
+            setInterval(gameTick, 1000);
+        });
     </script>
 </body>
 </html>
