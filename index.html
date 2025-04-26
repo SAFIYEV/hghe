@@ -389,7 +389,8 @@
             socialTaskCooldowns: {},
             lastSave: Date.now(),
             achievements: [],
-            hungerSatisfiedUntil: 0
+            hungerSatisfiedUntil: 0,
+            currentTask: null
         };
 
         const statuses = [
@@ -598,9 +599,9 @@
             for (const key in jobs) {
                 const job = jobs[key];
                 const button = document.createElement("button");
-                button.textContent = `${job.name} ($${job.pay}${job.unlock > 0 ? `, $${job.unlock.toLocaleString()}` : ""})`;
-                button.disabled = state.balance < job.unlock || state.isWorking;
-                button.onclick = () => takeJob(key);
+                button.textContent = `${job.name} ($${job.pay}${job.unlock > 0 ? `, Unlock: $${job.unlock.toLocaleString()}` : ""})`;
+                button.disabled = state.balance < job.unlock || (state.currentJob && state.currentJob.name === job.name);
+                button.onclick = () => selectJob(key);
                 jobList.appendChild(button);
             }
 
@@ -608,18 +609,18 @@
             taskList.innerHTML = "";
             if (state.currentJob) {
                 if (state.isWorking) {
-                    taskList.textContent = `Работа: ${state.currentJob.name}...`;
+                    taskList.innerHTML = `<div style="text-align: center;">Выполняется: ${state.currentTask.name}...</div>`;
                 } else {
                     state.currentJob.tasks.forEach(task => {
                         const button = document.createElement("button");
                         button.textContent = `${task.name} ($${task.pay}, ${task.energy} энергии)`;
                         button.disabled = state.energy < task.energy || state.isWorking;
-                        button.onclick = () => doJobTask(task);
+                        button.onclick = () => startJobTask(task);
                         taskList.appendChild(button);
                     });
                 }
             } else {
-                taskList.textContent = "Выберите работу";
+                taskList.innerHTML = '<div style="text-align: center;">Выберите работу</div>';
             }
 
             const socialTaskList = document.getElementById("socialTaskList");
@@ -708,26 +709,54 @@
             }
         }
 
-        function takeJob(jobKey) {
+        function selectJob(jobKey) {
+            if (state.currentJob && state.currentJob.name === jobs[jobKey].name) {
+                showNotification("Эта работа уже выбрана!");
+                return;
+            }
             state.currentJob = jobs[jobKey];
-            showNotification(`Работа: ${state.currentJob.name}`);
+            state.currentTask = null;
+            showNotification(`Работа выбрана: ${state.currentJob.name}`);
             playSound("clickSound");
             showSection('jobContainer');
             saveGame();
             render();
         }
 
-        function doJobTask(task) {
-            if (state.energy < task.energy || state.isWorking) {
-                showNotification(state.isWorking ? "Уже работаешь!" : "Мало энергии!");
+        function startJobTask(task) {
+            if (state.isWorking) {
+                showNotification("Уже выполняешь задание!");
                 return;
             }
-            state.isWorking = true;
-            state.energy -= task.energy;
-            state.mood -= 5;
-            if (state.mood < 0) state.mood = 0;
-            let pay = task.pay;
+            if (state.energy < task.energy) {
+                showNotification("Недостаточно энергии!");
+                return;
+            }
+            if (state.hunger < 30 && Date.now() > state.hungerSatisfiedUntil) {
+                showNotification("Ты слишком голоден для работы!");
+                return;
+            }
 
+            state.isWorking = true;
+            state.currentTask = task;
+            state.energy -= task.energy;
+            state.mood = Math.max(0, state.mood - 3); // Снижение настроения уменьшено
+
+            showNotification(`Начато: ${task.name} (${Math.floor(task.duration / 1000)}с)`);
+            playSound("clickSound");
+
+            setTimeout(() => {
+                completeJobTask(task);
+            }, task.duration);
+
+            saveGame();
+            render();
+        }
+
+        function completeJobTask(task) {
+            if (!state.isWorking || state.currentTask !== task) return; // Предотвращает дублирование
+
+            let pay = task.pay;
             state.inventory.forEach(item => {
                 if (item.job && state.currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === state.currentJob)) {
                     if (item.effect.payMultiplier) {
@@ -746,30 +775,26 @@
             });
 
             if (state.hunger < 50 && Date.now() > state.hungerSatisfiedUntil) {
-                pay *= 0.5;
+                pay *= 0.75; // Штраф за голод снижен
                 showNotification("Голод снижает доход!");
             }
             pay = Math.floor(pay);
 
-            showNotification(`Задание "${task.name}" начато (${Math.floor(task.duration/1000)}с)`);
+            if (state.balance < 0) {
+                const repayment = Math.min(pay, -state.balance);
+                state.balance += repayment;
+                showNotification(`Погашено долга: $${repayment}`);
+                pay -= repayment;
+            }
+            state.balance += pay;
 
-            setTimeout(() => {
-                state.isWorking = false;
-                if (state.balance < 0) {
-                    const repayment = Math.min(pay, -state.balance);
-                    state.balance += repayment;
-                    showNotification(`Погашено долга: $${repayment}`);
-                    pay -= repayment;
-                }
-                state.balance += pay;
-                showNotification(`Задание "${task.name}" готово! +$${pay}`);
-                playSound("cashSound");
-                createCoinAnimation();
-                updateStatus();
-                saveGame();
-                render();
-            }, task.duration);
+            showNotification(`Завершено: ${task.name}! +$${pay}`);
+            playSound("cashSound");
+            createCoinAnimation();
 
+            state.isWorking = false;
+            state.currentTask = null;
+            updateStatus();
             saveGame();
             render();
         }
@@ -932,28 +957,25 @@
         }
 
         function gameTick() {
-            // Энергия восстанавливается: 10 единиц за 5 минут (300 секунд)
             if (state.energy < 100) {
-                state.energy += 10 / (300); // 10 энергии за 300 секунд = 0.0333 энергии в секунду
+                state.energy += 10 / 300;
                 if (state.energy > 100) state.energy = 100;
             }
 
-            // Управление голодом
             if (Date.now() > state.hungerSatisfiedUntil) {
                 if (state.hunger > 0) {
-                    state.hunger -= 0.0333; // Голод уменьшается на 100 за ~50 минут
+                    state.hunger -= 0.0333;
                     if (state.hunger < 0) state.hunger = 0;
                     if (state.hunger < 30) {
                         showNotification("Голоден! Купи еду.");
                     }
                 }
             } else {
-                state.hunger = 100; // Сытость сохраняется, пока активен эффект хлеба
+                state.hunger = 100;
             }
 
-            // Настроение восстанавливается медленно
             if (state.mood < 100) {
-                state.mood += 0.0167; // 1 единица настроения за минуту
+                state.mood += 0.0167;
                 if (state.mood > 100) state.mood = 100;
             }
 
