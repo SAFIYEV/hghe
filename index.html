@@ -388,7 +388,8 @@
             isWorking: false,
             socialTaskCooldowns: {},
             lastSave: Date.now(),
-            achievements: []
+            achievements: [],
+            hungerSatisfiedUntil: 0
         };
 
         const statuses = [
@@ -513,8 +514,8 @@
         ];
 
         const shopItems = [
-            { name: "Хлеб", price: 5, desc: "Восполняет голод", effect: { hunger: 20 }, image: "bread.png", reusable: true },
-            { name: "Энергетик", price: 20, desc: "Восстанавливает энергию", effect: { energy: 50 }, image: "energy_drink.png", reusable: true },
+            { name: "Хлеб", price: 5, desc: "Снимает голод на 10 минут", effect: { hungerSatisfied: 600000 }, image: "bread.png", reusable: true },
+            { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true },
             { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
             { name: "Кроссовки", price: 200, desc: "Задания +10% дохода", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
             { name: "Велосипед", price: 500, desc: "Доставка +50% чаевых", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
@@ -744,7 +745,7 @@
                 }
             });
 
-            if (state.hunger < 50) {
+            if (state.hunger < 50 && Date.now() > state.hungerSatisfiedUntil) {
                 pay *= 0.5;
                 showNotification("Голод снижает доход!");
             }
@@ -818,9 +819,10 @@
                     state.energy = Math.min(state.energy + item.effect.energy, 100);
                     showNotification(`Энергия +${item.effect.energy}!`);
                 }
-                if (item.effect.hunger) {
-                    state.hunger = Math.min(state.hunger + item.effect.hunger, 100);
-                    showNotification(`Голод -${item.effect.hunger}!`);
+                if (item.effect.hungerSatisfied) {
+                    state.hungerSatisfiedUntil = Date.now() + item.effect.hungerSatisfied;
+                    state.hunger = 100;
+                    showNotification(`Сытость на ${item.effect.hungerSatisfied / 60000} минут!`);
                 }
                 if (item.effect.mood) {
                     state.mood = Math.min(state.mood + item.effect.mood, 100);
@@ -930,21 +932,31 @@
         }
 
         function gameTick() {
+            // Энергия восстанавливается: 10 единиц за 5 минут (300 секунд)
             if (state.energy < 100) {
-                state.energy += state.mood >= 50 ? 1 : 0.5;
+                state.energy += 10 / (300); // 10 энергии за 300 секунд = 0.0333 энергии в секунду
                 if (state.energy > 100) state.energy = 100;
             }
-            if (state.hunger > 0) {
-                state.hunger -= 0.0167;
-                if (state.hunger < 0) state.hunger = 0;
-                if (state.hunger < 30) {
-                    showNotification("Голоден! Купи еду.");
+
+            // Управление голодом
+            if (Date.now() > state.hungerSatisfiedUntil) {
+                if (state.hunger > 0) {
+                    state.hunger -= 0.0333; // Голод уменьшается на 100 за ~50 минут
+                    if (state.hunger < 0) state.hunger = 0;
+                    if (state.hunger < 30) {
+                        showNotification("Голоден! Купи еду.");
+                    }
                 }
+            } else {
+                state.hunger = 100; // Сытость сохраняется, пока активен эффект хлеба
             }
+
+            // Настроение восстанавливается медленно
             if (state.mood < 100) {
-                state.mood += 0.1;
+                state.mood += 0.0167; // 1 единица настроения за минуту
                 if (state.mood > 100) state.mood = 100;
             }
+
             if (state.businessOwned) {
                 let income = state.businessLevel * 1000;
                 if (state.balance < 0) {
