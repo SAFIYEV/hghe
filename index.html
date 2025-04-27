@@ -40,7 +40,7 @@
             transform: translateY(15px);
         }
 
-        .shop-container {
+        .shop-container, .job-container, .task-container {
             border: 2px solid #FFD700;
             background: rgba(30, 30, 40, 0.9);
         }
@@ -110,7 +110,7 @@
             background: rgba(255, 215, 0, 0.4);
         }
 
-        .shop-list {
+        .shop-list, .job-list, .task-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 8px;
@@ -119,7 +119,7 @@
             max-height: 60vh;
         }
 
-        .shop-item {
+        .shop-item, .job-item, .task-item {
             background: rgba(255, 255, 255, 0.08);
             border-radius: 10px;
             padding: 8px;
@@ -127,25 +127,25 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .shop-item:hover {
+        .shop-item:hover, .job-item:hover, .task-item:hover {
             transform: scale(1.04);
             box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
         }
 
-        .shop-item img {
+        .shop-item img, .job-item img, .task-item img {
             width: 64px;
             height: 64px;
             object-fit: contain;
             margin-bottom: 4px;
         }
 
-        .shop-item p {
+        .shop-item p, .job-item p, .task-item p {
             font-size: 0.8em;
             color: #D1D5DB;
             margin: 4px 0;
         }
 
-        .shop-item button {
+        .shop-item button, .job-item button, .task-item button {
             width: 100%;
             padding: 6px;
             font-size: 0.8em;
@@ -157,13 +157,13 @@
             transition: transform 0.2s, background 0.2s;
         }
 
-        .shop-item button:disabled {
+        .shop-item button:disabled, .job-item button:disabled, .task-item button:disabled {
             background: #444;
             color: #777;
             cursor: not-allowed;
         }
 
-        .shop-item button:hover:not(:disabled) {
+        .shop-item button:hover:not(:disabled), .job-item button:hover:not(:disabled), .task-item button:hover:not(:disabled) {
             background: linear-gradient(135deg, #FFE066, #FFD700);
             transform: scale(1.03);
         }
@@ -172,14 +172,14 @@
             animation: purchase 0.3s ease;
         }
 
-        .job-list, .task-list, .inventory-list, .casino, .business {
+        .inventory-list, .casino, .business {
             display: flex;
             flex-direction: column;
             gap: 6px;
             padding: 8px 0;
         }
 
-        .job-list button, .task-list button, .casino button, .business button {
+        .casino button, .business button {
             width: 100%;
             padding: 8px;
             font-size: 0.9em;
@@ -191,19 +191,14 @@
             transition: transform 0.2s, background 0.2s;
         }
 
-        .job-list button:disabled, .task-list button:disabled, .casino button:disabled, .business button:disabled {
+        .casino button:disabled, .business button:disabled {
             background: #444;
             cursor: not-allowed;
         }
 
-        .job-list button:hover:not(:disabled), .task-list button:hover:not(:disabled), .casino button:hover:not(:disabled), .business button:hover:not(:disabled) {
+        .casino button:hover:not(:disabled), .business button:hover:not(:disabled) {
             background: linear-gradient(135deg, #9CA3AF, #6B7280);
             transform: translateY(-1px);
-        }
-
-        .task-list button.active {
-            background: linear-gradient(135deg, #FFD700, #DAA520);
-            color: #1A1A1A;
         }
 
         .inventory-list {
@@ -263,8 +258,8 @@
             }
             .stat { font-size: 0.8em; }
             .tab-button { font-size: 0.7em; padding: 5px; }
-            .shop-item img { width: 48px; height: 48px; }
-            .shop-list { grid-template-columns: 1fr; }
+            .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
+            .shop-list, .job-list, .task-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -286,13 +281,13 @@
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
 
     <div class="job-container" id="jobContainer">
         <h1>Работа</h1>
         <div class="job-list" id="jobList"></div>
-        <div class="task-list" id="jobTaskList"></div>
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button active" onclick="showSection('jobContainer')">Работа</button>
@@ -301,12 +296,13 @@
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
 
     <div class="task-container" id="taskContainer">
         <h1>Задания</h1>
-        <div class="task-list" id="socialTaskList"></div>
+        <div class="task-list" id="taskList"></div>
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
@@ -315,6 +311,7 @@
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
 
@@ -329,6 +326,7 @@
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
 
@@ -343,6 +341,7 @@
             <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
 
@@ -357,6 +356,7 @@
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
 
@@ -371,6 +371,26 @@
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+        </div>
+    </div>
+
+    <div class="transfer-container" id="transferContainer">
+        <h1>Перевод валюты</h1>
+        <div class="transfer">
+            <input type="text" id="recipientId" placeholder="ID получателя" style="padding: 8px; margin-bottom: 8px; border-radius: 6px; border: none;">
+            <input type="number" id="transferAmount" placeholder="Сумма" style="padding: 8px; margin-bottom: 8px; border-radius: 6px; border: none;">
+            <button onclick="transferCurrency()" style="width: 100%; padding: 8px; font-size: 0.9em; background: linear-gradient(135deg, #FFD700, #DAA520); color: #1A1A1A; border: none; border-radius: 10px; cursor: pointer;">Отправить</button>
+        </div>
+        <div class="tabs">
+            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
+            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
 
@@ -386,6 +406,7 @@
             mood: 100,
             currentJob: null,
             currentTask: null,
+            taskStartTime: 0,
             businessOwned: false,
             businessLevel: 0,
             inventory: [],
@@ -395,7 +416,10 @@
             socialTaskCooldowns: {},
             lastSave: Date.now(),
             achievements: [],
-            hungerSatisfiedUntil: 0
+            hungerSatisfiedUntil: 0,
+            lastTick: Date.now(),
+            playerId: Math.random().toString(36).substr(2, 9),
+            hourlyIncome: 0
         };
 
         const statuses = [
@@ -412,75 +436,96 @@
                 name: "Уборщик",
                 pay: 50,
                 unlock: 0,
+                hourly: 1,
+                fine: 10,
+                image: "cleaner.png",
                 tasks: [
-                    { name: "Убрать улицу", pay: 50, energy: 10, duration: 60000 },
-                    { name: "Помыть окна", pay: 60, energy: 10, duration: 70000 },
-                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000 },
-                    { name: "Вынести мусор", pay: 40, energy: 10, duration: 50000 }
+                    { name: "Убрать улицу", pay: 50, energy: 10, duration: 60000, image: "clean_street.png" },
+                    { name: "Помыть окна", pay: 60, energy: 10, duration: 70000, image: "wash_windows.png" },
+                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000, image: "clean_carpets.png" },
+                    { name: "Вынести мусор", pay: 40, energy: 10, duration: 50000, image: "take_trash.png" }
                 ]
             },
             courier: {
                 name: "Курьер",
                 pay: 100,
                 unlock: 0,
+                hourly: 5,
+                fine: 20,
+                image: "courier.png",
                 tasks: [
-                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 60000 },
-                    { name: "Развести еду", pay: 120, energy: 10, duration: 70000 },
-                    { name: "Доставить пиццу", pay: 110, energy: 10, duration: 65000 }
+                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 60000, image: "deliver_package.png" },
+                    { name: "Развести еду", pay: 120, energy: 10, duration: 70000, image: "deliver_food.png" },
+                    { name: "Доставить пиццу", pay: 110, energy: 10, duration: 65000, image: "deliver_pizza.png" }
                 ]
             },
             postman: {
                 name: "Почтальон",
                 pay: 80,
                 unlock: 1000,
+                hourly: 3,
+                fine: 15,
+                image: "postman.png",
                 tasks: [
-                    { name: "Разнести письма", pay: 80, energy: 10, duration: 60000 },
-                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 70000 },
-                    { name: "Раздать газеты", pay: 70, energy: 10, duration: 55000 },
-                    { name: "Отправить заказное письмо", pay: 90, energy: 10, duration: 65000 }
+                    { name: "Разнести письма", pay: 80, energy: 10, duration: 60000, image: "deliver_letters.png" },
+                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 70000, image: "deliver_package_post.png" },
+                    { name: "Раздать газеты", pay: 70, energy: 10, duration: 55000, image: "deliver_newspapers.png" },
+                    { name: "Отправить заказное письмо", pay: 90, energy: 10, duration: 65000, image: "send_registered.png" }
                 ]
             },
             taxi: {
                 name: "Таксист",
                 pay: 150,
                 unlock: 5000,
+                hourly: 10,
+                fine: 30,
+                image: "taxi.png",
                 tasks: [
-                    { name: "Отвезти пассажира", pay: 150, energy: 10, duration: 80000 },
-                    { name: "Доехать до аэропорта", pay: 200, energy: 10, duration: 90000 },
-                    { name: "Подвезти в центр", pay: 170, energy: 10, duration: 85000 },
-                    { name: "Ночной рейс", pay: 250, energy: 15, duration: 100000 }
+                    { name: "Отвезти пассажира", pay: 150, energy: 10, duration: 80000, image: "drive_passenger.png" },
+                    { name: "Доехать до аэропорта", pay: 200, energy: 10, duration: 90000, image: "drive_airport.png" },
+                    { name: "Подвезти в центр", pay: 170, energy: 10, duration: 85000, image: "drive_center.png" },
+                    { name: "Ночной рейс", pay: 250, energy: 15, duration: 100000, image: "night_ride.png" }
                 ]
             },
             freelancer: {
                 name: "Фрилансер",
                 pay: 300,
                 unlock: 10000,
+                hourly: 20,
+                fine: 50,
+                image: "freelancer.png",
                 tasks: [
-                    { name: "Написать статью", pay: 300, energy: 10, duration: 90000 },
-                    { name: "Сделать логотип", pay: 350, energy: 10, duration: 95000 },
-                    { name: "Создать сайт", pay: 400, energy: 10, duration: 100000 }
+                    { name: "Написать статью", pay: 300, energy: 10, duration: 90000, image: "write_article.png" },
+                    { name: "Сделать логотип", pay: 350, energy: 10, duration: 95000, image: "design_logo.png" },
+                    { name: "Создать сайт", pay: 400, energy: 10, duration: 100000, image: "build_website.png" }
                 ]
             },
             influencer: {
                 name: "Инфлюенсер",
                 pay: 1000,
                 unlock: 50000,
+                hourly: 50,
+                fine: 100,
+                image: "influencer.png",
                 tasks: [
-                    { name: "Опубликовать пост", pay: 1000, energy: 10, duration: 80000 },
-                    { name: "Снять сторис", pay: 800, energy: 10, duration: 70000 },
-                    { name: "Провести прямой эфир", pay: 1200, energy: 10, duration: 90000 },
-                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000 }
+                    { name: "Опубликовать пост", pay: 1000, energy: 10, duration: 80000, image: "post_content.png" },
+                    { name: "Снять сторис", pay: 800, energy: 10, duration: 70000, image: "shoot_stories.png" },
+                    { name: "Провести прямой эфир", pay: 1200, energy: 10, duration: 90000, image: "live_stream.png" },
+                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000, image: "share_link.png" }
                 ]
             },
             crypto: {
                 name: "Криптотрейдер",
                 pay: 5000,
                 unlock: 100000,
+                hourly: 100,
+                fine: 200,
+                image: "crypto.png",
                 tasks: [
-                    { name: "Купить биткоин", pay: 5000, energy: 10, duration: 100000 },
-                    { name: "Продать NFT", pay: 6000, energy: 10, duration: 110000 },
-                    { name: "Майнить эфир", pay: 5500, energy: 10, duration: 105000 },
-                    { name: "Проанализировать рынок", pay: 4500, energy: 10, duration: 95000 }
+                    { name: "Купить биткоин", pay: 100000, energy: 10, duration: 100000, image: "buy_bitcoin.png" },
+                    { name: "Продать NFT", pay: 6000, energy: 10, duration: 110000, image: "sell_nft.png" },
+                    { name: "Майнить эфир", pay: 5500, energy: 10, duration: 105000, image: "mine_ether.png" },
+                    { name: "Проанализировать рынок", pay: 4500, energy: 10, duration: 95000, image: "analyze_market.png" }
                 ]
             }
         };
@@ -544,7 +589,6 @@
             { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } }
         ];
 
-        // Инициализация Telegram Web App
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.expand();
             window.Telegram.WebApp.enableClosingConfirmation();
@@ -552,7 +596,6 @@
             window.Telegram.WebApp.BackButton.show();
         }
 
-        // Активация полноэкранного режима
         function enterFullscreen() {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(err => {
@@ -571,12 +614,18 @@
                         delete state.socialTaskCooldowns[task];
                     }
                 }
-                // Сброс некорректного состояния работы
                 if (state.isWorking && !state.currentTask) {
                     state.isWorking = false;
                 }
+                if (state.isWorking && state.currentTask) {
+                    const elapsed = Date.now() - state.taskStartTime;
+                    if (elapsed >= state.currentTask.duration) {
+                        completeJobTask(state.currentTask);
+                    }
+                }
             }
             state.lastSave = Date.now();
+            state.lastTick = Date.now();
             saveGame();
         }
 
@@ -592,7 +641,7 @@
         }
 
         function showSection(sectionId) {
-            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer'].forEach(id => {
+            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer'].forEach(id => {
                 const section = document.getElementById(id);
                 section.classList.toggle('active', id === sectionId);
                 Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
@@ -627,45 +676,58 @@
             jobList.innerHTML = "";
             for (const key in jobs) {
                 const job = jobs[key];
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "job-item";
+                const img = document.createElement("img");
+                img.src = job.image;
+                img.alt = job.name;
+                img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
+                const desc = document.createElement("p");
+                desc.textContent = `З/П: $${job.pay}, Час: $${job.hourly}`;
                 const button = document.createElement("button");
-                button.textContent = `${job.name} ($${job.pay}${job.unlock > 0 ? `, Unlock: $${job.unlock.toLocaleString()}` : ""})`;
+                button.textContent = job.unlock > 0 ? `${job.name} ($${job.unlock.toLocaleString()})` : job.name;
                 button.disabled = state.balance < job.unlock || (state.currentJob && state.currentJob.name === job.name);
                 button.onclick = () => selectJob(key);
-                jobList.appendChild(button);
+                itemDiv.appendChild(img);
+                itemDiv.appendChild(desc);
+                itemDiv.appendChild(button);
+                jobList.appendChild(itemDiv);
             }
 
-            const taskList = document.getElementById("jobTaskList");
+            const taskList = document.getElementById("taskList");
             taskList.innerHTML = "";
             if (state.currentJob) {
                 if (state.isWorking && state.currentTask) {
-                    taskList.innerHTML = `<div style="text-align: center; color: #FFD700;">Выполняется: ${state.currentTask.name}...</div>`;
+                    const remainingTime = Math.max(0, Math.floor((state.currentTask.duration - (Date.now() - state.taskStartTime)) / 1000));
+                    taskList.innerHTML = `<div style="text-align: center; color: #FFD700;">Выполняется: ${state.currentTask.name} (${remainingTime}с)</div>`;
+                    const pauseButton = document.createElement("button");
+                    pauseButton.textContent = `Приостановить (штраф $${state.currentJob.fine})`;
+                    pauseButton.onclick = pauseJob;
+                    taskList.appendChild(pauseButton);
                 } else {
                     state.currentJob.tasks.forEach(task => {
+                        const itemDiv = document.createElement("div");
+                        itemDiv.className = "task-item";
+                        const img = document.createElement("img");
+                        img.src = task.image;
+                        img.alt = task.name;
+                        img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJक्ःMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
+                        const desc = document.createElement("p");
+                        desc.textContent = `$${task.pay}, ${task.energy} энергии`;
                         const button = document.createElement("button");
-                        button.textContent = `${task.name} ($${task.pay}, ${task.energy} энергии)`;
+                        button.textContent = task.name;
                         button.disabled = state.energy < task.energy || state.isWorking || state.hunger < 30;
                         button.classList.toggle('active', state.currentTask && state.currentTask.name === task.name);
                         button.onclick = () => startJobTask(task);
-                        taskList.appendChild(button);
+                        itemDiv.appendChild(img);
+                        itemDiv.appendChild(desc);
+                        itemDiv.appendChild(button);
+                        taskList.appendChild(itemDiv);
                     });
                 }
             } else {
                 taskList.innerHTML = '<div style="text-align: center;">Выберите работу</div>';
             }
-
-            const socialTaskList = document.getElementById("socialTaskList");
-            socialTaskList.innerHTML = "";
-            socialTasks.forEach(task => {
-                const button = document.createElement("button");
-                const isOnCooldown = state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name];
-                const timeLeft = isOnCooldown ? Math.ceil((state.socialTaskCooldowns[task.name] - Date.now()) / 1000) : 0;
-                button.textContent = isOnCooldown
-                    ? `${task.name} ($${task.pay}, ${task.energy} энергии, ${timeLeft}с)`
-                    : `${task.name} ($${task.pay}, ${task.energy} энергии)`;
-                button.disabled = state.energy < task.energy || isOnCooldown;
-                button.onclick = () => doSocialTask(task);
-                socialTaskList.appendChild(button);
-            });
 
             const shopList = document.getElementById("shopList");
             shopList.innerHTML = "";
@@ -750,9 +812,10 @@
             }
             state.currentJob = jobs[jobKey];
             state.currentTask = null;
+            state.hourlyIncome = state.currentJob.hourly;
             showNotification(`Работа выбрана: ${state.currentJob.name}`);
             playSound("clickSound");
-            showSection('jobContainer');
+            showSection('taskContainer');
             saveGame();
             render();
         }
@@ -773,16 +836,30 @@
 
             state.isWorking = true;
             state.currentTask = task;
+            state.taskStartTime = Date.now();
             state.energy -= task.energy;
             state.mood = Math.max(0, state.mood - 3);
 
             showNotification(`Начато: ${task.name} (${Math.floor(task.duration / 1000)}с)`);
             playSound("clickSound");
 
-            setTimeout(() => {
-                completeJobTask(task);
-            }, task.duration);
+            saveGame();
+            render();
+        }
 
+        function pauseJob() {
+            if (!state.isWorking || !state.currentJob) return;
+            const fine = state.currentJob.fine;
+            if (state.balance < fine) {
+                showNotification("Недостаточно денег для штрафа!");
+                return;
+            }
+            state.balance -= fine;
+            state.isWorking = false;
+            state.currentTask = null;
+            state.taskStartTime = 0;
+            showNotification(`Работа приостановлена! Штраф: $${fine}`);
+            playSound("clickSound");
             saveGame();
             render();
         }
@@ -791,6 +868,7 @@
             if (!state.isWorking || state.currentTask !== task) {
                 state.isWorking = false;
                 state.currentTask = null;
+                state.taskStartTime = 0;
                 saveGame();
                 render();
                 return;
@@ -834,6 +912,7 @@
 
             state.isWorking = false;
             state.currentTask = null;
+            state.taskStartTime = 0;
             updateStatus();
             saveGame();
             render();
@@ -961,6 +1040,24 @@
             render();
         }
 
+        function transferCurrency() {
+            const recipientId = document.getElementById("recipientId").value;
+            const amount = parseInt(document.getElementById("transferAmount").value);
+            if (!recipientId || isNaN(amount) || amount <= 0) {
+                showNotification("Введите корректные данные!");
+                return;
+            }
+            if (state.balance < amount) {
+                showNotification("Недостаточно денег!");
+                return;
+            }
+            state.balance -= amount;
+            showNotification(`Переведено $${amount} игроку ${recipientId}!`);
+            playSound("cashSound");
+            saveGame();
+            render();
+        }
+
         function checkDebt() {
             if (state.balance < 0 && !state.debtRepaymentActive) {
                 state.debtRepaymentActive = true;
@@ -997,14 +1094,17 @@
         }
 
         function gameTick() {
+            const now = Date.now();
+            const deltaTime = (now - state.lastTick) / 1000;
+
             if (state.energy < 100) {
-                state.energy += 10 / 300;
+                state.energy += (10 / 300) * deltaTime;
                 if (state.energy > 100) state.energy = 100;
             }
 
             if (Date.now() > state.hungerSatisfiedUntil) {
                 if (state.hunger > 0) {
-                    state.hunger -= 0.0333;
+                    state.hunger -= 0.0333 * deltaTime;
                     if (state.hunger < 0) state.hunger = 0;
                     if (state.hunger < 30) {
                         showNotification("Голоден! Купи еду.");
@@ -1015,27 +1115,40 @@
             }
 
             if (state.mood < 100) {
-                state.mood += 0.0167;
+                state.mood += 0.0167 * deltaTime;
                 if (state.mood > 100) state.mood = 100;
             }
 
             if (state.businessOwned) {
-                let income = state.businessLevel * 1000;
+                let income = state.businessLevel * 1000 * deltaTime;
                 if (state.balance < 0) {
                     const repayment = Math.min(income, -state.balance);
                     state.balance += repayment;
-                    showNotification(`Погашено долга: $${repayment}`);
+                    showNotification(`Погашено долга: $${Math.floor(repayment)}`);
                     income -= repayment;
                 }
                 state.balance += income;
             }
+
+            if (state.hourlyIncome > 0) {
+                const hourlyIncome = (state.hourlyIncome / 3600) * deltaTime;
+                state.balance += hourlyIncome;
+            }
+
+            if (state.isWorking && state.currentTask) {
+                const elapsed = now - state.taskStartTime;
+                if (elapsed >= state.currentTask.duration) {
+                    completeJobTask(state.currentTask);
+                }
+            }
+
             checkDebt();
             updateStatus();
+            state.lastTick = now;
             saveGame();
             render();
         }
 
-        // Запуск игры
         document.addEventListener('DOMContentLoaded', () => {
             enterFullscreen();
             loadGame();
