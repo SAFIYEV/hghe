@@ -19,30 +19,30 @@
             touch-action: manipulation;
         }
 
-        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container {
+        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
             width: 100%;
             max-width: 360px;
             margin: 8px;
-            padding: 10px;
-            background: rgba(20, 20, 30, 0.85);
+            padding: 12px;
+            background: rgba(20, 20, 30, 0.9);
             border-radius: 16px;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(6px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
             box-sizing: border-box;
             position: fixed;
             bottom: 8px;
             z-index: 1;
             display: none;
             flex-direction: column;
-            min-height: 250px;
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            min-height: 200px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
             opacity: 0;
-            transform: translateY(15px);
+            transform: translateY(20px);
         }
 
-        .shop-container, .job-container, .task-container {
-            border: 2px solid #FFD700;
-            background: rgba(30, 30, 40, 0.9);
+        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
+            border: 1px solid #FFD700;
+            background: rgba(30, 30, 40, 0.95);
         }
 
         .active {
@@ -52,91 +52,96 @@
         }
 
         h1 {
-            font-size: 1.5em;
+            font-size: 1.4em;
             margin: 8px 0;
             text-align: center;
             color: #FFD700;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .stats {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            font-size: 0.9em;
-            flex-wrap: wrap;
-            gap: 5px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 0.85em;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
         }
 
         .stat {
-            flex: 1;
             text-align: center;
             color: #E0E0E0;
         }
 
         .stat span {
             color: #FFD700;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .tabs {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-wrap: nowrap;
+            justify-content: space-around;
             margin-top: auto;
             padding: 8px 0;
-            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
         }
 
         .tab-button {
-            flex: 0 0 calc(25% - 6px);
-            padding: 6px;
+            flex: 1;
+            padding: 8px;
             font-size: 0.8em;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             color: #E0E0E0;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
+            margin: 0 4px;
             text-align: center;
         }
 
         .tab-button:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .tab-button.active {
-            background: rgba(255, 215, 0, 0.4);
+            background: #FFD700;
+            color: #1A1A1A;
+            font-weight: 600;
         }
 
         .shop-list, .job-list, .task-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            padding: 8px 0;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            padding: 10px 0;
             overflow-y: auto;
-            max-height: 60vh;
+            max-height: 50vh;
         }
 
         .shop-item, .job-item, .task-item {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px;
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .shop-item:hover, .job-item:hover, .task-item:hover {
-            transform: scale(1.04);
-            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
         }
 
         .shop-item img, .job-item img, .task-item img {
             width: 64px;
             height: 64px;
             object-fit: contain;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .shop-item p, .job-item p, .task-item p {
@@ -147,81 +152,91 @@
 
         .shop-item button, .job-item button, .task-item button {
             width: 100%;
-            padding: 6px;
-            font-size: 0.8em;
+            padding: 8px;
+            font-size: 0.85em;
             background: linear-gradient(135deg, #FFD700, #DAA520);
             color: #1A1A1A;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
 
         .shop-item button:disabled, .job-item button:disabled, .task-item button:disabled {
-            background: #444;
-            color: #777;
+            background: #555;
+            color: #888;
             cursor: not-allowed;
         }
 
         .shop-item button:hover:not(:disabled), .job-item button:hover:not(:disabled), .task-item button:hover:not(:disabled) {
             background: linear-gradient(135deg, #FFE066, #FFD700);
-            transform: scale(1.03);
+            transform: scale(1.05);
         }
 
         .shop-item.purchased {
             animation: purchase 0.3s ease;
         }
 
-        .inventory-list, .casino, .business {
+        .inventory-list, .casino, .business, .transfer {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            padding: 8px 0;
+            gap: 8px;
+            padding: 10px 0;
         }
 
-        .casino button, .business button {
+        .casino button, .business button, .transfer button {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             font-size: 0.9em;
             background: linear-gradient(135deg, #6B7280, #4B5563);
             color: #E0E0E0;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
 
-        .casino button:disabled, .business button:disabled {
-            background: #444;
+        .casino button:disabled, .business button:disabled, .transfer button:disabled {
+            background: #555;
             cursor: not-allowed;
         }
 
-        .casino button:hover:not(:disabled), .business button:hover:not(:disabled) {
+        .casino button:hover:not(:disabled), .business button:hover:not(:disabled), .transfer button:hover:not(:disabled) {
             background: linear-gradient(135deg, #9CA3AF, #6B7280);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         .inventory-list {
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: #D1D5DB;
             text-align: center;
         }
 
+        .transfer input {
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.9em;
+            background: rgba(255, 255, 255, 0.1);
+            color: #E0E0E0;
+        }
+
         .notification {
             position: fixed;
-            bottom: 16px;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: #FFD700;
-            background: rgba(0, 0, 0, 0.85);
-            padding: 8px 16px;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 20px;
+            border-radius: 12px;
             opacity: 0;
             transition: opacity 0.4s;
             max-width: 90%;
             text-align: center;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             z-index: 2000;
         }
 
@@ -240,24 +255,24 @@
 
         @keyframes purchase {
             0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
 
         @keyframes collectCoin {
             0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-60px); opacity: 0; }
+            100% { transform: translateY(-80px); opacity: 0; }
         }
 
         @media (max-width: 360px) {
-            h1 { font-size: 1.3em; }
-            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container {
+            h1 { font-size: 1.2em; }
+            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
                 margin: 4px;
-                padding: 8px;
+                padding: 10px;
                 max-width: 320px;
             }
-            .stat { font-size: 0.8em; }
-            .tab-button { font-size: 0.7em; padding: 5px; }
+            .stat { font-size: 0.75em; }
+            .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
             .shop-list, .job-list, .task-list { grid-template-columns: 1fr; }
         }
@@ -276,11 +291,10 @@
         <div class="tabs">
             <button class="tab-button active" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
@@ -291,11 +305,10 @@
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button active" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
@@ -303,16 +316,7 @@
     <div class="task-container" id="taskContainer">
         <h1>Задания</h1>
         <div class="task-list" id="taskList"></div>
-        <div class="tabs">
-            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button active" onclick="showSection('taskContainer')">Задания</button>
-            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-        </div>
+        <button class="tab-button" style="margin-top: 10px;" onclick="showSection('jobContainer')">Назад к работам</button>
     </div>
 
     <div class="shop-container" id="shopContainer">
@@ -321,11 +325,10 @@
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
             <button class="tab-button active" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
@@ -336,11 +339,10 @@
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
@@ -351,11 +353,10 @@
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
@@ -366,11 +367,10 @@
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
@@ -378,18 +378,17 @@
     <div class="transfer-container" id="transferContainer">
         <h1>Перевод валюты</h1>
         <div class="transfer">
-            <input type="text" id="recipientId" placeholder="ID получателя" style="padding: 8px; margin-bottom: 8px; border-radius: 6px; border: none;">
-            <input type="number" id="transferAmount" placeholder="Сумма" style="padding: 8px; margin-bottom: 8px; border-radius: 6px; border: none;">
-            <button onclick="transferCurrency()" style="width: 100%; padding: 8px; font-size: 0.9em; background: linear-gradient(135deg, #FFD700, #DAA520); color: #1A1A1A; border: none; border-radius: 10px; cursor: pointer;">Отправить</button>
+            <input type="text" id="recipientId" placeholder="ID получателя">
+            <input type="number" id="transferAmount" placeholder="Сумма">
+            <button onclick="transferCurrency()">Отправить</button>
         </div>
         <div class="tabs">
             <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
         </div>
     </div>
@@ -687,7 +686,10 @@
                 const button = document.createElement("button");
                 button.textContent = job.unlock > 0 ? `${job.name} ($${job.unlock.toLocaleString()})` : job.name;
                 button.disabled = state.balance < job.unlock || (state.currentJob && state.currentJob.name === job.name);
-                button.onclick = () => selectJob(key);
+                button.onclick = () => {
+                    selectJob(key);
+                    showSection('taskContainer');
+                };
                 itemDiv.appendChild(img);
                 itemDiv.appendChild(desc);
                 itemDiv.appendChild(button);
@@ -699,7 +701,7 @@
             if (state.currentJob) {
                 if (state.isWorking && state.currentTask) {
                     const remainingTime = Math.max(0, Math.floor((state.currentTask.duration - (Date.now() - state.taskStartTime)) / 1000));
-                    taskList.innerHTML = `<div style="text-align: center; color: #FFD700;">Выполняется: ${state.currentTask.name} (${remainingTime}с)</div>`;
+                    taskList.innerHTML = `<div style="text-align: center; color: #FFD700; font-size: 0.9em;">Выполняется: ${state.currentTask.name} (${remainingTime}с)</div>`;
                     const pauseButton = document.createElement("button");
                     pauseButton.textContent = `Приостановить (штраф $${state.currentJob.fine})`;
                     pauseButton.onclick = pauseJob;
@@ -711,7 +713,7 @@
                         const img = document.createElement("img");
                         img.src = task.image;
                         img.alt = task.name;
-                        img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJक्ःMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
+                        img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
                         const desc = document.createElement("p");
                         desc.textContent = `$${task.pay}, ${task.energy} энергии`;
                         const button = document.createElement("button");
@@ -726,7 +728,7 @@
                     });
                 }
             } else {
-                taskList.innerHTML = '<div style="text-align: center;">Выберите работу</div>';
+                taskList.innerHTML = '<div style="text-align: center; font-size: 0.9em;">Выберите работу</div>';
             }
 
             const shopList = document.getElementById("shopList");
@@ -815,7 +817,6 @@
             state.hourlyIncome = state.currentJob.hourly;
             showNotification(`Работа выбрана: ${state.currentJob.name}`);
             playSound("clickSound");
-            showSection('taskContainer');
             saveGame();
             render();
         }
