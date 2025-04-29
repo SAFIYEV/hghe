@@ -82,12 +82,18 @@
 
         .tabs {
             display: flex;
-            flex-wrap: nowrap;
-            justify-content: space-around;
+            flex-direction: column;
+            gap: 8px;
             margin-top: auto;
             padding: 8px 0;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 12px;
+        }
+
+        .tab-row {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-around;
         }
 
         .tab-button {
@@ -290,13 +296,17 @@
             <div class="stat">ID: <span id="playerId"></span></div>
         </div>
         <div class="tabs">
-            <button class="tab-button active" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <div class="tab-row">
+                <button class="tab-button active" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
         </div>
     </div>
 
@@ -304,13 +314,17 @@
         <h1>Работа</h1>
         <div class="job-list" id="jobList"></div>
         <div class="tabs">
-            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button active" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button active" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
         </div>
     </div>
 
@@ -324,27 +338,17 @@
         <h1>Магазин</h1>
         <div class="shop-list" id="shopList"></div>
         <div class="tabs">
-            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button active" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
-        </div>
-    </div>
-
-    <div class="business-container" id="businessContainer">
-        <h1>Бизнес</h1>
-        <div class="business" id="businessSection"></div>
-        <div class="tabs">
-            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button active" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
         </div>
     </div>
 
@@ -352,13 +356,35 @@
         <h1>Инвентарь</h1>
         <div class="inventory-list" id="inventoryList"></div>
         <div class="tabs">
-            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="business-container" id="businessContainer">
+        <h1>Бизнес</h1>
+        <div class="business" id="businessSection"></div>
+        <div class="tabs">
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
         </div>
     </div>
 
@@ -366,13 +392,17 @@
         <h1>Казино</h1>
         <div class="casino" id="casinoSection"></div>
         <div class="tabs">
-            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
         </div>
     </div>
 
@@ -384,13 +414,17 @@
             <button onclick="transferCurrency()">Отправить</button>
         </div>
         <div class="tabs">
-            <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-            <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-            <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-            <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
         </div>
     </div>
 
@@ -646,6 +680,7 @@
             if (Date.now() - state.lastSave >= 1000) {
                 try {
                     localStorage.setItem('riseToRichesState', JSON.stringify(state));
+                    localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
                     state.lastSave = Date.now();
                 } catch (e) {
                     console.warn("Ошибка сохранения: ", e);
@@ -1172,7 +1207,7 @@
 
             checkDebt();
             updateStatus();
-            state.lastTick = now;
+            state#defineProperty(lastTick, now);
             saveGame();
             render();
         }
