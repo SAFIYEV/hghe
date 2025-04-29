@@ -82,8 +82,8 @@
 
         .tabs {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: space-around;
             margin-top: auto;
             padding: 8px 0;
             background: rgba(0, 0, 0, 0.4);
@@ -92,7 +92,7 @@
 
         .tab-row {
             display: flex;
-            flex-wrap: nowrap;
+            width: 100%;
             justify-content: space-around;
         }
 
@@ -106,7 +106,7 @@
             color: #E0E0E0;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
-            margin: 0 4px;
+            margin: 4px;
             text-align: center;
         }
 
@@ -352,24 +352,6 @@
         </div>
     </div>
 
-    <div class="inventory-container" id="inventoryContainer">
-        <h1>Инвентарь</h1>
-        <div class="inventory-list" id="inventoryList"></div>
-        <div class="tabs">
-            <div class="tab-row">
-                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-                <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            </div>
-            <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
-                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            </div>
-        </div>
-    </div>
-
     <div class="business-container" id="businessContainer">
         <h1>Бизнес</h1>
         <div class="business" id="businessSection"></div>
@@ -382,6 +364,24 @@
             </div>
             <div class="tab-row">
                 <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="inventory-container" id="inventoryContainer">
+        <h1>Инвентарь</h1>
+        <div class="inventory-list" id="inventoryList"></div>
+        <div class="tabs">
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -664,7 +664,6 @@
                         completeJobTask(state.currentTask);
                     }
                 }
-                // Process pending transfers
                 state.pendingTransfers.forEach(transfer => {
                     state.balance += transfer.amount;
                     showNotification(`Получен перевод: $${transfer.amount} от игрока ${transfer.senderId}`);
@@ -680,7 +679,6 @@
             if (Date.now() - state.lastSave >= 1000) {
                 try {
                     localStorage.setItem('riseToRichesState', JSON.stringify(state));
-                    localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
                     state.lastSave = Date.now();
                 } catch (e) {
                     console.warn("Ошибка сохранения: ", e);
@@ -1107,7 +1105,6 @@
                 return;
             }
             state.balance -= amount;
-            // Store transfer in recipient's pending transfers
             const recipientState = JSON.parse(localStorage.getItem('riseToRichesState_' + recipientId)) || {};
             recipientState.pendingTransfers = recipientState.pendingTransfers || [];
             recipientState.pendingTransfers.push({
@@ -1207,7 +1204,7 @@
 
             checkDebt();
             updateStatus();
-            state#defineProperty(lastTick, now);
+            state.lastTick = now;
             saveGame();
             render();
         }
