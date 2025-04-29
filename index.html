@@ -287,15 +287,16 @@
             <div class="stat">Энергия: <span id="energy">100</span></div>
             <div class="stat">Голод: <span id="hunger">100</span></div>
             <div class="stat">Настр: <span id="mood">100</span></div>
+            <div class="stat">ID: <span id="playerId"></span></div>
         </div>
         <div class="tabs">
             <button class="tab-button active" onclick="showSection('mainContainer')">Главная</button>
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
         </div>
     </div>
 
@@ -307,9 +308,9 @@
             <button class="tab-button active" onclick="showSection('jobContainer')">Работа</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
         </div>
     </div>
 
@@ -327,9 +328,9 @@
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
             <button class="tab-button active" onclick="showSection('shopContainer')">Магазин</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
         </div>
     </div>
 
@@ -341,9 +342,9 @@
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
             <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
         </div>
     </div>
 
@@ -355,9 +356,9 @@
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
             <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
         </div>
     </div>
 
@@ -369,9 +370,9 @@
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
         </div>
     </div>
 
@@ -387,9 +388,9 @@
             <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
             <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
             <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
             <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
             <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
         </div>
     </div>
 
@@ -417,8 +418,9 @@
             achievements: [],
             hungerSatisfiedUntil: 0,
             lastTick: Date.now(),
-            playerId: Math.random().toString(36).substr(2, 9),
-            hourlyIncome: 0
+            playerId: generateUniqueId(),
+            hourlyIncome: 0,
+            pendingTransfers: []
         };
 
         const statuses = [
@@ -595,6 +597,12 @@
             window.Telegram.WebApp.BackButton.show();
         }
 
+        function generateUniqueId() {
+            const timestamp = Date.now().toString(36);
+            const randomStr = Math.random().toString(36).substr(2, 5);
+            return `${timestamp}-${randomStr}`;
+        }
+
         function enterFullscreen() {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(err => {
@@ -622,6 +630,12 @@
                         completeJobTask(state.currentTask);
                     }
                 }
+                // Process pending transfers
+                state.pendingTransfers.forEach(transfer => {
+                    state.balance += transfer.amount;
+                    showNotification(`Получен перевод: $${transfer.amount} от игрока ${transfer.senderId}`);
+                });
+                state.pendingTransfers = [];
             }
             state.lastSave = Date.now();
             state.lastTick = Date.now();
@@ -670,6 +684,7 @@
             document.getElementById("energy").textContent = Math.floor(state.energy);
             document.getElementById("hunger").textContent = Math.floor(state.hunger);
             document.getElementById("mood").textContent = Math.floor(state.mood);
+            document.getElementById("playerId").textContent = state.playerId;
 
             const jobList = document.getElementById("jobList");
             jobList.innerHTML = "";
@@ -1052,7 +1067,19 @@
                 showNotification("Недостаточно денег!");
                 return;
             }
+            if (recipientId === state.playerId) {
+                showNotification("Нельзя отправить деньги самому себе!");
+                return;
+            }
             state.balance -= amount;
+            // Store transfer in recipient's pending transfers
+            const recipientState = JSON.parse(localStorage.getItem('riseToRichesState_' + recipientId)) || {};
+            recipientState.pendingTransfers = recipientState.pendingTransfers || [];
+            recipientState.pendingTransfers.push({
+                senderId: state.playerId,
+                amount: amount
+            });
+            localStorage.setItem('riseToRichesState_' + recipientId, JSON.stringify(recipientState));
             showNotification(`Переведено $${amount} игроку ${recipientId}!`);
             playSound("cashSound");
             saveGame();
@@ -1152,6 +1179,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             enterFullscreen();
+            localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
             loadGame();
             render();
             setInterval(gameTick, 1000);
