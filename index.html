@@ -519,6 +519,7 @@
 
     <div class="friends-container" id="friendsContainer">
         <h1>Друзья</h1>
+        <div>Ваш реферальный код: <span id="referralCode"></span></div>
         <div>Приглашено: <span id="referralCount">0</span></div>
         <div class="referral-list">
             <input id="referralCodeInput" placeholder="Введите реферальный код друга" style="display: none;">
@@ -627,7 +628,7 @@
                 tasks: [
                     { name: "Убрать улицу", pay: 50, energy: 10, duration: 60000, image: "clean_street.png" },
                     { name: "Помыть окна", pay: 60, energy: 10, duration: 70000, image: "wash_windows.png" },
-                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000, image: "clean_carpets.png" },
+                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000, image: "clean_carpets.PNG" },
                     { name: "Вынести мусор", pay: 40, energy: 10, duration: 50000, image: "take_trash.png" }
                 ]
             },
@@ -939,12 +940,10 @@
                 if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
                     try {
                         const playerState = JSON.parse(localStorage.getItem(key));
-                        if (playerState.telegramUserId && playerState.balance !== undefined) {
+                        if (playerState.telegramUserId && playerState.balance !== undefined && playerState.walletAddress && /^[a-zA-Z0-9]{26,42}$/.test(playerState.walletAddress)) {
                             players.push({
-                                telegramUserId: playerState.telegramUserId,
-                                walletAddress: playerState.walletAddress || playerState.telegramUserId,
-                                balance: playerState.balance,
-                                achievements: playerState.achievements ? playerState.achievements.length : 0
+                                walletAddress: playerState.walletAddress,
+                                balance: playerState.balance
                             });
                         }
                     } catch (e) {
@@ -952,7 +951,7 @@
                     }
                 }
             }
-            return players.sort((a, b) => b.balance - a.balance || b.achievements - a.achievements).slice(0, 50);
+            return players.sort((a, b) => b.balance - a.balance).slice(0, 50);
         }
 
         function render() {
@@ -1077,6 +1076,7 @@
                 ? "Пока нет друзей"
                 : state.referrals.map(ref => `${ref.username || ref.telegramUserId} (Баланс: $${ref.balance.toLocaleString()}, Статус: ${ref.status})`).join("<br>");
             document.getElementById("referralCount").textContent = state.referrals.length;
+            document.getElementById("referralCode").textContent = state.referralCode;
 
             const referralInput = document.getElementById("referralCodeInput");
             const referralButton = document.getElementById("submitReferralCode");
@@ -1089,7 +1089,7 @@
                 ? "Лидерборд пуст"
                 : topPlayers.map((player, index) => `
                     <div class="leaderboard-item">
-                        ${index + 1}. ${player.walletAddress.slice(0, 6)}...${player.walletAddress.slice(-4)} | $${player.balance.toLocaleString()} | Достижений: ${player.achievements}
+                        ${index + 1}. ${player.walletAddress.slice(0, 6)}...${player.walletAddress.slice(-4)} | $${player.balance.toLocaleString()}
                     </div>
                 `).join("");
 
