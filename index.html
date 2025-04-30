@@ -147,6 +147,26 @@
             transform: scale(1.05);
         }
 
+        .wallet-button {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            background: linear-gradient(135deg, #FFD700, #DAA520);
+            color: #1A1A1A;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .wallet-button:hover {
+            background: linear-gradient(135deg, #FFE066, #FFD700);
+            transform: scale(1.05);
+        }
+
         .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -334,7 +354,7 @@
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
             .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list { grid-template-columns: 1fr; }
-            .leaderboard-button { padding: 6px 12px; font-size: 0.8em; }
+            .leaderboard-button, .wallet-button { padding: 6px 12px; font-size: 0.8em; }
         }
     </style>
 </head>
@@ -345,6 +365,7 @@
     </div>
 
     <button class="leaderboard-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
+    <button class="wallet-button" onclick="setWalletAddress()">Кошелек</button>
 
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
@@ -502,9 +523,9 @@
         <div class="referral-list">
             <input id="referralCodeInput" placeholder="Введите реферальный код друга" style="display: none;">
             <button id="submitReferralCode" onclick="submitReferralCode()" style="display: none;">Отправить</button>
-            <input id="referralLink" readonly value="">
-            <button onclick="copyReferralLink()">Копировать</button>
-            <button onclick="shareReferralLink()">Поделиться</button>
+            <!-- <input id="referralLink" readonly value=""> -->
+            <!-- <button onclick="copyReferralLink()">Копировать</button> -->
+            <!-- <button onclick="shareReferralLink()">Поделиться</button> -->
             <div id="referralList"></div>
         </div>
         <div class="tabs">
@@ -582,7 +603,8 @@
             referredBy: "",
             referrals: [],
             username: "",
-            referralCodeLocked: false
+            referralCodeLocked: false,
+            walletAddress: ""
         };
 
         const statuses = [
@@ -693,40 +715,6 @@
             }
         };
 
-        const socialTasks = [
-            {
-                name: "Подписаться на Telegram",
-                pay: 50,
-                energy: 5,
-                cooldown: 300000,
-                action: () => {
-                    if (window.Telegram?.WebApp) {
-                        window.Telegram.WebApp.openTelegramLink('https://t.me/it2009');
-                    } else {
-                        window.open('https://t.me/it2009', '_blank');
-                    }
-                }
-            },
-            {
-                name: "Поделиться в соцсетях",
-                pay: 100,
-                energy: 10,
-                cooldown: 600000,
-                action: () => {
-                    window.open('https://t.me/share/url?url=RiseToRiches', '_blank');
-                }
-            },
-            {
-                name: "Пригласить друга",
-                pay: 200,
-                energy: 15,
-                cooldown: 86400000,
-                action: () => {
-                    showNotification("Приглашайте друзей через Telegram!");
-                }
-            }
-        ];
-
         const shopItems = [
             { name: "Хлеб", price: 5, desc: "Снимает голод на 10 минут", effect: { hungerSatisfied: 600000 }, image: "bread.png", reusable: true },
             { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true },
@@ -781,27 +769,31 @@
         function loadGame() {
             const savedState = localStorage.getItem('riseToRichesState');
             if (savedState) {
-                const parsed = JSON.parse(savedState);
-                Object.assign(state, parsed);
-                for (const task in state.socialTaskCooldowns) {
-                    if (Date.now() >= state.socialTaskCooldowns[task]) {
-                        delete state.socialTaskCooldowns[task];
+                try {
+                    const parsed = JSON.parse(savedState);
+                    Object.assign(state, parsed);
+                    for (const task in state.socialTaskCooldowns) {
+                        if (Date.now() >= state.socialTaskCooldowns[task]) {
+                            delete state.socialTaskCooldowns[task];
+                        }
                     }
-                }
-                if (state.isWorking && !state.currentTask) {
-                    state.isWorking = false;
-                }
-                if (state.isWorking && state.currentTask) {
-                    const elapsed = Date.now() - state.taskStartTime;
-                    if (elapsed >= state.currentTask.duration) {
-                        completeJobTask(state.currentTask);
+                    if (state.isWorking && !state.currentTask) {
+                        state.isWorking = false;
                     }
+                    if (state.isWorking && state.currentTask) {
+                        const elapsed = Date.now() - state.taskStartTime;
+                        if (elapsed >= state.currentTask.duration) {
+                            completeJobTask(state.currentTask);
+                        }
+                    }
+                    state.pendingTransfers.forEach(transfer => {
+                        state.balance += transfer.amount;
+                        showNotification(`Получен перевод: $${transfer.amount} от ID ${transfer.senderTelegramId}`);
+                    });
+                    state.pendingTransfers = [];
+                } catch (e) {
+                    console.warn("Ошибка загрузки состояния: ", e);
                 }
-                state.pendingTransfers.forEach(transfer => {
-                    state.balance += transfer.amount;
-                    showNotification(`Получен перевод: $${transfer.amount} от ID ${transfer.senderTelegramId}`);
-                });
-                state.pendingTransfers = [];
             } else {
                 state.playerId = generateUniqueId();
                 state.referralCode = generateReferralCode();
@@ -812,11 +804,8 @@
             } else {
                 state.telegramUserId = state.playerId;
             }
-            if (!state.referralCodeLocked && window.Telegram?.WebApp?.initDataUnsafe?.start_param) {
-                state.referredBy = window.Telegram.WebApp.initDataUnsafe.start_param;
-                submitReferralCode(state.referredBy);
-            }
             state.referrals = state.referrals || [];
+            state.achievements = state.achievements || [];
             state.lastSave = Date.now();
             state.lastTick = Date.now();
             saveGame();
@@ -834,8 +823,21 @@
             }
         }
 
-        function submitReferralCode(inputCode) {
-            const code = inputCode || document.getElementById('referralCodeInput').value.trim();
+        function setWalletAddress() {
+            const address = prompt("Введите адрес вашего криптовалютного кошелька:");
+            if (address && /^[a-zA-Z0-9]{26,42}$/.test(address)) {
+                state.walletAddress = address;
+                showNotification("Адрес кошелька сохранен!");
+                saveGame();
+                render();
+            } else {
+                showNotification("Недействительный адрес кошелька!");
+            }
+            playSound("clickSound");
+        }
+
+        function submitReferralCode() {
+            const code = document.getElementById('referralCodeInput').value.trim();
             if (state.referralCodeLocked) {
                 showNotification("Реферальный код уже установлен!");
                 return;
@@ -851,7 +853,7 @@
             let referrerFound = false;
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith('riseToRichesState_')) {
+                if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
                     try {
                         const playerState = JSON.parse(localStorage.getItem(key));
                         if (playerState.referralCode === code && playerState.telegramUserId !== state.telegramUserId) {
@@ -898,25 +900,25 @@
             render();
         }
 
-        function copyReferralLink() {
-            const link = document.getElementById("referralLink");
-            link.select();
-            document.execCommand("copy");
-            showNotification("Ссылка скопирована!");
-            playSound("clickSound");
-        }
+        // function copyReferralLink() {
+        //     const link = document.getElementById("referralLink");
+        //     link.select();
+        //     document.execCommand("copy");
+        //     showNotification("Ссылка скопирована!");
+        //     playSound("clickSound");
+        // }
 
-        function shareReferralLink() {
-            const link = `https://t.me/rise_to_riches_bot?start=${state.referralCode}`;
-            const text = `Присоединяйся и становись от бомжа до миллионера!\n\nМой реф. код: ${state.referralCode}`;
-            if (window.Telegram?.WebApp) {
-                window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
-            } else {
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
-            }
-            showNotification("Ссылка отправлена!");
-            playSound("clickSound");
-        }
+        // function shareReferralLink() {
+        //     const link = `https://t.me/rise_to_riches_bot?start=${state.referralCode}`;
+        //     const text = `Присоединяйся и становись от бомжа до миллионера!\n\nМой реф. код: ${state.referralCode}`;
+        //     if (window.Telegram?.WebApp) {
+        //         window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
+        //     } else {
+        //         window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
+        //     }
+        //     showNotification("Ссылка отправлена!");
+        //     playSound("clickSound");
+        // }
 
         function checkAchievements() {
             achievements.forEach(ach => {
@@ -937,12 +939,12 @@
                 if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
                     try {
                         const playerState = JSON.parse(localStorage.getItem(key));
-                        if (playerState.telegramUserId && playerState.balance !== undefined && playerState.status) {
+                        if (playerState.telegramUserId && playerState.balance !== undefined) {
                             players.push({
                                 telegramUserId: playerState.telegramUserId,
-                                username: playerState.username || playerState.telegramUserId,
+                                walletAddress: playerState.walletAddress || playerState.telegramUserId,
                                 balance: playerState.balance,
-                                status: playerState.status
+                                achievements: playerState.achievements ? playerState.achievements.length : 0
                             });
                         }
                     } catch (e) {
@@ -950,7 +952,7 @@
                     }
                 }
             }
-            return players.sort((a, b) => b.balance - a.balance).slice(0, 50);
+            return players.sort((a, b) => b.balance - a.balance || b.achievements - a.achievements).slice(0, 50);
         }
 
         function render() {
@@ -1075,7 +1077,6 @@
                 ? "Пока нет друзей"
                 : state.referrals.map(ref => `${ref.username || ref.telegramUserId} (Баланс: $${ref.balance.toLocaleString()}, Статус: ${ref.status})`).join("<br>");
             document.getElementById("referralCount").textContent = state.referrals.length;
-            document.getElementById("referralLink").value = `https://t.me/rise_to_riches_bot?start=${state.referralCode}`;
 
             const referralInput = document.getElementById("referralCodeInput");
             const referralButton = document.getElementById("submitReferralCode");
@@ -1088,7 +1089,7 @@
                 ? "Лидерборд пуст"
                 : topPlayers.map((player, index) => `
                     <div class="leaderboard-item">
-                        ${index + 1}. ${player.username || player.telegramUserId} | ${player.status} | $${player.balance.toLocaleString()}
+                        ${index + 1}. ${player.walletAddress.slice(0, 6)}...${player.walletAddress.slice(-4)} | $${player.balance.toLocaleString()} | Достижений: ${player.achievements}
                     </div>
                 `).join("");
 
@@ -1114,13 +1115,29 @@
                     status: ref.telegramUserId === state.telegramUserId ? state.status : ref.status
                 }));
                 if (state.referredBy) {
-                    const referrerState = JSON.parse(localStorage.getItem(`riseToRichesState_${state.referredBy}`)) || {};
-                    if (referrerState.telegramUserId) {
-                        referrerState.referrals = (referrerState.referrals || []).map(ref => ({
-                            ...ref,
-                            status: ref.telegramUserId === state.telegramUserId ? state.status : ref.status
-                        }));
-                        localStorage.setItem(`riseToRichesState_${state.referredBy}`, JSON.stringify(referrerState));
+                    let referrerFound = false;
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
+                            try {
+                                const referrerState = JSON.parse(localStorage.getItem(key));
+                                if (referrerState.referralCode === state.referredBy) {
+                                    referrerState.referrals = (referrerState.referrals || []).map(ref => ({
+                                        ...ref,
+                                        status: ref.telegramUserId === state.telegramUserId ? state.status : ref.status,
+                                        balance: ref.telegramUserId === state.telegramUserId ? state.balance : ref.balance
+                                    }));
+                                    localStorage.setItem(`riseToRichesState_${referrerState.telegramUserId}`, JSON.stringify(referrerState));
+                                    referrerFound = true;
+                                    break;
+                                }
+                            } catch (e) {
+                                console.warn(`Ошибка чтения ${key}: ${e}`);
+                            }
+                        }
+                    }
+                    if (!referrerFound) {
+                        console.warn("Реферер не найден для обновления статуса.");
                     }
                 }
             }
@@ -1241,18 +1258,33 @@
             state.balance += pay;
 
             if (state.referredBy) {
-                const referrerState = JSON.parse(localStorage.getItem(`riseToRichesState_${state.referredBy}`)) || {};
-                if (referrerState.telegramUserId) {
-                    const bonus = Math.floor(pay * 0.1);
-                    referrerState.balance = (referrerState.balance || 0) + bonus;
-                    referrerState.referrals = (referrerState.referrals || []).map(ref => ({
-                        telegramUserId: ref.telegramUserId,
-                        username: ref.telegramUserId === state.telegramUserId ? state.username : ref.username,
-                        balance: ref.telegramUserId === state.telegramUserId ? state.balance + pay : ref.balance,
-                        status: ref.telegramUserId === state.telegramUserId ? state.status : ref.status
-                    }));
-                    localStorage.setItem(`riseToRichesState_${state.referredBy}`, JSON.stringify(referrerState));
-                    showNotification(`Реферер получил бонус: $${bonus}`);
+                let referrerFound = false;
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
+                        try {
+                            const referrerState = JSON.parse(localStorage.getItem(key));
+                            if (referrerState.referralCode === state.referredBy) {
+                                const bonus = Math.floor(pay * 0.1);
+                                referrerState.balance = (referrerState.balance || 0) + bonus;
+                                referrerState.referrals = (referrerState.referrals || []).map(ref => ({
+                                    telegramUserId: ref.telegramUserId,
+                                    username: ref.telegramUserId === state.telegramUserId ? state.username : ref.username,
+                                    balance: ref.telegramUserId === state.telegramUserId ? state.balance + pay : ref.balance,
+                                    status: ref.telegramUserId === state.telegramUserId ? state.status : ref.status
+                                }));
+                                localStorage.setItem(`riseToRichesState_${referrerState.telegramUserId}`, JSON.stringify(referrerState));
+                                showNotification(`Реферер получил бонус: $${bonus}`);
+                                referrerFound = true;
+                                break;
+                            }
+                        } catch (e) {
+                            console.warn(`Ошибка чтения ${key}: ${e}`);
+                        }
+                    }
+                }
+                if (!referrerFound) {
+                    console.warn("Реферер не найден для начисления бонуса.");
                 }
             }
 
@@ -1270,34 +1302,6 @@
             state.isWorking = false;
             state.currentTask = null;
             state.taskStartTime = 0;
-            updateStatus();
-            saveGame();
-            render();
-        }
-
-        function doSocialTask(task) {
-            if (state.energy < task.energy) {
-                showNotification("Мало энергии!");
-                return;
-            }
-            if (state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name]) {
-                showNotification("Задание на кулдауне!");
-                return;
-            }
-            if (task.action) task.action();
-            state.energy -= task.energy;
-            let pay = task.pay;
-            if (state.balance < 0) {
-                const repayment = Math.min(pay, -state.balance);
-                state.balance += repayment;
-                showNotification(`Погашено долга: $${repayment}`);
-                pay -= repayment;
-            }
-            state.balance += pay;
-            state.socialTaskCooldowns[task.name] = Date.now() + task.cooldown;
-            showNotification(`Задание "${task.name}" выполнено! +$${pay}`);
-            playSound("cashSound");
-            createCoinAnimation();
             updateStatus();
             saveGame();
             render();
@@ -1412,19 +1416,33 @@
                 showNotification("Нельзя отправить деньги самому себе!");
                 return;
             }
-            const recipientState = JSON.parse(localStorage.getItem(`riseToRichesState_${recipientId}`)) || {};
-            if (!recipientState.telegramUserId) {
+            let recipientFound = false;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key === `riseToRichesState_${recipientId}`) {
+                    try {
+                        const recipientState = JSON.parse(localStorage.getItem(key));
+                        if (recipientState.telegramUserId) {
+                            state.balance -= amount;
+                            recipientState.pendingTransfers = recipientState.pendingTransfers || [];
+                            recipientState.pendingTransfers.push({
+                                senderTelegramId: state.telegramUserId,
+                                amount: amount
+                            });
+                            localStorage.setItem(`riseToRichesState_${recipientId}`, JSON.stringify(recipientState));
+                            showNotification(`Переведено $${amount} игроку ID ${recipientId}!`);
+                            recipientFound = true;
+                            break;
+                        }
+                    } catch (e) {
+                        console.warn(`Ошибка чтения ${key}: ${e}`);
+                    }
+                }
+            }
+            if (!recipientFound) {
                 showNotification("Игрок не найден!");
                 return;
             }
-            state.balance -= amount;
-            recipientState.pendingTransfers = recipientState.pendingTransfers || [];
-            recipientState.pendingTransfers.push({
-                senderTelegramId: state.telegramUserId,
-                amount: amount
-            });
-            localStorage.setItem(`riseToRichesState_${recipientId}`, JSON.stringify(recipientState));
-            showNotification(`Переведено $${amount} игроку ID ${recipientId}!`);
             playSound("cashSound");
             saveGame();
             render();
