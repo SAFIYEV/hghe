@@ -602,7 +602,8 @@
             referrals: [],
             username: "",
             referralCodeLocked: false,
-            walletAddress: ""
+            walletAddress: "",
+            activeItems: []
         };
 
         const statuses = [
@@ -714,9 +715,10 @@
         };
 
         const shopItems = [
-            { name: "Хлеб", price: 5, desc: "Снимает голод на 10 минут", effect: { hungerSatisfied: 600000 }, image: "bread.png", reusable: true },
-            { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true },
-            { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
+            { name: "Хлеб", price: 5, desc: "Снимает голод на 20 минут", effect: { hungerSatisfied: 1200000 }, image: "bread.png", reusable: true, autoUse: true },
+            { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true, autoUse: true },
+            { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payM
+ultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
             { name: "Кроссовки", price: 200, desc: "Задания +10% дохода", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
             { name: "Велосипед", price: 500, desc: "Доставка +50% чаевых", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
             { name: "Машина (Лада)", price: 5000, desc: "Такси +50% дохода", effect: { taskPayMultiplier: 1.5 }, job: "taxi", image: "lada.png" },
@@ -789,6 +791,7 @@
                         showNotification(`Получен перевод: $${transfer.amount} от ID ${transfer.senderPlayerId}`);
                     });
                     state.pendingTransfers = [];
+                    state.activeItems = state.activeItems.filter(item => item.expiresAt > Date.now());
                 } catch (e) {
                     console.warn("Ошибка загрузки состояния: ", e);
                 }
@@ -804,6 +807,7 @@
             }
             state.referrals = state.referrals || [];
             state.achievements = state.achievements || [];
+            state.activeItems = state.activeItems || [];
             state.lastSave = Date.now();
             state.lastTick = Date.now();
             saveGame();
@@ -863,12 +867,12 @@
                                     balance: state.balance,
                                     status: state.status
                                 });
-                                playerState.balance = (playerState.balance || 0) + 100;
+                                playerState.balance = (playerState.balance || 0) + 200;
                                 localStorage.setItem(`riseToRichesState_${playerState.playerId}`, JSON.stringify(playerState));
                                 state.referredBy = code;
                                 state.referralCodeLocked = true;
-                                state.balance += 50;
-                                showNotification("Реферальный код принят! Бонус: +$50");
+                                state.balance += 200;
+                                showNotification("Реферальный код принят! Бонус: +$200 для вас и реферера!");
                                 referrerFound = true;
                                 break;
                             }
@@ -919,8 +923,10 @@
                         const playerState = JSON.parse(localStorage.getItem(key));
                         if (playerState.playerId && playerState.balance !== undefined && playerState.walletAddress && /^[a-zA-Z0-9]{26,42}$/.test(playerState.walletAddress)) {
                             players.push({
+                                playerId: playerState.playerId,
                                 walletAddress: playerState.walletAddress,
-                                balance: playerState.balance
+                                balance: playerState.balance,
+                                username: playerState.username || playerState.playerId
                             });
                         }
                     } catch (e) {
@@ -928,10 +934,12 @@
                     }
                 }
             }
-            if (state.walletAddress && /^[a-zA-Z0-9]{26,42}$/.test(state.walletAddress)) {
+            if (state.playerId && state.balance !== undefined && state.walletAddress && /^[a-zA-Z0-9]{26,42}$/.test(state.walletAddress)) {
                 players.push({
+                    playerId: state.playerId,
                     walletAddress: state.walletAddress,
-                    balance: state.balance
+                    balance: state.balance,
+                    username: state.username
                 });
             }
             return players.sort((a, b) => b.balance - a.balance).slice(0, 50);
@@ -1072,7 +1080,7 @@
                 ? "Лидерборд пуст"
                 : topPlayers.map((player, index) => `
                     <div class="leaderboard-item">
-                        ${index + 1}. ${player.walletAddress.slice(0, 6)}...${player.walletAddress.slice(-4)} | $${player.balance.toLocaleString()}
+                        ${index + 1}. ${player.username} (${player.walletAddress.slice(0, 6)}...${player.walletAddress.slice(-4)}) | $${player.balance.toLocaleString()}
                     </div>
                 `).join("");
 
@@ -1290,6 +1298,24 @@
             render();
         }
 
+        function activateItem(item) {
+            if (item.effect.hungerSatisfied) {
+                state.hungerSatisfiedUntil = Date.now() + item.effect.hungerSatisfied;
+                state.hunger = 100;
+                state.activeItems.push({ name: item.name, expiresAt: state.hungerSatisfiedUntil });
+                showNotification(`Активировано: ${item.name}! Сытость на ${item.effect.hungerSatisfied / 60000} минут`);
+            }
+            if (item.effect.energy) {
+                state.energy = Math.min(state.energy + item.effect.energy, 100);
+                showNotification(`Энергия +${item.effect.energy}!`);
+                state.inventory = state.inventory.filter(i => i.name !== item.name);
+            }
+            if (item.effect.mood) {
+                state.mood = Math.min(state.mood + item.effect.mood, 100);
+                showNotification(`Настроение +${item.effect.mood}!`);
+            }
+        }
+
         function buyItem(item) {
             if (state.balance < item.price) {
                 showNotification("Не хватает денег!");
@@ -1302,21 +1328,16 @@
             state.balance -= item.price;
             state.inventory.push(item);
             showNotification(`Куплено: ${item.name} за $${item.price.toLocaleString()}!`);
-            if (item.effect) {
-                if (item.effect.energy) {
-                    state.energy = Math.min(state.energy + item.effect.energy, 100);
-                    showNotification(`Энергия +${item.effect.energy}!`);
-                }
-                if (item.effect.hungerSatisfied) {
-                    state.hungerSatisfiedUntil = Date.now() + item.effect.hungerSatisfied;
-                    state.hunger = 100;
-                    showNotification(`Сытость на ${item.effect.hungerSatisfied / 60000} минут!`);
-                }
-                if (item.effect.mood) {
-                    state.mood = Math.min(state.mood + item.effect.mood, 100);
-                    showNotification(`Настроение +${item.effect.mood}!`);
+
+            if (item.autoUse && item.effect) {
+                if (item.effect.hungerSatisfied && state.hunger < 50 && Date.now() > state.hungerSatisfiedUntil) {
+                    activateItem(item);
+                    state.inventory = state.inventory.filter(i => i.name !== item.name);
+                } else if (item.effect.energy && state.energy < 50) {
+                    activateItem(item);
                 }
             }
+
             playSound("cashSound");
             const itemDiv = Array.from(document.getElementById("shopList").children)
                 .find(div => div.querySelector("button").textContent.includes(item.name));
@@ -1521,6 +1542,15 @@
                     }
                 }
             }
+
+            state.activeItems = state.activeItems.filter(item => {
+                if (item.expiresAt <= now) {
+                    showNotification(`${item.name} истек!`);
+                    state.inventory = state.inventory.filter(i => i.name !== item.name);
+                    return false;
+                }
+                return true;
+            });
 
             checkDebt();
             updateStatus();
