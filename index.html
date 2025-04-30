@@ -19,7 +19,7 @@
             touch-action: manipulation;
         }
 
-        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
+        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
             width: 100%;
             max-width: 360px;
             margin: 8px;
@@ -40,7 +40,7 @@
             transform: translateY(20px);
         }
 
-        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
+        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
             border: 1px solid #FFD700;
             background: rgba(30, 30, 40, 0.95);
         }
@@ -121,7 +121,7 @@
             font-weight: 600;
         }
 
-        .shop-list, .job-list, .task-list, .referral-list {
+        .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
@@ -183,7 +183,7 @@
             animation: purchase 0.3s ease;
         }
 
-        .inventory-list, .casino, .business, .transfer, .referral-list {
+        .inventory-list, .casino, .business, .transfer, .referral-list, .leaderboard-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -282,7 +282,7 @@
 
         @media (max-width: 360px) {
             h1 { font-size: 1.2em; }
-            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
+            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
                 margin: 4px;
                 padding: 10px;
                 max-width: 320px;
@@ -290,7 +290,7 @@
             .stat { font-size: 0.75em; }
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
-            .shop-list, .job-list, .task-list, .referral-list { grid-template-columns: 1fr; }
+            .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -316,12 +316,13 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -335,12 +336,13 @@
                 <button class="tab-button active" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -360,12 +362,13 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button active" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -379,12 +382,13 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -398,12 +402,13 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -417,12 +422,13 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -440,18 +446,19 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
 
     <div class="friends-container" id="friendsContainer">
-        <h1>Друзья</hmedia: true;</h1>
+        <h1>Друзья</h1>
         <div>Приглашено: <span id="referralCount">0</span></div>
         <div class="referral-list">
             <input id="referralLink" readonly value="">
@@ -465,12 +472,33 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-                <button class="tab-button active" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button active" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="leaderboard-container" id="leaderboardContainer">
+        <h1>Лидерборд</h1>
+        <div class="leaderboard-list" id="leaderboardList"></div>
+        <div class="tabs">
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+                <button class="tab-button active" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -480,7 +508,6 @@
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
-        // Проверка на мобильное устройство
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
@@ -488,14 +515,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (!isMobileDevice()) {
                 document.getElementById('mobileOnly').style.display = 'flex';
-                document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container').forEach(el => {
+                document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container').forEach(el => {
                     el.style.display = 'none';
                 });
                 return;
             }
             document.getElementById('mobileOnly').style.display = 'none';
             enterFullscreen();
-            localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
             loadGame();
             render();
             setInterval(gameTick, 1000);
@@ -525,7 +551,8 @@
             pendingTransfers: [],
             referralCode: "",
             referredBy: "",
-            referrals: []
+            referrals: [],
+            username: ""
         };
 
         const statuses = [
@@ -715,7 +742,7 @@
 
         function enterFullscreen() {
             if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(err => {
+                document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch(err => {
                     console.warn(`Fullscreen error: ${err.message}`);
                 });
             }
@@ -749,6 +776,9 @@
             if (!state.referralCode) {
                 state.referralCode = generateReferralCode();
             }
+            if (!state.username && window.Telegram?.WebApp?.initDataUnsafe?.user) {
+                state.username = window.Telegram.WebApp.initDataUnsafe.user.username || window.Telegram.WebApp.initDataUnsafe.user.first_name || state.playerId;
+            }
             if (window.Telegram?.WebApp?.initDataUnsafe?.start_param) {
                 state.referredBy = window.Telegram.WebApp.initDataUnsafe.start_param;
                 const referrerState = JSON.parse(localStorage.getItem('riseToRichesState_' + state.referredBy)) || {};
@@ -776,7 +806,7 @@
         }
 
         function showSection(sectionId) {
-            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer', 'friendsContainer'].forEach(id => {
+            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer', 'friendsContainer', 'leaderboardContainer'].forEach(id => {
                 const section = document.getElementById(id);
                 section.classList.toggle('active', id === sectionId);
                 Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
@@ -797,11 +827,12 @@
         }
 
         function shareReferralLink() {
-            const link = `https://t.me/YourBot?start=${state.referralCode}`;
+            const link = `https://t.me/rise_to_riches_bot?start=${state.referralCode}`;
+            const text = `Присоединяйся и становись от бомжа до долларового миллионера\n\nМой реф. код: ${state.referralCode}`;
             if (window.Telegram?.WebApp) {
-                window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к Rise to Riches!`);
+                window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
             } else {
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к Rise to Riches!`, '_blank');
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
             }
             showNotification("Ссылка отправлена!");
             playSound("clickSound");
@@ -817,6 +848,28 @@
                     playSound("cashSound");
                 }
             });
+        }
+
+        function getLeaderboard() {
+            const players = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('riseToRichesState_')) {
+                    try {
+                        const playerState = JSON.parse(localStorage.getItem(key));
+                        if (playerState.playerId && playerState.balance !== undefined) {
+                            players.push({
+                                id: playerState.playerId,
+                                username: playerState.username || playerState.playerId,
+                                balance: playerState.balance
+                            });
+                        }
+                    } catch (e) {
+                        console.warn(`Ошибка чтения ${key}: ${e}`);
+                    }
+                }
+            }
+            return players.sort((a, b) => b.balance - a.balance).slice(0, 50);
         }
 
         function render() {
@@ -941,7 +994,13 @@
                 ? "Пока нет друзей"
                 : state.referrals.map(ref => `Игрок ${ref.id} (Баланс: $${ref.balance.toLocaleString()})`).join("<br>");
             document.getElementById("referralCount").textContent = state.referrals.length;
-            document.getElementById("referralLink").value = `https://t.me/YourBot?start=${state.referralCode}`;
+            document.getElementById("referralLink").value = `https://t.me/rise_to_riches_bot?start=${state.referralCode}`;
+
+            const leaderboardList = document.getElementById("leaderboardList");
+            const topPlayers = getLeaderboard();
+            leaderboardList.innerHTML = topPlayers.length === 0
+                ? "Лидерборд пуст"
+                : topPlayers.map((player, index) => `${index + 1}. ${player.username} (ID: ${player.id}) - $${player.balance.toLocaleString()}`).join("<br>");
 
             let bgImage;
             if (state.balance >= 10000000) bgImage = "bg4.jpg";
@@ -1029,10 +1088,13 @@
         }
 
         function completeJobTask(task) {
-            if (!state.isWorking || state.currentTask !== task) {
+            if (!state.isWorking || state.currentTask !== task || state.energy <= 0) {
                 state.isWorking = false;
                 state.currentTask = null;
                 state.taskStartTime = 0;
+                if (state.energy <= 0) {
+                    showNotification("Энергия закончилась! Работа остановлена.");
+                }
                 saveGame();
                 render();
                 return;
@@ -1041,7 +1103,7 @@
             let pay = task.pay;
             state.inventory.forEach(item => {
                 if (item.job && state.currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === state.currentJob)) {
-                    if (item.payMultiplier) {
+                    if (item.effect.payMultiplier) {
                         pay *= item.effect.payMultiplier;
                         showNotification(`Бонус от ${item.name}: +${((item.effect.payMultiplier - 1) * 100).toFixed(0)}%!`);
                     }
@@ -1330,9 +1392,16 @@
             }
 
             if (state.isWorking && state.currentTask) {
-                const elapsed = now - state.taskStartTime;
-                if (elapsed >= state.currentTask.duration) {
-                    completeJobTask(state.currentTask);
+                if (state.energy <= 0) {
+                    state.isWorking = false;
+                    state.currentTask = null;
+                    state.taskStartTime = 0;
+                    showNotification("Энергия закончилась! Работа остановлена.");
+                } else {
+                    const elapsed = now - state.taskStartTime;
+                    if (elapsed >= state.currentTask.duration) {
+                        completeJobTask(state.currentTask);
+                    }
                 }
             }
 
