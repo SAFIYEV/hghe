@@ -45,6 +45,12 @@
             background: rgba(30, 30, 40, 0.95);
         }
 
+        .leaderboard-container {
+            top: 80px;
+            bottom: 8px;
+            z-index: 2;
+        }
+
         .active {
             display: flex;
             opacity: 1;
@@ -121,6 +127,26 @@
             font-weight: 600;
         }
 
+        .leaderboard-button {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            background: linear-gradient(135deg, #FFD700, #DAA520);
+            color: #1A1A1A;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .leaderboard-button:hover {
+            background: linear-gradient(135deg, #FFE066, #FFD700);
+            transform: scale(1.05);
+        }
+
         .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -128,6 +154,23 @@
             padding: 10px 0;
             overflow-y: auto;
             max-height: 50vh;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px 0;
+            font-size: 0.85em;
+            color: #D1D5DB;
+            text-align: left;
+            max-height: calc(100vh - 150px);
+        }
+
+        .leaderboard-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 8px;
         }
 
         .shop-item, .job-item, .task-item {
@@ -183,7 +226,7 @@
             animation: purchase 0.3s ease;
         }
 
-        .inventory-list, .casino, .business, .transfer, .referral-list, .leaderboard-list {
+        .inventory-list, .casino, .business, .transfer, .referral-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -291,6 +334,7 @@
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
             .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list { grid-template-columns: 1fr; }
+            .leaderboard-button { padding: 6px 12px; font-size: 0.8em; }
         }
     </style>
 </head>
@@ -299,6 +343,8 @@
         <h1>Игра доступна только на мобильных устройствах!</h1>
         <p>Откройте игру через Telegram на вашем смартфоне.</p>
     </div>
+
+    <button class="leaderboard-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
 
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
@@ -322,7 +368,6 @@
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -342,7 +387,6 @@
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -368,7 +412,6 @@
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -388,7 +431,6 @@
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -408,7 +450,6 @@
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -428,7 +469,6 @@
                 <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -452,7 +492,6 @@
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -478,7 +517,6 @@
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
                 <button class="tab-button active" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
             </div>
         </div>
     </div>
@@ -486,21 +524,7 @@
     <div class="leaderboard-container" id="leaderboardContainer">
         <h1>Лидерборд</h1>
         <div class="leaderboard-list" id="leaderboardList"></div>
-        <div class="tabs">
-            <div class="tab-row">
-                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            </div>
-            <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
-                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-                <button class="tab-button active" onclick="showSection('leaderboardContainer')">Лидерборд</button>
-            </div>
-        </div>
+        <button class="tab-button" style="margin-top: 10px;" onclick="showSection('mainContainer')">Назад</button>
     </div>
 
     <div class="notification" id="notification"></div>
@@ -552,7 +576,8 @@
             referralCode: "",
             referredBy: "",
             referrals: [],
-            username: ""
+            username: "",
+            telegramUserId: ""
         };
 
         const statuses = [
@@ -776,7 +801,8 @@
             if (!state.referralCode) {
                 state.referralCode = generateReferralCode();
             }
-            if (!state.username && window.Telegram?.WebApp?.initDataUnsafe?.user) {
+            if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+                state.telegramUserId = window.Telegram.WebApp.initDataUnsafe.user.id.toString();
                 state.username = window.Telegram.WebApp.initDataUnsafe.user.username || window.Telegram.WebApp.initDataUnsafe.user.first_name || state.playerId;
             }
             if (window.Telegram?.WebApp?.initDataUnsafe?.start_param) {
@@ -784,7 +810,7 @@
                 const referrerState = JSON.parse(localStorage.getItem('riseToRichesState_' + state.referredBy)) || {};
                 referrerState.referrals = referrerState.referrals || [];
                 if (!referrerState.referrals.some(ref => ref.id === state.playerId)) {
-                    referrerState.referrals.push({ id: state.playerId, balance: state.balance });
+                    referrerState.referrals.push({ id: state.playerId, balance: state.balance, telegramUserId: state.telegramUserId });
                     localStorage.setItem('riseToRichesState_' + state.referredBy, JSON.stringify(referrerState));
                 }
             }
@@ -857,10 +883,9 @@
                 if (key.startsWith('riseToRichesState_')) {
                     try {
                         const playerState = JSON.parse(localStorage.getItem(key));
-                        if (playerState.playerId && playerState.balance !== undefined) {
+                        if (playerState.telegramUserId && playerState.balance !== undefined) {
                             players.push({
-                                id: playerState.playerId,
-                                username: playerState.username || playerState.playerId,
+                                telegramUserId: playerState.telegramUserId,
                                 balance: playerState.balance
                             });
                         }
@@ -1000,7 +1025,11 @@
             const topPlayers = getLeaderboard();
             leaderboardList.innerHTML = topPlayers.length === 0
                 ? "Лидерборд пуст"
-                : topPlayers.map((player, index) => `${index + 1}. ${player.username} (ID: ${player.id}) - $${player.balance.toLocaleString()}`).join("<br>");
+                : topPlayers.map((player, index) => `
+                    <div class="leaderboard-item">
+                        ${index + 1}. ID: ${player.telegramUserId} - $${player.balance.toLocaleString()}
+                    </div>
+                `).join("");
 
             let bgImage;
             if (state.balance >= 10000000) bgImage = "bg4.jpg";
@@ -1105,7 +1134,7 @@
                 if (item.job && state.currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === state.currentJob)) {
                     if (item.effect.payMultiplier) {
                         pay *= item.effect.payMultiplier;
-                        showNotification(`Бонус от ${item.name}: +${((item.effect.payMultiplier - 1) * 100).toFixed(0)}%!`);
+                        showNotification(` muted Бонус от ${item.name}: +${((item.effect.payMultiplier - 1) * 100).toFixed(0)}%!`);
                     }
                     if (item.effect.tipChance && Math.random() < item.effect.tipChance) {
                         const tip = pay * (item.effect.tipMultiplier - 1);
@@ -1139,7 +1168,8 @@
                     referrerState.balance = (referrerState.balance || 0) + bonus;
                     referrerState.referrals = referrerState.referrals.map(ref => ({
                         id: ref.id,
-                        balance: ref.id === state.playerId ? state.balance + pay : ref.balance
+                        balance: ref.id === state.playerId ? state.balance + pay : ref.balance,
+                        telegramUserId: ref.telegramUserId
                     }));
                     localStorage.setItem('riseToRichesState_' + state.referredBy, JSON.stringify(referrerState));
                     showNotification(`Реферер получил бонус: $${bonus}`);
@@ -1148,7 +1178,8 @@
 
             state.referrals = state.referrals.map(ref => ({
                 id: ref.id,
-                balance: ref.id === state.playerId ? state.balance + pay : ref.balance
+                balance: ref.id === state.playerId ? state.balance + pay : ref.balance,
+                telegramUserId: ref.telegramUserId
             }));
 
             showNotification(`Завершено: ${task.name}! +$${pay}`);
@@ -1233,7 +1264,7 @@
                 return;
             }
             state.balance -= 50000;
-            state.businessOwned = true;
+            state.business disconcert owned = true;
             state.businessLevel = 1;
             showNotification("Бизнес открыт! +$1,000/сек!");
             playSound("cashSound");
