@@ -19,7 +19,7 @@
             touch-action: manipulation;
         }
 
-        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
+        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
             width: 100%;
             max-width: 360px;
             margin: 8px;
@@ -40,7 +40,7 @@
             transform: translateY(20px);
         }
 
-        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
+        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
             border: 1px solid #FFD700;
             background: rgba(30, 30, 40, 0.95);
         }
@@ -121,7 +121,7 @@
             font-weight: 600;
         }
 
-        .shop-list, .job-list, .task-list {
+        .shop-list, .job-list, .task-list, .referral-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
@@ -183,14 +183,17 @@
             animation: purchase 0.3s ease;
         }
 
-        .inventory-list, .casino, .business, .transfer {
+        .inventory-list, .casino, .business, .transfer, .referral-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
             padding: 10px 0;
+            font-size: 0.85em;
+            color: #D1D5DB;
+            text-align: center;
         }
 
-        .casino button, .business button, .transfer button {
+        .casino button, .business button, .transfer button, .referral-list button {
             width: 100%;
             padding: 10px;
             font-size: 0.9em;
@@ -202,23 +205,17 @@
             transition: transform 0.2s, background 0.2s;
         }
 
-        .casino button:disabled, .business button:disabled, .transfer button:disabled {
+        .casino button:disabled, .business button:disabled, .transfer button:disabled, .referral-list button:disabled {
             background: #555;
             cursor: not-allowed;
         }
 
-        .casino button:hover:not(:disabled), .business button:hover:not(:disabled), .transfer button:hover:not(:disabled) {
+        .casino button:hover:not(:disabled), .business button:hover:not(:disabled), .transfer button:hover:not(:disabled), .referral-list button:hover:not(:disabled) {
             background: linear-gradient(135deg, #9CA3AF, #6B7280);
             transform: translateY(-2px);
         }
 
-        .inventory-list {
-            font-size: 0.85em;
-            color: #D1D5DB;
-            text-align: center;
-        }
-
-        .transfer input {
+        .transfer input, .referral-list input {
             padding: 10px;
             margin-bottom: 8px;
             border-radius: 8px;
@@ -259,6 +256,19 @@
             animation: collectCoin 0.8s ease-out forwards;
         }
 
+        .mobile-only {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            font-size: 1.2em;
+            padding: 20px;
+            background: rgba(20, 20, 30, 0.9);
+            border-radius: 16px;
+        }
+
         @keyframes purchase {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
@@ -272,7 +282,7 @@
 
         @media (max-width: 360px) {
             h1 { font-size: 1.2em; }
-            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
+            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
                 margin: 4px;
                 padding: 10px;
                 max-width: 320px;
@@ -280,11 +290,16 @@
             .stat { font-size: 0.75em; }
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
-            .shop-list, .job-list, .task-list { grid-template-columns: 1fr; }
+            .shop-list, .job-list, .task-list, .referral-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+    <div class="mobile-only" id="mobileOnly">
+        <h1>Игра доступна только на мобильных устройствах!</h1>
+        <p>Откройте игру через Telegram на вашем смартфоне.</p>
+    </div>
+
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
         <div class="stats">
@@ -301,6 +316,7 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
@@ -319,6 +335,7 @@
                 <button class="tab-button active" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
@@ -343,6 +360,7 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button active" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
@@ -361,6 +379,7 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
@@ -379,6 +398,7 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
@@ -397,6 +417,7 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
@@ -419,6 +440,7 @@
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
@@ -428,11 +450,57 @@
         </div>
     </div>
 
+    <div class="friends-container" id="friendsContainer">
+        <h1>Друзья</hmedia: true;</h1>
+        <div>Приглашено: <span id="referralCount">0</span></div>
+        <div class="referral-list">
+            <input id="referralLink" readonly value="">
+            <button onclick="copyReferralLink()">Копировать</button>
+            <button onclick="shareReferralLink()">Поделиться</button>
+            <div id="referralList"></div>
+        </div>
+        <div class="tabs">
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+                <button class="tab-button active" onclick="showSection('friendsContainer')">Друзья</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
+        </div>
+    </div>
+
     <div class="notification" id="notification"></div>
     <audio id="clickSound" src="click.mp3"></audio>
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
+        // Проверка на мобильное устройство
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!isMobileDevice()) {
+                document.getElementById('mobileOnly').style.display = 'flex';
+                document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container').forEach(el => {
+                    el.style.display = 'none';
+                });
+                return;
+            }
+            document.getElementById('mobileOnly').style.display = 'none';
+            enterFullscreen();
+            localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
+            loadGame();
+            render();
+            setInterval(gameTick, 1000);
+        });
+
         let state = {
             balance: 0,
             energy: 100,
@@ -454,7 +522,10 @@
             lastTick: Date.now(),
             playerId: generateUniqueId(),
             hourlyIncome: 0,
-            pendingTransfers: []
+            pendingTransfers: [],
+            referralCode: "",
+            referredBy: "",
+            referrals: []
         };
 
         const statuses = [
@@ -621,7 +692,8 @@
             { name: "Работяга", desc: "Стань Работягой", condition: () => state.status === "Работяга", reward: { energy: 20 } },
             { name: "Бизнесмен", desc: "Открой бизнес", condition: () => state.businessOwned, reward: { balance: 1000 } },
             { name: "Миллионер", desc: "Стань Миллионером", condition: () => state.status === "Миллионер", reward: { balance: 100000 } },
-            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } }
+            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } },
+            { name: "Пригласитель", desc: "Пригласи 1 друга", condition: () => state.referrals.length >= 1, reward: { balance: 200 } }
         ];
 
         if (window.Telegram?.WebApp) {
@@ -635,6 +707,10 @@
             const timestamp = Date.now().toString(36);
             const randomStr = Math.random().toString(36).substr(2, 5);
             return `${timestamp}-${randomStr}`;
+        }
+
+        function generateReferralCode() {
+            return state.playerId.slice(0, 8) + Math.random().toString(36).substr(2, 4);
         }
 
         function enterFullscreen() {
@@ -670,6 +746,18 @@
                 });
                 state.pendingTransfers = [];
             }
+            if (!state.referralCode) {
+                state.referralCode = generateReferralCode();
+            }
+            if (window.Telegram?.WebApp?.initDataUnsafe?.start_param) {
+                state.referredBy = window.Telegram.WebApp.initDataUnsafe.start_param;
+                const referrerState = JSON.parse(localStorage.getItem('riseToRichesState_' + state.referredBy)) || {};
+                referrerState.referrals = referrerState.referrals || [];
+                if (!referrerState.referrals.some(ref => ref.id === state.playerId)) {
+                    referrerState.referrals.push({ id: state.playerId, balance: state.balance });
+                    localStorage.setItem('riseToRichesState_' + state.referredBy, JSON.stringify(referrerState));
+                }
+            }
             state.lastSave = Date.now();
             state.lastTick = Date.now();
             saveGame();
@@ -679,6 +767,7 @@
             if (Date.now() - state.lastSave >= 1000) {
                 try {
                     localStorage.setItem('riseToRichesState', JSON.stringify(state));
+                    localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
                     state.lastSave = Date.now();
                 } catch (e) {
                     console.warn("Ошибка сохранения: ", e);
@@ -687,7 +776,7 @@
         }
 
         function showSection(sectionId) {
-            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer'].forEach(id => {
+            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer', 'friendsContainer'].forEach(id => {
                 const section = document.getElementById(id);
                 section.classList.toggle('active', id === sectionId);
                 Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
@@ -697,6 +786,25 @@
             }
             playSound("clickSound");
             render();
+        }
+
+        function copyReferralLink() {
+            const link = document.getElementById("referralLink");
+            link.select();
+            document.execCommand("copy");
+            showNotification("Ссылка скопирована!");
+            playSound("clickSound");
+        }
+
+        function shareReferralLink() {
+            const link = `https://t.me/YourBot?start=${state.referralCode}`;
+            if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к Rise to Riches!`);
+            } else {
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к Rise to Riches!`, '_blank');
+            }
+            showNotification("Ссылка отправлена!");
+            playSound("clickSound");
         }
 
         function checkAchievements() {
@@ -828,6 +936,13 @@
                 casinoSection.appendChild(button);
             });
 
+            const referralList = document.getElementById("referralList");
+            referralList.innerHTML = state.referrals.length === 0
+                ? "Пока нет друзей"
+                : state.referrals.map(ref => `Игрок ${ref.id} (Баланс: $${ref.balance.toLocaleString()})`).join("<br>");
+            document.getElementById("referralCount").textContent = state.referrals.length;
+            document.getElementById("referralLink").value = `https://t.me/YourBot?start=${state.referralCode}`;
+
             let bgImage;
             if (state.balance >= 10000000) bgImage = "bg4.jpg";
             else if (state.balance >= 1000000) bgImage = "bg3.jpg";
@@ -926,7 +1041,7 @@
             let pay = task.pay;
             state.inventory.forEach(item => {
                 if (item.job && state.currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === state.currentJob)) {
-                    if (item.effect.payMultiplier) {
+                    if (item.payMultiplier) {
                         pay *= item.effect.payMultiplier;
                         showNotification(`Бонус от ${item.name}: +${((item.effect.payMultiplier - 1) * 100).toFixed(0)}%!`);
                     }
@@ -954,6 +1069,25 @@
                 pay -= repayment;
             }
             state.balance += pay;
+
+            if (state.referredBy) {
+                const referrerState = JSON.parse(localStorage.getItem('riseToRichesState_' + state.referredBy)) || {};
+                if (referrerState.playerId) {
+                    const bonus = Math.floor(pay * 0.1);
+                    referrerState.balance = (referrerState.balance || 0) + bonus;
+                    referrerState.referrals = referrerState.referrals.map(ref => ({
+                        id: ref.id,
+                        balance: ref.id === state.playerId ? state.balance + pay : ref.balance
+                    }));
+                    localStorage.setItem('riseToRichesState_' + state.referredBy, JSON.stringify(referrerState));
+                    showNotification(`Реферер получил бонус: $${bonus}`);
+                }
+            }
+
+            state.referrals = state.referrals.map(ref => ({
+                id: ref.id,
+                balance: ref.id === state.playerId ? state.balance + pay : ref.balance
+            }));
 
             showNotification(`Завершено: ${task.name}! +$${pay}`);
             playSound("cashSound");
@@ -1208,14 +1342,6 @@
             saveGame();
             render();
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            enterFullscreen();
-            localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
-            loadGame();
-            render();
-            setInterval(gameTick, 1000);
-        });
     </script>
 </body>
 </html>
