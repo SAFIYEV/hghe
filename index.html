@@ -21,15 +21,15 @@
             touch-action: manipulation;
         }
 
-        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
+        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 360px;
             margin: 8px;
-            padding: 16px;
-            background: rgba(20, 20, 30, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
+            padding: 12px;
+            background: rgba(20, 20, 30, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
             box-sizing: border-box;
             position: fixed;
             bottom: 8px;
@@ -42,12 +42,9 @@
             transform: translateY(20px);
         }
 
-        .leaderboard-container {
-            top: 80px;
-            bottom: 8px;
-            z-index: 2;
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
+        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
+            border: 1px solid #FFD700;
+            background: rgba(30, 30, 40, 0.95);
         }
 
         .active {
@@ -57,22 +54,22 @@
         }
 
         h1 {
-            font-size: 1.5em;
+            font-size: 1.4em;
             margin: 8px 0;
             text-align: center;
             color: #FFD700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-            gap: 10px;
-            margin: 12px 0;
-            font-size: 0.9em;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 0.85em;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
         }
 
         .stat {
@@ -90,8 +87,8 @@
             flex-wrap: wrap;
             justify-content: space-around;
             margin-top: auto;
-            padding: 10px 0;
-            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 0;
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 12px;
         }
 
@@ -103,11 +100,11 @@
 
         .tab-button {
             flex: 1;
-            padding: 10px;
-            font-size: 0.85em;
-            background: rgba(255, 255, 255, 0.15);
+            padding: 8px;
+            font-size: 0.8em;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             color: #E0E0E0;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
@@ -116,7 +113,7 @@
         }
 
         .tab-button:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
 
@@ -126,32 +123,23 @@
             font-weight: 600;
         }
 
-        .leaderboard-button, .wallet-button {
+        .wallet-button {
             position: fixed;
             top: 16px;
-            padding: 10px 20px;
-            font-size: 0.95em;
+            left: 16px;
+            padding: 8px 16px;
+            font-size: 0.9em;
             background: linear-gradient(135deg, #FFD700, #DAA520);
             color: #1A1A1A;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
             z-index: 1000;
             transition: transform 0.2s, background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .leaderboard-button {
-            right: 16px;
-        }
-
-        .wallet-button {
-            left: 16px;
-        }
-
-        .leaderboard-button:hover, .wallet-button:hover {
+        .wallet-button:hover {
             background: linear-gradient(135deg, #FFE066, #FFD700);
             transform: scale(1.05);
         }
@@ -159,41 +147,16 @@
         .shop-list, .job-list, .task-list, .referral-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            padding: 12px 0;
+            gap: 10px;
+            padding: 10px 0;
             overflow-y: auto;
             max-height: 50vh;
         }
 
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 12px 0;
-            font-size: 0.9em;
-            color: #D1D5DB;
-            text-align: left;
-            max-height: calc(100vh - 150px);
-        }
-
-        .leaderboard-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 12px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .leaderboard-item span {
-            font-size: 0.85em;
-            color: #A1A1A1;
-        }
-
         .shop-item, .job-item, .task-item {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -207,23 +170,23 @@
             width: 64px;
             height: 64px;
             object-fit: contain;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .shop-item p, .job-item p, .task-item p {
-            font-size: 0.85em;
+            font-size: 0.8em;
             color: #D1D5DB;
             margin: 4px 0;
         }
 
         .shop-item button, .job-item button, .task-item button {
             width: 100%;
-            padding: 10px;
-            font-size: 0.9em;
+            padding: 8px;
+            font-size: 0.85em;
             background: linear-gradient(135deg, #FFD700, #DAA520);
             color: #1A1A1A;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
@@ -239,24 +202,28 @@
             transform: scale(1.05);
         }
 
+        .shop-item.purchased {
+            animation: purchase 0.3s ease;
+        }
+
         .inventory-list, .casino, .business, .transfer, .referral-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            padding: 12px 0;
-            font-size: 0.9em;
+            gap: 8px;
+            padding: 10px 0;
+            font-size: 0.85em;
             color: #D1D5DB;
             text-align: center;
         }
 
         .casino button, .business button, .transfer button, .referral-list button {
             width: 100%;
-            padding: 12px;
-            font-size: 0.95em;
+            padding: 10px;
+            font-size: 0.9em;
             background: linear-gradient(135deg, #6B7280, #4B5563);
             color: #E0E0E0;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
@@ -272,24 +239,13 @@
         }
 
         .transfer input, .referral-list input {
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border: 1px solid #FFD700;
-            font-size: 0.95em;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.9em;
             background: rgba(255, 255, 255, 0.1);
             color: #E0E0E0;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .transfer input:focus, .referral-list input:focus {
-            outline: none;
-            border-color: #FFE066;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .transfer input::placeholder, .referral-list input::placeholder {
-            color: #A1A1A1;
         }
 
         .notification {
@@ -297,10 +253,10 @@
             top: 16px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #FFD700;
             background: rgba(0, 0, 0, 0.9);
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 12px;
             opacity: 0;
             transition: opacity 0.4s;
@@ -336,29 +292,40 @@
             border-radius: 16px;
         }
 
+        @keyframes purchase {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         @keyframes collectCoin {
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-80px); opacity: 0; }
         }
 
-        @media (max-width: 400px) {
-            h1 { font-size: 1.3em; }
-            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
+        @media (max-width: 360px) {
+            h1 { font-size: 1.2em; }
+            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
                 margin: 4px;
-                padding: 12px;
-                max-width: 360px;
+                padding: 10px;
+                max-width: 320px;
             }
-            .stat { font-size: 0.8em; }
-            .tab-button { font-size: 0.75em; padding: 8px; }
-            .shop-item img, .job-item img, .task-item img { width: 56px; height: 56px; }
-            .leaderboard-button, .wallet-button { padding: 8px 16px; font-size: 0.85em; }
+            .stat { font-size: 0.75em; }
+            .tab-button { font-size: 0.7em; padding: 6px; }
+            .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
+            .shop-list, .job-list, .task-list, .referral-list { grid-template-columns: 1fr; }
+            .wallet-button { padding: 6px 12px; font-size: 0.8em; }
         }
     </style>
 </head>
 <body>
-    
-    <button class="leaderboard-button" onclick="showSection('leaderboardContainer')">🏆 Лидерборд</button>
-    <button class="wallet-button" onclick="connectWallet()">🔗 TON Кошелёк</button>
+    <div class="mobile-only" id="mobileOnly">
+        <h1>Игра доступна только на мобильных устройствах!</h1>
+        <p>Откройте игру через Telegram на вашем смартфоне.</p>
+    </div>
+
+    <button class="wallet-button" onclick="connectWallet()">🔗 Подключить TON кошелёк</button>
+    <p id="wallet-address" style="position: fixed; top: 48px; left: 16px; color: #FFD700; font-size: 0.8em;"></p>
 
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
@@ -369,7 +336,6 @@
             <div class="stat">Голод: <span id="hunger">100</span></div>
             <div class="stat">Настр: <span id="mood">100</span></div>
             <div class="stat">ID: <span id="playerId"></span></div>
-            <div class="stat">Кошелёк: <span id="walletAddress">Не подключён</span></div>
         </div>
         <div class="tabs">
             <div class="tab-row">
@@ -409,7 +375,7 @@
     <div class="task-container" id="taskContainer">
         <h1>Задания</h1>
         <div class="task-list" id="taskList"></div>
-        <button class="tab-button" style="margin-top: 12px;" onclick="showSection('jobContainer')">Назад к работам</button>
+        <button class="tab-button" style="margin-top: 10px;" onclick="showSection('jobContainer')">Назад к работам</button>
     </div>
 
     <div class="shop-container" id="shopContainer">
@@ -536,43 +502,104 @@
         </div>
     </div>
 
-    <div class="leaderboard-container" id="leaderboardContainer">
-        <h1>🏆 Лидерборд</h1>
-        <button class="tab-button" style="margin-bottom: 12px;" onclick="fetchLeaderboard()">Обновить</button>
-        <div class="leaderboard-list" id="leaderboardList"></div>
-        <button class="tab-button" style="margin-top: 12px;" onclick="showSection('mainContainer')">Назад</button>
-    </div>
-
     <div class="notification" id="notification"></div>
     <audio id="clickSound" src="click.mp3"></audio>
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbx0t3esGuVR1sDuAHWQ1pknrdSeSM0x9qSJ4BIu2mmOSA95ZMq0bAZG6QaUVxIL55pl/exec';
-        const tonConnect = new window.TON_CONNECT.TonConnect();
+        const tonConnect = new TONConnect.TonConnect({
+            manifestUrl: 'https://your-app.com/tonconnect-manifest.json'
+        });
 
-                    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        async function connectWallet() {
+            try {
+                await tonConnect.restoreConnection();
+                if (tonConnect.connected && tonConnect.account) {
+                    state.walletAddress = tonConnect.account.address;
+                    showNotification("Кошелек восстановлен: " + state.walletAddress);
+                    document.getElementById('wallet-address').textContent = "Кошелёк: " + state.walletAddress;
+                    saveGame();
+                    return;
+                }
+
+                const walletsList = await tonConnect.getWallets();
+                if (walletsList.length === 0) {
+                    showNotification("Нет доступных кошельков TON");
+                    return;
+                }
+
+                const wallet = walletsList[0];
+                tonConnect.connect({ universalLink: wallet.universalLink });
+
+                tonConnect.onStatusChange((walletInfo) => {
+                    if (walletInfo && walletInfo.account) {
+                        state.walletAddress = walletInfo.account.address;
+                        showNotification("Кошелек подключен: " + state.walletAddress);
+                        document.getElementById('wallet-address').textContent = "Кошелёк: " + state.walletAddress;
+                        saveGame();
+                        sendToGoogleSheets();
+                    }
+                });
+            } catch (error) {
+                console.error("Ошибка подключения кошелька:", error);
+                showNotification("Ошибка подключения кошелька");
+            }
+            playSound("clickSound");
+        }
+
+        async function sendToGoogleSheets() {
+            if (!state.walletAddress || !state.playerId) return;
+            const data = {
+                playerId: state.playerId,
+                username: state.username,
+                balance: state.balance,
+                status: state.status,
+                walletAddress: state.walletAddress,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    mode: 'no-cors'
+                });
+                console.log("Данные отправлены в Google Sheets:", data);
+            } catch (error) {
+                console.error("Ошибка отправки в Google Sheets:", error);
+            }
+        }
+
+        function isMobileDevice() {
             const ua = navigator.userAgent.toLowerCase();
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
             const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(ua);
-            return isTouch || isMobileUA;
+            const isSmallScreen = window.innerWidth <= 768;
+            return (isMobileUA || (isTouch && isSmallScreen)) && !/windows nt/i.test(ua);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container')
-            .forEach(el => el.style.display = 'none');
-        document.getElementById('mainContainer').classList.add('active');
-            if (window.Telegram?.WebApp) {
-                window.Telegram.WebApp.ready();
-                window.Telegram.WebApp.expand();
-                window.Telegram.WebApp.enableClosingConfirmation();
-                window.Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
-                window.Telegram.WebApp.BackButton.show();
+            if (!isMobileDevice()) {
+                document.getElementById('mobileOnly').style.display = 'flex';
+                document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container').forEach(el => {
+                    el.style.display = 'none';
+                });
+                return;
             }
-            
+            document.getElementById('mobileOnly').style.display = 'none';
+
+            if (window.Telegram?.WebApp) {
+                Telegram.WebApp.ready();
+                Telegram.WebApp.expand();
+                Telegram.WebApp.enableClosingConfirmation();
+                Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
+                Telegram.WebApp.BackButton.show();
+            }
+
             loadGame();
             render();
             setInterval(gameTick, 1000);
-            fetchLeaderboard();
         });
 
         let state = {
@@ -745,33 +772,6 @@
             { name: "Пригласитель", desc: "Пригласи 1 друга", condition: () => state.referrals.length >= 1, reward: { balance: 200 } }
         ];
 
-        async function connectWallet() {
-            try {
-                await tonConnect.restoreConnection();
-                const walletsList = await tonConnect.getWallets();
-                const wallet = walletsList.find(w => w.appName.toLowerCase().includes('ton'));
-                if (!wallet) {
-                    showNotification("Нет доступных TON кошельков!");
-                    return;
-                }
-                tonConnect.connect({ universalLink: wallet.universalLink });
-                tonConnect.onStatusChange(async (walletInfo) => {
-                    if (walletInfo && walletInfo.account) {
-                        state.walletAddress = walletInfo.account.address;
-                        document.getElementById('walletAddress').textContent = state.walletAddress.slice(0, 6) + '...' + state.walletAddress.slice(-4);
-                        showNotification("TON кошелёк подключён!");
-                        saveGame();
-                        render();
-                        updateLeaderboard();
-                    }
-                });
-            } catch (e) {
-                showNotification("Ошибка подключения кошелька!");
-                console.error(e);
-            }
-            playSound("clickSound");
-        }
-
         function generateUniqueId() {
             const timestamp = Date.now().toString(36);
             const randomStr = Math.random().toString(36).substr(2, 5);
@@ -781,8 +781,6 @@
         function generateReferralCode() {
             return Math.random().toString(36).substr(2, 8);
         }
-
-                }
 
         function loadGame() {
             const savedState = localStorage.getItem('riseToRichesState');
@@ -831,48 +829,22 @@
             state.lastSave = Date.now();
             state.lastTick = Date.now();
             saveGame();
-            updateLeaderboard();
+            if (state.walletAddress) {
+                document.getElementById('wallet-address').textContent = "Кошелёк: " + state.walletAddress;
+                connectWallet();
+            }
         }
 
         function saveGame() {
             if (Date.now() - state.lastSave >= 1000) {
                 try {
                     localStorage.setItem('riseToRichesState', JSON.stringify(state));
+                    localStorage.setItem(`riseToRichesState_${state.playerId}`, JSON.stringify(state));
                     state.lastSave = Date.now();
-                    updateLeaderboard();
                 } catch (e) {
                     console.warn("Ошибка сохранения: ", e);
                 }
             }
-        }
-
-        function updateLeaderboard() {
-            if (!state.username || state.balance === 0) return;
-            const wallet = state.walletAddress || "Не подключён";
-            fetch(`${API_URL}?name=${encodeURIComponent(state.username)}&score=${state.balance}&status=${encodeURIComponent(state.status)}&wallet=${encodeURIComponent(wallet)}`, {
-                method: 'POST'
-            }).catch(e => console.warn("Ошибка обновления лидерборда: ", e));
-        }
-
-        function fetchLeaderboard() {
-            fetch(API_URL)
-                .then(res => res.json())
-                .then(data => {
-                    const leaderboardList = document.getElementById("leaderboardList");
-                    leaderboardList.innerHTML = data.length === 0
-                        ? "Лидерборд пуст"
-                        : data.slice(0, 50).map((entry, index) => `
-                            <div class="leaderboard-item">
-                                ${index + 1}. ${entry.name} — $${entry.score.toLocaleString()}
-                                <span>Статус: ${entry.status}</span>
-                                <span>Кошелёк: ${entry.wallet.slice(0, 6) + '...' + entry.wallet.slice(-4)}</span>
-                            </div>
-                        `).join("");
-                })
-                .catch(e => {
-                    console.warn("Ошибка загрузки лидерборда: ", e);
-                    document.getElementById("leaderboardList").innerHTML = "Ошибка загрузки лидерборда";
-                });
         }
 
         function submitReferralCode() {
@@ -911,6 +883,7 @@
                                 state.balance += 200;
                                 showNotification("Реферальный код принят! Бонус: +$200 для вас и реферера!");
                                 referrerFound = true;
+                                sendToGoogleSheets();
                                 break;
                             }
                         }
@@ -927,7 +900,7 @@
         }
 
         function showSection(sectionId) {
-            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer', 'friendsContainer', 'leaderboardContainer'].forEach(id => {
+            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer', 'friendsContainer'].forEach(id => {
                 const section = document.getElementById(id);
                 section.classList.toggle('active', id === sectionId);
                 Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
@@ -937,7 +910,6 @@
             }
             playSound("clickSound");
             render();
-            if (sectionId === 'leaderboardContainer') fetchLeaderboard();
         }
 
         function checkAchievements() {
@@ -948,6 +920,7 @@
                     if (ach.reward.balance) state.balance += ach.reward.balance;
                     if (ach.reward.energy) state.energy = Math.min(state.energy + ach.reward.energy, 100);
                     playSound("cashSound");
+                    sendToGoogleSheets();
                 }
             });
         }
@@ -959,7 +932,6 @@
             document.getElementById("hunger").textContent = Math.floor(state.hunger);
             document.getElementById("mood").textContent = Math.floor(state.mood);
             document.getElementById("playerId").textContent = state.playerId;
-            document.getElementById("walletAddress").textContent = state.walletAddress ? state.walletAddress.slice(0, 6) + '...' + state.walletAddress.slice(-4) : "Не подключён";
 
             const jobList = document.getElementById("jobList");
             jobList.innerHTML = "";
@@ -1137,7 +1109,7 @@
                         console.warn("Реферер не найден для обновления статуса.");
                     }
                 }
-                updateLeaderboard();
+                sendToGoogleSheets();
             }
             if (state.balance >= 10000000 && !state.achievements.includes("Миллионер")) {
                 showNotification("Ты миллионер! $10,000,000!");
@@ -1307,7 +1279,8 @@
                                 const bonus = Math.floor(pay * 0.1);
                                 referrerState.balance = (referrerState.balance || 0) + bonus;
                                 referrerState.referrals = (referrerState.referrals || []).map(ref => ({
-                                    ...ref,
+                                    playerId: ref.playerId,
+                                    username: ref.playerId === state.playerId ? state.username : ref.username,
                                     balance: ref.playerId === state.playerId ? state.balance + pay : ref.balance,
                                     status: ref.playerId === state.playerId ? state.status : ref.status
                                 }));
@@ -1321,10 +1294,14 @@
                         }
                     }
                 }
+                if (!referrerFound) {
+                    console.warn("Реферер не найден для начисления бонуса.");
+                }
             }
 
             state.referrals = state.referrals.map(ref => ({
-                ...ref,
+                playerId: ref.playerId,
+                username: ref.playerId === state.playerId ? state.username : ref.username,
                 balance: ref.playerId === state.playerId ? state.balance + pay : ref.balance,
                 status: ref.playerId === state.playerId ? state.status : ref.status
             }));
@@ -1337,6 +1314,7 @@
             state.currentTask = null;
             state.taskStartTime = 0;
             updateStatus();
+            sendToGoogleSheets();
             saveGame();
             render();
         }
@@ -1382,7 +1360,11 @@
             }
 
             playSound("cashSound");
+            const itemDiv = Array.from(document.getElementById("shopList").children)
+                .find(div => div.querySelector("button").textContent.includes(item.name));
+            if (itemDiv) itemDiv.classList.add("purchased");
             updateStatus();
+            sendToGoogleSheets();
             saveGame();
             render();
         }
@@ -1398,6 +1380,7 @@
             showNotification("Бизнес открыт! +$1,000/сек!");
             playSound("cashSound");
             updateStatus();
+            sendToGoogleSheets();
             saveGame();
             render();
         }
@@ -1413,36 +1396,53 @@
             showNotification(`Бизнес прокачан! +$${state.businessLevel * 1000}/сек!`);
             playSound("cashSound");
             updateStatus();
+            sendToGoogleSheets();
             saveGame();
             render();
         }
 
         function playCasino(bet) {
             if (state.balance < bet) {
-                showNotification("Недостаточно денег!");
+                showNotification("Не хватает денег!");
                 return;
             }
             state.balance -= bet;
-            const winChance = 0.4;
-            const multiplier = Math.random() < winChance ? 2 : 0;
-            const outcome = multiplier > 0 ? `Вы выиграли $${(bet * multiplier).toLocaleString()}!` : `Вы проиграли $${bet.toLocaleString()}!`;
-            state.balance += bet * multiplier;
+            const rand = Math.random() * 100;
+            let outcome;
+            if (rand < 45) {
+                const winAmount = bet * 2;
+                state.balance += winAmount;
+                outcome = `Выиграл $${winAmount.toLocaleString()}!`;
+            } else if (rand < 85) {
+                outcome = `Проиграл $${bet.toLocaleString()}!`;
+            } else if (rand < 95) {
+                state.balance = Math.max(0, state.balance - bet * 2);
+                outcome = "Крупный проигрыш!";
+            } else {
+                state.balance += bet * 5;
+                outcome = `Джекпот! +$${bet * 5}!`;
+            }
             showNotification(outcome);
-            playSound(multiplier > 0 ? "cashSound" : "clickSound");
+            playSound("cashSound");
             updateStatus();
+            sendToGoogleSheets();
             saveGame();
             render();
         }
 
         function transferCurrency() {
-            const recipientId = document.getElementById('recipientId').value.trim();
-            const amount = parseInt(document.getElementById('transferAmount').value);
+            const recipientId = document.getElementById("recipientId").value;
+            const amount = parseInt(document.getElementById("transferAmount").value);
             if (!recipientId || isNaN(amount) || amount <= 0) {
-                showNotification("Введите корректный ID и сумму!");
+                showNotification("Введите корректные данные!");
                 return;
             }
             if (state.balance < amount) {
                 showNotification("Недостаточно денег!");
+                return;
+            }
+            if (recipientId === state.playerId) {
+                showNotification("Нельзя отправить деньги самому себе!");
                 return;
             }
             let recipientFound = false;
@@ -1451,16 +1451,17 @@
                 if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
                     try {
                         const recipientState = JSON.parse(localStorage.getItem(key));
-                        if (recipientState.playerId === recipientId && recipientState.playerId !== state.playerId) {
+                        if (recipientState.playerId === recipientId) {
+                            state.balance -= amount;
                             recipientState.pendingTransfers = recipientState.pendingTransfers || [];
                             recipientState.pendingTransfers.push({
                                 senderPlayerId: state.playerId,
                                 amount: amount
                             });
-                            localStorage.setItem(`riseToRichesState_${recipientState.playerId}`, JSON.stringify(recipientState));
-                            state.balance -= amount;
-                            showNotification(`Перевод $${amount} игроку ${recipientId} отправлен!`);
+                            localStorage.setItem(`riseToRichesState_${recipientId}`, JSON.stringify(recipientState));
+                            showNotification(`Переведено $${amount} игроку ID ${recipientId}!`);
                             recipientFound = true;
+                            sendToGoogleSheets();
                             break;
                         }
                     } catch (e) {
@@ -1470,48 +1471,90 @@
             }
             if (!recipientFound) {
                 showNotification("Игрок не найден!");
+                return;
             }
+            playSound("cashSound");
             saveGame();
             render();
-            playSound("cashSound");
         }
 
         function checkDebt() {
             if (state.balance < 0 && !state.debtRepaymentActive) {
                 state.debtRepaymentActive = true;
-                showNotification("У тебя долг! Доходы идут на его погашение.");
+                showNotification("Долг! Заработок идет на его погашение.");
             } else if (state.balance >= 0 && state.debtRepaymentActive) {
                 state.debtRepaymentActive = false;
                 showNotification("Долг погашен!");
             }
         }
 
+        function showNotification(message) {
+            const notification = document.getElementById("notification");
+            notification.textContent = message;
+            notification.classList.add("show");
+            setTimeout(() => {
+                notification.classList.remove("show");
+                notification.textContent = "";
+            }, 3000);
+        }
+
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            sound.currentTime = 0;
+            sound.play().catch(() => {});
+        }
+
+        function createCoinAnimation() {
+            const coin = document.createElement("div");
+            coin.className = "coin-animation";
+            coin.style.left = `${Math.random() * (window.innerWidth - 32)}px`;
+            coin.style.top = `${window.innerHeight - 64}px`;
+            document.body.appendChild(coin);
+            setTimeout(() => coin.remove(), 800);
+        }
+
         function gameTick() {
             const now = Date.now();
             const deltaTime = (now - state.lastTick) / 1000;
-            state.lastTick = now;
 
-            if (state.hunger > 0 && Date.now() > state.hungerSatisfiedUntil) {
-                state.hunger = Math.max(0, state.hunger - deltaTime * 0.5);
-            }
             if (state.energy < 100) {
-                state.energy = Math.min(100, state.energy + deltaTime * 0.1);
+                state.energy += (10 / 300) * deltaTime;
+                if (state.energy > 100) state.energy = 100;
             }
+
+            if (Date.now() > state.hungerSatisfiedUntil) {
+                if (state.hunger > 0) {
+                    state.hunger -= 0.0333 * deltaTime;
+                    if (state.hunger < 0) state.hunger = 0;
+                    if (state.hunger < 30) {
+                        showNotification("Голоден! Купи еду.");
+                    }
+                }
+            } else {
+                state.hunger = 100;
+            }
+
             if (state.mood < 100) {
-                state.mood = Math.min(100, state.mood + deltaTime * 0.05);
+                state.mood += 0.0167 * deltaTime;
+                if (state.mood > 100) state.mood = 100;
             }
 
             if (state.businessOwned) {
-                const income = state.businessLevel * 1000 * deltaTime;
-                state.balance += Math.floor(income);
-                if (income >= 1) {
-                    showNotification(`Бизнес принёс $${Math.floor(income)}!`);
-                    playSound("cashSound");
+                let income = state.businessLevel * 1000 * deltaTime;
+                if (state.balance < 0) {
+                    const repayment = Math.min(income, -state.balance);
+                    state.balance += repayment;
+                    income -= repayment;
+                }
+                state.balance += income;
+                if (income > 0) {
+                    showNotification(`Бизнес: +$${Math.floor(income)}`);
+                    createCoinAnimation();
                 }
             }
 
             if (state.isWorking && state.currentTask) {
-                const elapsed = now - state.taskStartTime;
+                const elapsed = Date.now() - state.taskStartTime;
                 if (elapsed >= state.currentTask.duration) {
                     completeJobTask(state.currentTask);
                 }
@@ -1521,30 +1564,8 @@
             updateStatus();
             saveGame();
             render();
-        }
 
-        function showNotification(message) {
-            const notification = document.getElementById("notification");
-            notification.textContent = message;
-            notification.classList.add("show");
-            setTimeout(() => notification.classList.remove("show"), 3000);
-        }
-
-        function playSound(soundId) {
-            const sound = document.getElementById(soundId);
-            if (sound) {
-                sound.currentTime = 0;
-                sound.play().catch(e => console.warn("Ошибка воспроизведения звука: ", e));
-            }
-        }
-
-        function createCoinAnimation() {
-            const coin = document.createElement("div");
-            coin.className = "coin-animation";
-            coin.style.left = `${Math.random() * (window.innerWidth - 32)}px`;
-            coin.style.bottom = "100px";
-            document.body.appendChild(coin);
-            setTimeout(() => coin.remove(), 800);
+            state.lastTick = now;
         }
     </script>
 </body>
