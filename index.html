@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rise to Riches</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
     <style>
         body {
             margin: 0;
@@ -21,13 +23,13 @@
 
         .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
             width: 100%;
-            max-width: 360px;
+            max-width: 400px;
             margin: 8px;
-            padding: 12px;
-            background: rgba(20, 20, 30, 0.9);
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
+            padding: 16px;
+            background: rgba(20, 20, 30, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
             box-sizing: border-box;
             position: fixed;
             bottom: 8px;
@@ -40,15 +42,12 @@
             transform: translateY(20px);
         }
 
-        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
-            border: 1px solid #FFD700;
-            background: rgba(30, 30, 40, 0.95);
-        }
-
         .leaderboard-container {
             top: 80px;
             bottom: 8px;
             z-index: 2;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
         }
 
         .active {
@@ -58,22 +57,22 @@
         }
 
         h1 {
-            font-size: 1.4em;
+            font-size: 1.5em;
             margin: 8px 0;
             text-align: center;
             color: #FFD700;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 8px;
-            margin: 10px 0;
-            font-size: 0.85em;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 10px;
+            margin: 12px 0;
+            font-size: 0.9em;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
         }
 
         .stat {
@@ -91,8 +90,8 @@
             flex-wrap: wrap;
             justify-content: space-around;
             margin-top: auto;
-            padding: 8px 0;
-            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 0;
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 12px;
         }
 
@@ -104,11 +103,11 @@
 
         .tab-button {
             flex: 1;
-            padding: 8px;
-            font-size: 0.8em;
-            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            font-size: 0.85em;
+            background: rgba(255, 255, 255, 0.15);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             color: #E0E0E0;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
@@ -117,7 +116,7 @@
         }
 
         .tab-button:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
 
@@ -127,52 +126,41 @@
             font-weight: 600;
         }
 
-        .leaderboard-button {
+        .leaderboard-button, .wallet-button {
             position: fixed;
             top: 16px;
-            right: 16px;
-            padding: 8px 16px;
-            font-size: 0.9em;
+            padding: 10px 20px;
+            font-size: 0.95em;
             background: linear-gradient(135deg, #FFD700, #DAA520);
             color: #1A1A1A;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             z-index: 1000;
             transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .leaderboard-button:hover {
-            background: linear-gradient(135deg, #FFE066, #FFD700);
-            transform: scale(1.05);
+        .leaderboard-button {
+            right: 16px;
         }
 
         .wallet-button {
-            position: fixed;
-            top: 16px;
             left: 16px;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            background: linear-gradient(135deg, #FFD700, #DAA520);
-            color: #1A1A1A;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            z-index: 1000;
-            transition: transform 0.2s, background 0.2s;
         }
 
-        .wallet-button:hover {
+        .leaderboard-button:hover, .wallet-button:hover {
             background: linear-gradient(135deg, #FFE066, #FFD700);
             transform: scale(1.05);
         }
 
-        .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list {
+        .shop-list, .job-list, .task-list, .referral-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            padding: 10px 0;
+            gap: 12px;
+            padding: 12px 0;
             overflow-y: auto;
             max-height: 50vh;
         }
@@ -180,24 +168,32 @@
         .leaderboard-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            padding: 10px 0;
-            font-size: 0.85em;
+            gap: 10px;
+            padding: 12px 0;
+            font-size: 0.9em;
             color: #D1D5DB;
             text-align: left;
             max-height: calc(100vh - 150px);
         }
 
         .leaderboard-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .leaderboard-item span {
+            font-size: 0.85em;
+            color: #A1A1A1;
         }
 
         .shop-item, .job-item, .task-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 12px;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -211,23 +207,23 @@
             width: 64px;
             height: 64px;
             object-fit: contain;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .shop-item p, .job-item p, .task-item p {
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: #D1D5DB;
             margin: 4px 0;
         }
 
         .shop-item button, .job-item button, .task-item button {
             width: 100%;
-            padding: 8px;
-            font-size: 0.85em;
+            padding: 10px;
+            font-size: 0.9em;
             background: linear-gradient(135deg, #FFD700, #DAA520);
             color: #1A1A1A;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
@@ -243,28 +239,24 @@
             transform: scale(1.05);
         }
 
-        .shop-item.purchased {
-            animation: purchase 0.3s ease;
-        }
-
         .inventory-list, .casino, .business, .transfer, .referral-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            padding: 10px 0;
-            font-size: 0.85em;
+            gap: 10px;
+            padding: 12px 0;
+            font-size: 0.9em;
             color: #D1D5DB;
             text-align: center;
         }
 
         .casino button, .business button, .transfer button, .referral-list button {
             width: 100%;
-            padding: 10px;
-            font-size: 0.9em;
+            padding: 12px;
+            font-size: 0.95em;
             background: linear-gradient(135deg, #6B7280, #4B5563);
             color: #E0E0E0;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
@@ -280,13 +272,24 @@
         }
 
         .transfer input, .referral-list input {
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            border: none;
-            font-size: 0.9em;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #FFD700;
+            font-size: 0.95em;
             background: rgba(255, 255, 255, 0.1);
             color: #E0E0E0;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .transfer input:focus, .referral-list input:focus {
+            outline: none;
+            border-color: #FFE066;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .transfer input::placeholder, .referral-list input::placeholder {
+            color: #A1A1A1;
         }
 
         .notification {
@@ -294,10 +297,10 @@
             top: 16px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.85em;
+            font-size: 0.9em;
             color: #FFD700;
             background: rgba(0, 0, 0, 0.9);
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 12px;
             opacity: 0;
             transition: opacity 0.4s;
@@ -333,29 +336,22 @@
             border-radius: 16px;
         }
 
-        @keyframes purchase {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
         @keyframes collectCoin {
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-80px); opacity: 0; }
         }
 
-        @media (max-width: 360px) {
-            h1 { font-size: 1.2em; }
+        @media (max-width: 400px) {
+            h1 { font-size: 1.3em; }
             .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container {
                 margin: 4px;
-                padding: 10px;
-                max-width: 320px;
+                padding: 12px;
+                max-width: 360px;
             }
-            .stat { font-size: 0.75em; }
-            .tab-button { font-size: 0.7em; padding: 6px; }
-            .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
-            .shop-list, .job-list, .task-list, .referral-list, .leaderboard-list { grid-template-columns: 1fr; }
-            .leaderboard-button, .wallet-button { padding: 6px 12px; font-size: 0.8em; }
+            .stat { font-size: 0.8em; }
+            .tab-button { font-size: 0.75em; padding: 8px; }
+            .shop-item img, .job-item img, .task-item img { width: 56px; height: 56px; }
+            .leaderboard-button, .wallet-button { padding: 8px 16px; font-size: 0.85em; }
         }
     </style>
 </head>
@@ -365,8 +361,8 @@
         <p>Откройте игру через Telegram на вашем смартфоне.</p>
     </div>
 
-    <button class="leaderboard-button" onclick="showSection('leaderboardContainer')">Лидерборд</button>
-    <button class="wallet-button" onclick="setWalletAddress()">Кошелек</button>
+    <button class="leaderboard-button" onclick="showSection('leaderboardContainer')">🏆 Лидерборд</button>
+    <button class="wallet-button" onclick="connectWallet()">🔗 TON Кошелёк</button>
 
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
@@ -377,6 +373,7 @@
             <div class="stat">Голод: <span id="hunger">100</span></div>
             <div class="stat">Настр: <span id="mood">100</span></div>
             <div class="stat">ID: <span id="playerId"></span></div>
+            <div class="stat">Кошелёк: <span id="walletAddress">Не подключён</span></div>
         </div>
         <div class="tabs">
             <div class="tab-row">
@@ -416,7 +413,7 @@
     <div class="task-container" id="taskContainer">
         <h1>Задания</h1>
         <div class="task-list" id="taskList"></div>
-        <button class="tab-button" style="margin-top: 10px;" onclick="showSection('jobContainer')">Назад к работам</button>
+        <button class="tab-button" style="margin-top: 12px;" onclick="showSection('jobContainer')">Назад к работам</button>
     </div>
 
     <div class="shop-container" id="shopContainer">
@@ -544,9 +541,10 @@
     </div>
 
     <div class="leaderboard-container" id="leaderboardContainer">
-        <h1>Лидерборд</h1>
+        <h1>🏆 Лидерборд</h1>
+        <button class="tab-button" style="margin-bottom: 12px;" onclick="fetchLeaderboard()">Обновить</button>
         <div class="leaderboard-list" id="leaderboardList"></div>
-        <button class="tab-button" style="margin-top: 10px;" onclick="showSection('mainContainer')">Назад</button>
+        <button class="tab-button" style="margin-top: 12px;" onclick="showSection('mainContainer')">Назад</button>
     </div>
 
     <div class="notification" id="notification"></div>
@@ -554,6 +552,9 @@
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbx0t3esGuVR1sDuAHWQ1pknrdSeSM0x9qSJ4BIu2mmOSA95ZMq0bAZG6QaUVxIL55pl/exec';
+        const tonConnect = new window.TON_CONNECT.TonConnect();
+
         function isMobileDevice() {
             const ua = navigator.userAgent.toLowerCase();
             const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -571,10 +572,18 @@
                 return;
             }
             document.getElementById('mobileOnly').style.display = 'none';
+            if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+                window.Telegram.WebApp.enableClosingConfirmation();
+                window.Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
+                window.Telegram.WebApp.BackButton.show();
+            }
             enterFullscreen();
             loadGame();
             render();
             setInterval(gameTick, 1000);
+            fetchLeaderboard();
         });
 
         let state = {
@@ -747,11 +756,31 @@
             { name: "Пригласитель", desc: "Пригласи 1 друга", condition: () => state.referrals.length >= 1, reward: { balance: 200 } }
         ];
 
-        if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.expand();
-            window.Telegram.WebApp.enableClosingConfirmation();
-            window.Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
-            window.Telegram.WebApp.BackButton.show();
+        async function connectWallet() {
+            try {
+                await tonConnect.restoreConnection();
+                const walletsList = await tonConnect.getWallets();
+                const wallet = walletsList.find(w => w.appName.toLowerCase().includes('ton'));
+                if (!wallet) {
+                    showNotification("Нет доступных TON кошельков!");
+                    return;
+                }
+                tonConnect.connect({ universalLink: wallet.universalLink });
+                tonConnect.onStatusChange(async (walletInfo) => {
+                    if (walletInfo && walletInfo.account) {
+                        state.walletAddress = walletInfo.account.address;
+                        document.getElementById('walletAddress').textContent = state.walletAddress.slice(0, 6) + '...' + state.walletAddress.slice(-4);
+                        showNotification("TON кошелёк подключён!");
+                        saveGame();
+                        render();
+                        updateLeaderboard();
+                    }
+                });
+            } catch (e) {
+                showNotification("Ошибка подключения кошелька!");
+                console.error(e);
+            }
+            playSound("clickSound");
         }
 
         function generateUniqueId() {
@@ -819,31 +848,48 @@
             state.lastSave = Date.now();
             state.lastTick = Date.now();
             saveGame();
+            updateLeaderboard();
         }
 
         function saveGame() {
             if (Date.now() - state.lastSave >= 1000) {
                 try {
                     localStorage.setItem('riseToRichesState', JSON.stringify(state));
-                    localStorage.setItem(`riseToRichesState_${state.playerId}`, JSON.stringify(state));
                     state.lastSave = Date.now();
+                    updateLeaderboard();
                 } catch (e) {
                     console.warn("Ошибка сохранения: ", e);
                 }
             }
         }
 
-        function setWalletAddress() {
-            const address = prompt("Введите адрес вашего криптовалютного кошелька:");
-            if (address && /^[a-zA-Z0-9]{26,42}$/.test(address)) {
-                state.walletAddress = address;
-                showNotification("Адрес кошелька сохранен!");
-                saveGame();
-                render();
-            } else {
-                showNotification("Недействительный адрес кошелька!");
-            }
-            playSound("clickSound");
+        function updateLeaderboard() {
+            if (!state.username || state.balance === 0) return;
+            const wallet = state.walletAddress || "Не подключён";
+            fetch(`${API_URL}?name=${encodeURIComponent(state.username)}&score=${state.balance}&status=${encodeURIComponent(state.status)}&wallet=${encodeURIComponent(wallet)}`, {
+                method: 'POST'
+            }).catch(e => console.warn("Ошибка обновления лидерборда: ", e));
+        }
+
+        function fetchLeaderboard() {
+            fetch(API_URL)
+                .then(res => res.json())
+                .then(data => {
+                    const leaderboardList = document.getElementById("leaderboardList");
+                    leaderboardList.innerHTML = data.length === 0
+                        ? "Лидерборд пуст"
+                        : data.slice(0, 50).map((entry, index) => `
+                            <div class="leaderboard-item">
+                                ${index + 1}. ${entry.name} — $${entry.score.toLocaleString()}
+                                <span>Статус: ${entry.status}</span>
+                                <span>Кошелёк: ${entry.wallet.slice(0, 6) + '...' + entry.wallet.slice(-4)}</span>
+                            </div>
+                        `).join("");
+                })
+                .catch(e => {
+                    console.warn("Ошибка загрузки лидерборда: ", e);
+                    document.getElementById("leaderboardList").innerHTML = "Ошибка загрузки лидерборда";
+                });
         }
 
         function submitReferralCode() {
@@ -908,6 +954,7 @@
             }
             playSound("clickSound");
             render();
+            if (sectionId === 'leaderboardContainer') fetchLeaderboard();
         }
 
         function checkAchievements() {
@@ -922,37 +969,6 @@
             });
         }
 
-        function getLeaderboard() {
-            const players = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
-                    try {
-                        const playerState = JSON.parse(localStorage.getItem(key));
-                        if (playerState.playerId && playerState.balance !== undefined && playerState.walletAddress && /^[a-zA-Z0-9]{26,42}$/.test(playerState.walletAddress)) {
-                            players.push({
-                                playerId: playerState.playerId,
-                                walletAddress: playerState.walletAddress,
-                                balance: playerState.balance,
-                                username: playerState.username || playerState.playerId
-                            });
-                        }
-                    } catch (e) {
-                        console.warn(`Ошибка чтения ${key}: ${e}`);
-                    }
-                }
-            }
-            if (state.playerId && state.balance !== undefined && state.walletAddress && /^[a-zA-Z0-9]{26,42}$/.test(state.walletAddress)) {
-                players.push({
-                    playerId: state.playerId,
-                    walletAddress: state.walletAddress,
-                    balance: state.balance,
-                    username: state.username
-                });
-            }
-            return players.sort((a, b) => b.balance - a.balance).slice(0, 50);
-        }
-
         function render() {
             document.getElementById("balance").textContent = state.balance.toLocaleString();
             document.getElementById("status").textContent = state.status;
@@ -960,6 +976,7 @@
             document.getElementById("hunger").textContent = Math.floor(state.hunger);
             document.getElementById("mood").textContent = Math.floor(state.mood);
             document.getElementById("playerId").textContent = state.playerId;
+            document.getElementById("walletAddress").textContent = state.walletAddress ? state.walletAddress.slice(0, 6) + '...' + state.walletAddress.slice(-4) : "Не подключён";
 
             const jobList = document.getElementById("jobList");
             jobList.innerHTML = "";
@@ -1090,16 +1107,6 @@
             referralInput.style.display = state.referralCodeLocked ? 'none' : 'block';
             referralButton.style.display = state.referralCodeLocked ? 'none' : 'block';
 
-            const leaderboardList = document.getElementById("leaderboardList");
-            const topPlayers = getLeaderboard();
-            leaderboardList.innerHTML = topPlayers.length === 0
-                ? "Лидерборд пуст"
-                : topPlayers.map((player, index) => `
-                    <div class="leaderboard-item">
-                        ${index + 1}. ${player.username} (${player.walletAddress}) | $${player.balance.toLocaleString()}
-                    </div>
-                `).join("");
-
             let bgImage;
             if (state.balance >= 10000000) bgImage = "bg4.jpg";
             else if (state.balance >= 1000000) bgImage = "bg3.jpg";
@@ -1147,6 +1154,7 @@
                         console.warn("Реферер не найден для обновления статуса.");
                     }
                 }
+                updateLeaderboard();
             }
             if (state.balance >= 10000000 && !state.achievements.includes("Миллионер")) {
                 showNotification("Ты миллионер! $10,000,000!");
@@ -1302,7 +1310,7 @@
 
             if (task.social && !state.completedSocialTasks.includes(task.name)) {
                 state.completedSocialTasks.push(task.name);
-                state.socialTaskCooldowns[task.name] = Date.now() + 24 * 60 * 60 * 1000; // 24 часа
+                state.socialTaskCooldowns[task.name] = Date.now() + 24 * 60 * 60 * 1000;
             }
 
             if (state.referredBy) {
@@ -1316,8 +1324,7 @@
                                 const bonus = Math.floor(pay * 0.1);
                                 referrerState.balance = (referrerState.balance || 0) + bonus;
                                 referrerState.referrals = (referrerState.referrals || []).map(ref => ({
-                                    playerId: ref.playerId,
-                                    username: ref.playerId === state.playerId ? state.username : ref.username,
+                                    ...ref,
                                     balance: ref.playerId === state.playerId ? state.balance + pay : ref.balance,
                                     status: ref.playerId === state.playerId ? state.status : ref.status
                                 }));
@@ -1331,14 +1338,10 @@
                         }
                     }
                 }
-                if (!referrerFound) {
-                    console.warn("Реферер не найден для начисления бонуса.");
-                }
             }
 
             state.referrals = state.referrals.map(ref => ({
-                playerId: ref.playerId,
-                username: ref.playerId === state.playerId ? state.username : ref.username,
+                ...ref,
                 balance: ref.playerId === state.playerId ? state.balance + pay : ref.balance,
                 status: ref.playerId === state.playerId ? state.status : ref.status
             }));
@@ -1396,9 +1399,6 @@
             }
 
             playSound("cashSound");
-            const itemDiv = Array.from(document.getElementById("shopList").children)
-                .find(div => div.querySelector("button").textContent.includes(item.name));
-            if (itemDiv) itemDiv.classList.add("purchased");
             updateStatus();
             saveGame();
             render();
@@ -1434,99 +1434,12 @@
             render();
         }
 
-        function playCasino(bet) {
-            if (state.balance < bet) {
-                showNotification("Не хватает денег!");
-                return;
-            }
-            state.balance -= bet;
-            const rand = Math.random() * 100;
-            let outcome;
-            if (rand < 45) {
-                const winAmount = bet * 2;
-                state.balance += winAmount;
-                outcome = `Выиграл $${winAmount.toLocaleString()}!`;
-            } else if (rand < 85) {
-                outcome = `Проиграл $${bet.toLocaleString()}!`;
-            } else if (rand < 95) {
-                state.balance = Math.max(0, state.balance - bet * 2);
-                outcome = "Крупный проигрыш!";
-            } else {
-                state.balance += bet * 5;
-                outcome = `Джекпот! +$${bet * 5}!`;
-            }
+        function playCasino(bet) he notification duration to 4000ms
             showNotification(outcome);
-            playSound("cashSound");
-            updateStatus();
-            saveGame();
-            render();
-        }
-
-        function transferCurrency() {
-            const recipientId = document.getElementById("recipientId").value;
-            const amount = parseInt(document.getElementById("transferAmount").value);
-            if (!recipientId || isNaN(amount) || amount <= 0) {
-                showNotification("Введите корректные данные!");
-                return;
-            }
-            if (state.balance < amount) {
-                showNotification("Недостаточно денег!");
-                return;
-            }
-            if (recipientId === state.playerId) {
-                showNotification("Нельзя отправить деньги самому себе!");
-                return;
-            }
-            let recipientFound = false;
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
-                    try {
-                        const recipientState = JSON.parse(localStorage.getItem(key));
-                        if (recipientState.playerId === recipientId) {
-                            state.balance -= amount;
-                            recipientState.pendingTransfers = recipientState.pendingTransfers || [];
-                            recipientState.pendingTransfers.push({
-                                senderPlayerId: state.playerId,
-                                amount: amount
-                            });
-                            localStorage.setItem(`riseToRichesState_${recipientId}`, JSON.stringify(recipientState));
-                            showNotification(`Переведено $${amount} игроку ID ${recipientId}!`);
-                            recipientFound = true;
-                            break;
-                        }
-                    } catch (e) {
-                        console.warn(`Ошибка чтения ${key}: ${e}`);
-                    }
-                }
-            }
-            if (!recipientFound) {
-                showNotification("Игрок не найден!");
-                return;
-            }
-            playSound("cashSound");
-            saveGame();
-            render();
-        }
-
-        function checkDebt() {
-            if (state.balance < 0 && !state.debtRepaymentActive) {
-                state.debtRepaymentActive = true;
-                showNotification("Долг! Заработок идет на его погашение.");
-            } else if (state.balance >= 0 && state.debtRepaymentActive) {
-                state.debtRepaymentActive = false;
-                showNotification("Долг погашен!");
-            }
-        }
-
-        function showNotification(message) {
-            const notification = document.getElementById("notification");
-            notification.textContent = message;
-            notification.classList.add("show");
             setTimeout(() => {
                 notification.classList.remove("show");
                 notification.textContent = "";
-            }, 3000);
+            }, 4000);
         }
 
         function playSound(soundId) {
