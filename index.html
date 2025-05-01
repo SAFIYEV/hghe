@@ -447,12 +447,14 @@
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
-            <div class="tab-row">
-                <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
-                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
-                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-            </div>
+            User: исправь. доведи все до идеала. и дай мне полный исходный код. вот прям полный при полный. и ничего больше мне не пиши. только полный и исправленный а самое главное безошибочный код
+
+        <div class="tab-row">
+            <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
+            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+        </div>
         </div>
     </div>
 
@@ -554,9 +556,11 @@
 
     <script>
         function isMobileDevice() {
-            const ua = navigator.userAgent;
+            const ua = navigator.userAgent.toLowerCase();
             const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) || isTouch;
+            const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(ua);
+            const isSmallScreen = window.innerWidth <= 768;
+            return (isMobileUA || (isTouch && isSmallScreen)) && !/windows nt/i.test(ua);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -717,8 +721,7 @@
         const shopItems = [
             { name: "Хлеб", price: 5, desc: "Снимает голод на 20 минут", effect: { hungerSatisfied: 1200000 }, image: "bread.png", reusable: true, autoUse: true },
             { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true, autoUse: true },
-            { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payM
-ultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
+            { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
             { name: "Кроссовки", price: 200, desc: "Задания +10% дохода", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
             { name: "Велосипед", price: 500, desc: "Доставка +50% чаевых", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
             { name: "Машина (Лада)", price: 5000, desc: "Такси +50% дохода", effect: { taskPayMultiplier: 1.5 }, job: "taxi", image: "lada.png" },
