@@ -20,7 +20,6 @@
             overflow: hidden;
             touch-action: manipulation;
         }
-
         .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
             width: 100%;
             max-width: 360px;
@@ -41,18 +40,15 @@
             opacity: 0;
             transform: translateY(20px);
         }
-
         .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
             border: 1px solid #FFD700;
             background: rgba(30, 30, 40, 0.95);
         }
-
         .active {
             display: flex;
             opacity: 1;
             transform: translateY(0);
         }
-
         h1 {
             font-size: 1.4em;
             margin: 8px 0;
@@ -60,7 +56,6 @@
             color: #FFD700;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
-
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -71,17 +66,14 @@
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
         }
-
         .stat {
             text-align: center;
             color: #E0E0E0;
         }
-
         .stat span {
             color: #FFD700;
             font-weight: 600;
         }
-
         .tabs {
             display: flex;
             flex-wrap: wrap;
@@ -91,13 +83,11 @@
             background: rgba(0, 0, 0, 0.4);
             border-radius: 12px;
         }
-
         .tab-row {
             display: flex;
             width: 100%;
             justify-content: space-around;
         }
-
         .tab-button {
             flex: 1;
             padding: 8px;
@@ -111,18 +101,15 @@
             margin: 4px;
             text-align: center;
         }
-
         .tab-button:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
-
         .tab-button.active {
             background: #FFD700;
             color: #1A1A1A;
             font-weight: 600;
         }
-
         .wallet-button {
             position: fixed;
             top: 16px;
@@ -138,12 +125,10 @@
             z-index: 1000;
             transition: transform 0.2s, background 0.2s;
         }
-
         .wallet-button:hover {
             background: linear-gradient(135deg, #FFE066, #FFD700);
             transform: scale(1.05);
         }
-
         .shop-list, .job-list, .task-list, .referral-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -152,7 +137,6 @@
             overflow-y: auto;
             max-height: 50vh;
         }
-
         .shop-item, .job-item, .task-item {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
@@ -160,25 +144,21 @@
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-
         .shop-item:hover, .job-item:hover, .task-item:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
         }
-
         .shop-item img, .job-item img, .task-item img {
             width: 64px;
             height: 64px;
             object-fit: contain;
             margin-bottom: 6px;
         }
-
         .shop-item p, .job-item p, .task-item p {
             font-size: 0.8em;
             color: #D1D5DB;
             margin: 4px 0;
         }
-
         .shop-item button, .job-item button, .task-item button {
             width: 100%;
             padding: 8px;
@@ -190,22 +170,18 @@
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
-
         .shop-item button:disabled, .job-item button:disabled, .task-item button:disabled {
             background: #555;
             color: #888;
             cursor: not-allowed;
         }
-
         .shop-item button:hover:not(:disabled), .job-item button:hover:not(:disabled), .task-item button:hover:not(:disabled) {
             background: linear-gradient(135deg, #FFE066, #FFD700);
             transform: scale(1.05);
         }
-
         .shop-item.purchased {
             animation: purchase 0.3s ease;
         }
-
         .inventory-list, .casino, .business, .transfer, .referral-list {
             display: flex;
             flex-direction: column;
@@ -215,7 +191,6 @@
             color: #D1D5DB;
             text-align: center;
         }
-
         .casino button, .business button, .transfer button, .referral-list button {
             width: 100%;
             padding: 10px;
@@ -227,17 +202,14 @@
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
-
         .casino button:disabled, .business button:disabled, .transfer button:disabled, .referral-list button:disabled {
             background: #555;
             cursor: not-allowed;
         }
-
         .casino button:hover:not(:disabled), .business button:hover:not(:disabled), .transfer button:hover:not(:disabled), .referral-list button:hover:not(:disabled) {
             background: linear-gradient(135deg, #9CA3AF, #6B7280);
             transform: translateY(-2px);
         }
-
         .transfer input, .referral-list input {
             padding: 10px;
             margin-bottom: 8px;
@@ -247,7 +219,6 @@
             background: rgba(255, 255, 255, 0.1);
             color: #E0E0E0;
         }
-
         .notification {
             position: fixed;
             top: 16px;
@@ -265,11 +236,9 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             z-index: 2000;
         }
-
         .notification.show {
             opacity: 1;
         }
-
         .coin-animation {
             position: absolute;
             width: 32px;
@@ -278,18 +247,15 @@
             background-size: contain;
             animation: collectCoin 0.8s ease-out forwards;
         }
-
         @keyframes purchase {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-
         @keyframes collectCoin {
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-80px); opacity: 0; }
         }
-
         @media (max-width: 360px) {
             h1 { font-size: 1.2em; }
             .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
@@ -466,6 +432,7 @@
         <div class="referral-list">
             <input id="referralCodeInput" placeholder="Введите реферальный код друга">
             <button id="submitReferralCode" onclick="submitReferralCode()">Отправить</button>
+            <button id="shareReferralCode" onclick="shareReferralCode()">Поделиться кодом</button>
             <div id="referralList"></div>
         </div>
         <div class="tabs">
@@ -524,7 +491,7 @@
                 });
             } catch (error) {
                 console.error("Ошибка подключения кошелька:", error);
-                showNotification("Ошибка подключения кошелька");
+                showNotification("Ошибка подключения кошелька: " + error.message);
             }
             playSound("clickSound");
         }
@@ -776,6 +743,7 @@
                     state.completedSocialTasks = state.completedSocialTasks || [];
                 } catch (e) {
                     console.warn("Ошибка загрузки состояния: ", e);
+                    showNotification("Ошибка загрузки игры!");
                 }
             } else {
                 state.playerId = generateUniqueId();
@@ -808,6 +776,7 @@
                     state.lastSave = Date.now();
                 } catch (e) {
                     console.warn("Ошибка сохранения: ", e);
+                    showNotification("Ошибка сохранения!");
                 }
             }
         }
@@ -862,6 +831,18 @@
             }
             saveGame();
             render();
+        }
+
+        function shareReferralCode() {
+            if (!window.Telegram?.WebApp) {
+                showNotification("Поделиться можно только через Telegram!");
+                return;
+            }
+            const shareText = `Присоединяйся к Rise to Riches! Используй мой реферальный код: ${state.referralCode}`;
+            const shareUrl = `https://t.me/your_bot?start=${state.referralCode}`;
+            window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`);
+            showNotification("Поделись кодом в Telegram!");
+            playSound("clickSound");
         }
 
         function showSection(sectionId) {
@@ -1396,7 +1377,7 @@
         }
 
         function transferCurrency() {
-            const recipientId = document.getElementById("recipientId").value;
+            const recipientId = document.getElementById("recipientId").value.trim();
             const amount = parseInt(document.getElementById("transferAmount").value);
             if (!recipientId || isNaN(amount) || amount <= 0) {
                 showNotification("Введите корректные данные!");
@@ -1457,23 +1438,22 @@
             const notification = document.getElementById("notification");
             notification.textContent = message;
             notification.classList.add("show");
-            setTimeout(() => {
-                notification.classList.remove("show");
-                notification.textContent = "";
-            }, 3000);
+            setTimeout(() => notification.classList.remove("show"), 3000);
         }
 
         function playSound(soundId) {
             const sound = document.getElementById(soundId);
-            sound.currentTime = 0;
-            sound.play().catch(() => {});
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.warn("Ошибка воспроизведения звука:", e));
+            }
         }
 
         function createCoinAnimation() {
             const coin = document.createElement("div");
             coin.className = "coin-animation";
             coin.style.left = `${Math.random() * (window.innerWidth - 32)}px`;
-            coin.style.top = `${window.innerHeight - 64}px`;
+            coin.style.top = `${window.innerHeight - 100}px`;
             document.body.appendChild(coin);
             setTimeout(() => coin.remove(), 800);
         }
@@ -1481,56 +1461,36 @@
         function gameTick() {
             const now = Date.now();
             const deltaTime = (now - state.lastTick) / 1000;
+            state.lastTick = now;
 
-            if (state.energy < 100) {
-                state.energy += (10 / 300) * deltaTime;
-                if (state.energy > 100) state.energy = 100;
-            }
-
+            state.energy = Math.min(state.energy + 0.1 * deltaTime, 100);
             if (Date.now() > state.hungerSatisfiedUntil) {
-                if (state.hunger > 0) {
-                    state.hunger -= 0.0333 * deltaTime;
-                    if (state.hunger < 0) state.hunger = 0;
-                    if (state.hunger < 30) {
-                        showNotification("Голоден! Купи еду.");
-                    }
-                }
-            } else {
-                state.hunger = 100;
+                state.hunger = Math.max(state.hunger - 0.5 * deltaTime, 0);
             }
-
-            if (state.mood < 100) {
-                state.mood += 0.0167 * deltaTime;
-                if (state.mood > 100) state.mood = 100;
-            }
+            state.mood = Math.max(state.mood - 0.2 * deltaTime, 0);
 
             if (state.businessOwned) {
-                let income = state.businessLevel * 1000 * deltaTime;
-                if (state.balance < 0) {
-                    const repayment = Math.min(income, -state.balance);
-                    state.balance += repayment;
-                    income -= repayment;
-                }
-                state.balance += income;
-                if (income > 0) {
-                    showNotification(`Бизнес: +$${Math.floor(income)}`);
-                    createCoinAnimation();
+                const businessIncome = state.businessLevel * 1000 * deltaTime;
+                state.balance += businessIncome;
+                if (businessIncome >= 1000) {
+                    showNotification(`Доход от бизнеса: $${Math.floor(businessIncome)}`);
+                    playSound("cashSound");
                 }
             }
 
             if (state.isWorking && state.currentTask) {
-                const elapsed = Date.now() - state.taskStartTime;
+                const elapsed = now - state.taskStartTime;
                 if (elapsed >= state.currentTask.duration) {
                     completeJobTask(state.currentTask);
                 }
             }
 
+            state.activeItems = state.activeItems.filter(item => item.expiresAt > now);
+
             checkDebt();
             updateStatus();
             saveGame();
             render();
-
-            state.lastTick = now;
         }
     </script>
 </body>
