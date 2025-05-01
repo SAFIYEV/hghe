@@ -558,14 +558,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            if (false) {
-                document.getElementById('mobileOnly').style.display = 'flex';
-                document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container').forEach(el => {
-                    el.style.display = 'none';
-                });
-                return;
-            }
-            document.getElementById('mobileOnly').style.display = 'none';
+        document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container')
+            .forEach(el => el.style.display = 'none');
+        document.getElementById('mainContainer').classList.add('active');
             if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.ready();
                 window.Telegram.WebApp.expand();
