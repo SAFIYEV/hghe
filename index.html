@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rise to Riches</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
     <style>
         body {
             margin: 0;
@@ -20,7 +18,8 @@
             overflow: hidden;
             touch-action: manipulation;
         }
-        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
+
+        .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
             width: 100%;
             max-width: 360px;
             margin: 8px;
@@ -40,15 +39,18 @@
             opacity: 0;
             transform: translateY(20px);
         }
-        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
+
+        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
             border: 1px solid #FFD700;
             background: rgba(30, 30, 40, 0.95);
         }
+
         .active {
             display: flex;
             opacity: 1;
             transform: translateY(0);
         }
+
         h1 {
             font-size: 1.4em;
             margin: 8px 0;
@@ -56,6 +58,7 @@
             color: #FFD700;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -66,14 +69,17 @@
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
         }
+
         .stat {
             text-align: center;
             color: #E0E0E0;
         }
+
         .stat span {
             color: #FFD700;
             font-weight: 600;
         }
+
         .tabs {
             display: flex;
             flex-wrap: wrap;
@@ -83,11 +89,13 @@
             background: rgba(0, 0, 0, 0.4);
             border-radius: 12px;
         }
+
         .tab-row {
             display: flex;
             width: 100%;
             justify-content: space-around;
         }
+
         .tab-button {
             flex: 1;
             padding: 8px;
@@ -101,35 +109,19 @@
             margin: 4px;
             text-align: center;
         }
+
         .tab-button:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
+
         .tab-button.active {
             background: #FFD700;
             color: #1A1A1A;
             font-weight: 600;
         }
-        .wallet-button {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            background: linear-gradient(135deg, #FFD700, #DAA520);
-            color: #1A1A1A;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            z-index: 1000;
-            transition: transform 0.2s, background 0.2s;
-        }
-        .wallet-button:hover {
-            background: linear-gradient(135deg, #FFE066, #FFD700);
-            transform: scale(1.05);
-        }
-        .shop-list, .job-list, .task-list, .referral-list {
+
+        .shop-list, .job-list, .task-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
@@ -137,6 +129,7 @@
             overflow-y: auto;
             max-height: 50vh;
         }
+
         .shop-item, .job-item, .task-item {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
@@ -144,21 +137,25 @@
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
         }
+
         .shop-item:hover, .job-item:hover, .task-item:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
         }
+
         .shop-item img, .job-item img, .task-item img {
             width: 64px;
             height: 64px;
             object-fit: contain;
             margin-bottom: 6px;
         }
+
         .shop-item p, .job-item p, .task-item p {
             font-size: 0.8em;
             color: #D1D5DB;
             margin: 4px 0;
         }
+
         .shop-item button, .job-item button, .task-item button {
             width: 100%;
             padding: 8px;
@@ -170,28 +167,30 @@
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
+
         .shop-item button:disabled, .job-item button:disabled, .task-item button:disabled {
             background: #555;
             color: #888;
             cursor: not-allowed;
         }
+
         .shop-item button:hover:not(:disabled), .job-item button:hover:not(:disabled), .task-item button:hover:not(:disabled) {
             background: linear-gradient(135deg, #FFE066, #FFD700);
             transform: scale(1.05);
         }
+
         .shop-item.purchased {
             animation: purchase 0.3s ease;
         }
-        .inventory-list, .casino, .business, .transfer, .referral-list {
+
+        .inventory-list, .casino, .business, .transfer {
             display: flex;
             flex-direction: column;
             gap: 8px;
             padding: 10px 0;
-            font-size: 0.85em;
-            color: #D1D5DB;
-            text-align: center;
         }
-        .casino button, .business button, .transfer button, .referral-list button {
+
+        .casino button, .business button, .transfer button {
             width: 100%;
             padding: 10px;
             font-size: 0.9em;
@@ -202,15 +201,24 @@
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
-        .casino button:disabled, .business button:disabled, .transfer button:disabled, .referral-list button:disabled {
+
+        .casino button:disabled, .business button:disabled, .transfer button:disabled {
             background: #555;
             cursor: not-allowed;
         }
-        .casino button:hover:not(:disabled), .business button:hover:not(:disabled), .transfer button:hover:not(:disabled), .referral-list button:hover:not(:disabled) {
+
+        .casino button:hover:not(:disabled), .business button:hover:not(:disabled), .transfer button:hover:not(:disabled) {
             background: linear-gradient(135deg, #9CA3AF, #6B7280);
             transform: translateY(-2px);
         }
-        .transfer input, .referral-list input {
+
+        .inventory-list {
+            font-size: 0.85em;
+            color: #D1D5DB;
+            text-align: center;
+        }
+
+        .transfer input {
             padding: 10px;
             margin-bottom: 8px;
             border-radius: 8px;
@@ -219,6 +227,7 @@
             background: rgba(255, 255, 255, 0.1);
             color: #E0E0E0;
         }
+
         .notification {
             position: fixed;
             top: 16px;
@@ -236,9 +245,11 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             z-index: 2000;
         }
+
         .notification.show {
             opacity: 1;
         }
+
         .coin-animation {
             position: absolute;
             width: 32px;
@@ -247,18 +258,21 @@
             background-size: contain;
             animation: collectCoin 0.8s ease-out forwards;
         }
+
         @keyframes purchase {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+
         @keyframes collectCoin {
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-80px); opacity: 0; }
         }
+
         @media (max-width: 360px) {
             h1 { font-size: 1.2em; }
-            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container {
+            .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
                 margin: 4px;
                 padding: 10px;
                 max-width: 320px;
@@ -266,15 +280,11 @@
             .stat { font-size: 0.75em; }
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
-            .shop-list, .job-list, .task-list, .referral-list { grid-template-columns: 1fr; }
-            .wallet-button { padding: 6px 12px; font-size: 0.8em; }
+            .shop-list, .job-list, .task-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <button class="wallet-button" onclick="connectWallet()">🔗 Подключить TON кошелёк</button>
-    <p id="wallet-address" style="position: fixed; top: 48px; left: 16px; color: #FFD700; font-size: 0.8em;"></p>
-
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
         <div class="stats">
@@ -296,7 +306,6 @@
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
         </div>
     </div>
@@ -315,7 +324,6 @@
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
         </div>
     </div>
@@ -340,7 +348,6 @@
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
         </div>
     </div>
@@ -359,7 +366,6 @@
                 <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
         </div>
     </div>
@@ -378,7 +384,6 @@
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
         </div>
     </div>
@@ -397,7 +402,6 @@
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
         </div>
     </div>
@@ -405,7 +409,7 @@
     <div class="transfer-container" id="transferContainer">
         <h1>Перевод валюты</h1>
         <div class="transfer">
-            <input type="text" id="recipientId" placeholder="Уникальный ID игрока">
+            <input type="text" id="recipientId" placeholder="ID получателя">
             <input type="number" id="transferAmount" placeholder="Сумма">
             <button onclick="transferCurrency()">Отправить</button>
         </div>
@@ -420,33 +424,6 @@
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="friends-container" id="friendsContainer">
-        <h1>Друзья</h1>
-        <div>Ваш реферальный код: <span id="referralCode"></span></div>
-        <div>Приглашено: <span id="referralCount">0</span></div>
-        <div class="referral-list">
-            <input id="referralCodeInput" placeholder="Введите реферальный код друга">
-            <button id="submitReferralCode" onclick="submitReferralCode()">Отправить</button>
-            <button id="shareReferralCode" onclick="shareReferralCode()">Поделиться кодом</button>
-            <div id="referralList"></div>
-        </div>
-        <div class="tabs">
-            <div class="tab-row">
-                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
-                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
-                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
-            </div>
-            <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
-                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
-                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-                <button class="tab-button active" onclick="showSection('friendsContainer')">Друзья</button>
             </div>
         </div>
     </div>
@@ -456,84 +433,6 @@
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
-        const tonConnect = new TONConnect.TonConnect({
-            manifestUrl: 'https://your-app.com/tonconnect-manifest.json'
-        });
-
-        async function connectWallet() {
-            try {
-                await tonConnect.restoreConnection();
-                if (tonConnect.connected && tonConnect.account) {
-                    state.walletAddress = tonConnect.account.address;
-                    showNotification("Кошелек восстановлен: " + state.walletAddress);
-                    document.getElementById('wallet-address').textContent = "Кошелёк: " + state.walletAddress;
-                    saveGame();
-                    return;
-                }
-
-                const walletsList = await tonConnect.getWallets();
-                if (walletsList.length === 0) {
-                    showNotification("Нет доступных кошельков TON");
-                    return;
-                }
-
-                const wallet = walletsList[0];
-                tonConnect.connect({ universalLink: wallet.universalLink });
-
-                tonConnect.onStatusChange((walletInfo) => {
-                    if (walletInfo && walletInfo.account) {
-                        state.walletAddress = walletInfo.account.address;
-                        showNotification("Кошелек подключен: " + state.walletAddress);
-                        document.getElementById('wallet-address').textContent = "Кошелёк: " + state.walletAddress;
-                        saveGame();
-                        sendToGoogleSheets();
-                    }
-                });
-            } catch (error) {
-                console.error("Ошибка подключения кошелька:", error);
-                showNotification("Ошибка подключения кошелька: " + error.message);
-            }
-            playSound("clickSound");
-        }
-
-        async function sendToGoogleSheets() {
-            if (!state.walletAddress || !state.playerId) return;
-            const data = {
-                playerId: state.playerId,
-                username: state.username,
-                balance: state.balance,
-                status: state.status,
-                walletAddress: state.walletAddress,
-                timestamp: new Date().toISOString()
-            };
-
-            try {
-                const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                    mode: 'no-cors'
-                });
-                console.log("Данные отправлены в Google Sheets:", data);
-            } catch (error) {
-                console.error("Ошибка отправки в Google Sheets:", error);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.Telegram?.WebApp) {
-                Telegram.WebApp.ready();
-                Telegram.WebApp.expand();
-                Telegram.WebApp.enableClosingConfirmation();
-                Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
-                Telegram.WebApp.BackButton.show();
-            }
-
-            loadGame();
-            render();
-            setInterval(gameTick, 1000);
-        });
-
         let state = {
             balance: 0,
             energy: 100,
@@ -553,18 +452,9 @@
             achievements: [],
             hungerSatisfiedUntil: 0,
             lastTick: Date.now(),
-            playerId: "",
-            telegramUserId: "",
+            playerId: generateUniqueId(),
             hourlyIncome: 0,
-            pendingTransfers: [],
-            referralCode: "",
-            referredBy: "",
-            referrals: [],
-            username: "",
-            referralCodeLocked: false,
-            walletAddress: "",
-            activeItems: [],
-            completedSocialTasks: []
+            pendingTransfers: []
         };
 
         const statuses = [
@@ -656,10 +546,7 @@
                     { name: "Опубликовать пост", pay: 1000, energy: 10, duration: 80000, image: "post_content.png" },
                     { name: "Снять сторис", pay: 800, energy: 10, duration: 70000, image: "shoot_stories.png" },
                     { name: "Провести прямой эфир", pay: 1200, energy: 10, duration: 90000, image: "live_stream.png" },
-                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000, image: "share_link.png" },
-                    { name: "Подписаться на Matrixon STD", pay: 50, energy: 5, duration: 10000, image: "telegram.png", social: true, url: "https://t.me/matrixonstd" },
-                    { name: "Подписаться на канал CEO", pay: 50, energy: 5, duration: 10000, image: "telegram.png", social: true, url: "https://t.me/Safiyev_Marat" },
-                    { name: "Подписаться на OneCoinTON", pay: 50, energy: 5, duration: 10000, image: "telegram.png", social: true, url: "https://t.me/onecointon" }
+                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000, image: "share_link.png" }
                 ]
             },
             crypto: {
@@ -670,7 +557,7 @@
                 fine: 200,
                 image: "crypto.png",
                 tasks: [
-                    { name: "Купить биткоин", pay: 5000, energy: 10, duration: 100000, image: "buy_bitcoin.png" },
+                    { name: "Купить биткоин", pay: 100000, energy: 10, duration: 100000, image: "buy_bitcoin.png" },
                     { name: "Продать NFT", pay: 6000, energy: 10, duration: 110000, image: "sell_nft.png" },
                     { name: "Майнить эфир", pay: 5500, energy: 10, duration: 105000, image: "mine_ether.png" },
                     { name: "Проанализировать рынок", pay: 4500, energy: 10, duration: 95000, image: "analyze_market.png" }
@@ -678,9 +565,43 @@
             }
         };
 
+        const socialTasks = [
+            {
+                name: "Подписаться на Telegram",
+                pay: 50,
+                energy: 5,
+                cooldown: 300000,
+                action: () => {
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/it2009');
+                    } else {
+                        window.open('https://t.me/it2009', '_blank');
+                    }
+                }
+            },
+            {
+                name: "Поделиться в соцсетях",
+                pay: 100,
+                energy: 10,
+                cooldown: 600000,
+                action: () => {
+                    window.open('https://t.me/share/url?url=RiseToRiches', '_blank');
+                }
+            },
+            {
+                name: "Пригласить друга",
+                pay: 200,
+                energy: 15,
+                cooldown: 86400000,
+                action: () => {
+                    showNotification("Приглашайте друзей через Telegram!");
+                }
+            }
+        ];
+
         const shopItems = [
-            { name: "Хлеб", price: 5, desc: "Снимает голод на 20 минут", effect: { hungerSatisfied: 1200000 }, image: "bread.png", reusable: true, autoUse: true },
-            { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true, autoUse: true },
+            { name: "Хлеб", price: 5, desc: "Снимает голод на 10 минут", effect: { hungerSatisfied: 600000 }, image: "bread.png", reusable: true },
+            { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true },
             { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
             { name: "Кроссовки", price: 200, desc: "Задания +10% дохода", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
             { name: "Велосипед", price: 500, desc: "Доставка +50% чаевых", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
@@ -700,9 +621,15 @@
             { name: "Работяга", desc: "Стань Работягой", condition: () => state.status === "Работяга", reward: { energy: 20 } },
             { name: "Бизнесмен", desc: "Открой бизнес", condition: () => state.businessOwned, reward: { balance: 1000 } },
             { name: "Миллионер", desc: "Стань Миллионером", condition: () => state.status === "Миллионер", reward: { balance: 100000 } },
-            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } },
-            { name: "Пригласитель", desc: "Пригласи 1 друга", condition: () => state.referrals.length >= 1, reward: { balance: 200 } }
+            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } }
         ];
+
+        if (window.Telegram?.WebApp) {
+            window.Telegram.WebApp.expand();
+            window.Telegram.WebApp.enableClosingConfirmation();
+            window.Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
+            window.Telegram.WebApp.BackButton.show();
+        }
 
         function generateUniqueId() {
             const timestamp = Date.now().toString(36);
@@ -710,143 +637,57 @@
             return `${timestamp}-${randomStr}`;
         }
 
-        function generateReferralCode() {
-            return Math.random().toString(36).substr(2, 8);
+        function enterFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.warn(`Fullscreen error: ${err.message}`);
+                });
+            }
         }
 
         function loadGame() {
             const savedState = localStorage.getItem('riseToRichesState');
             if (savedState) {
-                try {
-                    const parsed = JSON.parse(savedState);
-                    Object.assign(state, parsed);
-                    for (const task in state.socialTaskCooldowns) {
-                        if (Date.now() >= state.socialTaskCooldowns[task]) {
-                            delete state.socialTaskCooldowns[task];
-                        }
+                const parsed = JSON.parse(savedState);
+                Object.assign(state, parsed);
+                for (const task in state.socialTaskCooldowns) {
+                    if (Date.now() >= state.socialTaskCooldowns[task]) {
+                        delete state.socialTaskCooldowns[task];
                     }
-                    if (state.isWorking && !state.currentTask) {
-                        state.isWorking = false;
-                    }
-                    if (state.isWorking && state.currentTask) {
-                        const elapsed = Date.now() - state.taskStartTime;
-                        if (elapsed >= state.currentTask.duration) {
-                            completeJobTask(state.currentTask);
-                        }
-                    }
-                    state.pendingTransfers.forEach(transfer => {
-                        state.balance += transfer.amount;
-                        showNotification(`Получен перевод: $${transfer.amount} от ID ${transfer.senderPlayerId}`);
-                    });
-                    state.pendingTransfers = [];
-                    state.activeItems = state.activeItems.filter(item => item.expiresAt > Date.now());
-                    state.completedSocialTasks = state.completedSocialTasks || [];
-                } catch (e) {
-                    console.warn("Ошибка загрузки состояния: ", e);
-                    showNotification("Ошибка загрузки игры!");
                 }
-            } else {
-                state.playerId = generateUniqueId();
-                state.referralCode = generateReferralCode();
-                state.completedSocialTasks = [];
+                if (state.isWorking && !state.currentTask) {
+                    state.isWorking = false;
+                }
+                if (state.isWorking && state.currentTask) {
+                    const elapsed = Date.now() - state.taskStartTime;
+                    if (elapsed >= state.currentTask.duration) {
+                        completeJobTask(state.currentTask);
+                    }
+                }
+                state.pendingTransfers.forEach(transfer => {
+                    state.balance += transfer.amount;
+                    showNotification(`Получен перевод: $${transfer.amount} от игрока ${transfer.senderId}`);
+                });
+                state.pendingTransfers = [];
             }
-            if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-                state.telegramUserId = window.Telegram.WebApp.initDataUnsafe.user.id.toString();
-                state.username = window.Telegram.WebApp.initDataUnsafe.user.username || window.Telegram.WebApp.initDataUnsafe.user.first_name || state.playerId;
-            } else {
-                state.telegramUserId = state.playerId;
-            }
-            state.referrals = state.referrals || [];
-            state.achievements = state.achievements || [];
-            state.activeItems = state.activeItems || [];
             state.lastSave = Date.now();
             state.lastTick = Date.now();
             saveGame();
-            if (state.walletAddress) {
-                document.getElementById('wallet-address').textContent = "Кошелёк: " + state.walletAddress;
-                connectWallet();
-            }
         }
 
         function saveGame() {
             if (Date.now() - state.lastSave >= 1000) {
                 try {
                     localStorage.setItem('riseToRichesState', JSON.stringify(state));
-                    localStorage.setItem(`riseToRichesState_${state.playerId}`, JSON.stringify(state));
                     state.lastSave = Date.now();
                 } catch (e) {
                     console.warn("Ошибка сохранения: ", e);
-                    showNotification("Ошибка сохранения!");
                 }
             }
-        }
-
-        function submitReferralCode() {
-            const code = document.getElementById('referralCodeInput').value.trim();
-            if (state.referralCodeLocked) {
-                showNotification("Реферальный код уже установлен!");
-                return;
-            }
-            if (!code) {
-                showNotification("Введите реферальный код!");
-                return;
-            }
-            if (code === state.referralCode) {
-                showNotification("Нельзя использовать свой код!");
-                return;
-            }
-            let referrerFound = false;
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
-                    try {
-                        const playerState = JSON.parse(localStorage.getItem(key));
-                        if (playerState.referralCode === code && playerState.playerId !== state.playerId) {
-                            playerState.referrals = playerState.referrals || [];
-                            if (!playerState.referrals.some(ref => ref.playerId === state.playerId)) {
-                                playerState.referrals.push({
-                                    playerId: state.playerId,
-                                    username: state.username,
-                                    balance: state.balance,
-                                    status: state.status
-                                });
-                                playerState.balance = (playerState.balance || 0) + 200;
-                                localStorage.setItem(`riseToRichesState_${playerState.playerId}`, JSON.stringify(playerState));
-                                state.referredBy = code;
-                                state.referralCodeLocked = true;
-                                state.balance += 200;
-                                showNotification("Реферальный код принят! Бонус: +$200 для вас и реферера!");
-                                referrerFound = true;
-                                sendToGoogleSheets();
-                                break;
-                            }
-                        }
-                    } catch (e) {
-                        console.warn(`Ошибка чтения ${key}: ${e}`);
-                    }
-                }
-            }
-            if (!referrerFound) {
-                showNotification("Реферальный код недействителен!");
-            }
-            saveGame();
-            render();
-        }
-
-        function shareReferralCode() {
-            if (!window.Telegram?.WebApp) {
-                showNotification("Поделиться можно только через Telegram!");
-                return;
-            }
-            const shareText = `Присоединяйся к Rise to Riches! Используй мой реферальный код: ${state.referralCode}`;
-            const shareUrl = `https://t.me/your_bot?start=${state.referralCode}`;
-            window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`);
-            showNotification("Поделись кодом в Telegram!");
-            playSound("clickSound");
         }
 
         function showSection(sectionId) {
-            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer', 'friendsContainer'].forEach(id => {
+            ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer'].forEach(id => {
                 const section = document.getElementById(id);
                 section.classList.toggle('active', id === sectionId);
                 Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
@@ -866,7 +707,6 @@
                     if (ach.reward.balance) state.balance += ach.reward.balance;
                     if (ach.reward.energy) state.energy = Math.min(state.energy + ach.reward.energy, 100);
                     playSound("cashSound");
-                    sendToGoogleSheets();
                 }
             });
         }
@@ -926,17 +766,9 @@
                         desc.textContent = `$${task.pay}, ${task.energy} энергии`;
                         const button = document.createElement("button");
                         button.textContent = task.name;
-                        const isSocialTaskCompleted = task.social && state.completedSocialTasks.includes(task.name);
-                        const isOnCooldown = task.social && state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name];
-                        button.disabled = state.energy < task.energy || state.isWorking || state.hunger < 30 || isSocialTaskCompleted || isOnCooldown;
+                        button.disabled = state.energy < task.energy || state.isWorking || state.hunger < 30;
                         button.classList.toggle('active', state.currentTask && state.currentTask.name === task.name);
-                        button.onclick = () => task.social ? startSocialTask(task) : startJobTask(task);
-                        if (isSocialTaskCompleted) {
-                            button.textContent = `${task.name} (Выполнено)`;
-                        } else if (isOnCooldown) {
-                            const remainingTime = Math.ceil((state.socialTaskCooldowns[task.name] - Date.now()) / 1000);
-                            button.textContent = `${task.name} (${remainingTime}с)`;
-                        }
+                        button.onclick = () => startJobTask(task);
                         itemDiv.appendChild(img);
                         itemDiv.appendChild(desc);
                         itemDiv.appendChild(button);
@@ -996,18 +828,6 @@
                 casinoSection.appendChild(button);
             });
 
-            const referralList = document.getElementById("referralList");
-            referralList.innerHTML = state.referrals.length === 0
-                ? "Пока нет друзей"
-                : state.referrals.map(ref => `${ref.username || ref.playerId} (Баланс: $${ref.balance.toLocaleString()}, Статус: ${ref.status})`).join("<br>");
-            document.getElementById("referralCount").textContent = state.referrals.length;
-            document.getElementById("referralCode").textContent = state.referralCode;
-
-            const referralInput = document.getElementById("referralCodeInput");
-            const referralButton = document.getElementById("submitReferralCode");
-            referralInput.style.display = state.referralCodeLocked ? 'none' : 'block';
-            referralButton.style.display = state.referralCodeLocked ? 'none' : 'block';
-
             let bgImage;
             if (state.balance >= 10000000) bgImage = "bg4.jpg";
             else if (state.balance >= 1000000) bgImage = "bg3.jpg";
@@ -1025,37 +845,6 @@
                 state.status = newStatus;
                 showNotification(`Новый статус: ${state.status}!`);
                 playSound("cashSound");
-                state.referrals = state.referrals.map(ref => ({
-                    ...ref,
-                    status: ref.playerId === state.playerId ? state.status : ref.status
-                }));
-                if (state.referredBy) {
-                    let referrerFound = false;
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
-                            try {
-                                const referrerState = JSON.parse(localStorage.getItem(key));
-                                if (referrerState.referralCode === state.referredBy) {
-                                    referrerState.referrals = (referrerState.referrals || []).map(ref => ({
-                                        ...ref,
-                                        status: ref.playerId === state.playerId ? state.status : ref.status,
-                                        balance: ref.playerId === state.playerId ? state.balance : ref.balance
-                                    }));
-                                    localStorage.setItem(`riseToRichesState_${referrerState.playerId}`, JSON.stringify(referrerState));
-                                    referrerFound = true;
-                                    break;
-                                }
-                            } catch (e) {
-                                console.warn(`Ошибка чтения ${key}: ${e}`);
-                            }
-                        }
-                    }
-                    if (!referrerFound) {
-                        console.warn("Реферер не найден для обновления статуса.");
-                    }
-                }
-                sendToGoogleSheets();
             }
             if (state.balance >= 10000000 && !state.achievements.includes("Миллионер")) {
                 showNotification("Ты миллионер! $10,000,000!");
@@ -1063,16 +852,12 @@
         }
 
         function selectJob(jobKey) {
-            if (state.balance < jobs[jobKey].unlock) {
-                showNotification("Недостаточно денег для разблокировки!");
-                return;
-            }
             if (state.currentJob && state.currentJob.name === jobs[jobKey].name) {
                 showNotification("Эта работа уже выбрана!");
                 return;
             }
             if (state.isWorking) {
-                showNotification("Завершите текущее задание!");
+                showNotification("Дождитесь завершения текущего задания!");
                 return;
             }
             state.currentJob = jobs[jobKey];
@@ -1111,42 +896,6 @@
             render();
         }
 
-        function startSocialTask(task) {
-            if (state.isWorking) {
-                showNotification("Уже выполняешь задание!");
-                return;
-            }
-            if (state.energy < task.energy) {
-                showNotification("Недостаточно энергии!");
-                return;
-            }
-            if (state.hunger < 30 && Date.now() > state.hungerSatisfiedUntil) {
-                showNotification("Ты слишком голоден для работы!");
-                return;
-            }
-            if (state.completedSocialTasks.includes(task.name)) {
-                showNotification("Это задание уже выполнено!");
-                return;
-            }
-            if (state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name]) {
-                showNotification("Задание на перезарядке!");
-                return;
-            }
-
-            window.open(task.url, '_blank');
-            state.isWorking = true;
-            state.currentTask = task;
-            state.taskStartTime = Date.now();
-            state.energy -= task.energy;
-            state.mood = Math.max(0, state.mood - 3);
-
-            showNotification(`Начато: ${task.name} (${Math.floor(task.duration / 1000)}с)`);
-            playSound("clickSound");
-
-            saveGame();
-            render();
-        }
-
         function pauseJob() {
             if (!state.isWorking || !state.currentJob) return;
             const fine = state.currentJob.fine;
@@ -1165,13 +914,10 @@
         }
 
         function completeJobTask(task) {
-            if (!state.isWorking || state.currentTask !== task || state.energy <= 0) {
+            if (!state.isWorking || state.currentTask !== task) {
                 state.isWorking = false;
                 state.currentTask = null;
                 state.taskStartTime = 0;
-                if (state.energy <= 0) {
-                    showNotification("Энергия закончилась! Работа остановлена.");
-                }
                 saveGame();
                 render();
                 return;
@@ -1209,49 +955,6 @@
             }
             state.balance += pay;
 
-            if (task.social && !state.completedSocialTasks.includes(task.name)) {
-                state.completedSocialTasks.push(task.name);
-                state.socialTaskCooldowns[task.name] = Date.now() + 24 * 60 * 60 * 1000;
-            }
-
-            if (state.referredBy) {
-                let referrerFound = false;
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
-                        try {
-                            const referrerState = JSON.parse(localStorage.getItem(key));
-                            if (referrerState.referralCode === state.referredBy) {
-                                const bonus = Math.floor(pay * 0.1);
-                                referrerState.balance = (referrerState.balance || 0) + bonus;
-                                referrerState.referrals = (referrerState.referrals || []).map(ref => ({
-                                    playerId: ref.playerId,
-                                    username: ref.playerId === state.playerId ? state.username : ref.username,
-                                    balance: ref.playerId === state.playerId ? state.balance + pay : ref.balance,
-                                    status: ref.playerId === state.playerId ? state.status : ref.status
-                                }));
-                                localStorage.setItem(`riseToRichesState_${referrerState.playerId}`, JSON.stringify(referrerState));
-                                showNotification(`Реферер получил бонус: $${bonus}`);
-                                referrerFound = true;
-                                break;
-                            }
-                        } catch (e) {
-                            console.warn(`Ошибка чтения ${key}: ${e}`);
-                        }
-                    }
-                }
-                if (!referrerFound) {
-                    console.warn("Реферер не найден для начисления бонуса.");
-                }
-            }
-
-            state.referrals = state.referrals.map(ref => ({
-                playerId: ref.playerId,
-                username: ref.playerId === state.playerId ? state.username : ref.username,
-                balance: ref.playerId === state.playerId ? state.balance + pay : ref.balance,
-                status: ref.playerId === state.playerId ? state.status : ref.status
-            }));
-
             showNotification(`Завершено: ${task.name}! +$${pay}`);
             playSound("cashSound");
             createCoinAnimation();
@@ -1260,27 +963,36 @@
             state.currentTask = null;
             state.taskStartTime = 0;
             updateStatus();
-            sendToGoogleSheets();
             saveGame();
             render();
         }
 
-        function activateItem(item) {
-            if (item.effect.hungerSatisfied) {
-                state.hungerSatisfiedUntil = Date.now() + item.effect.hungerSatisfied;
-                state.hunger = 100;
-                state.activeItems.push({ name: item.name, expiresAt: state.hungerSatisfiedUntil });
-                showNotification(`Активировано: ${item.name}! Сытость на ${item.effect.hungerSatisfied / 60000} минут`);
+        function doSocialTask(task) {
+            if (state.energy < task.energy) {
+                showNotification("Мало энергии!");
+                return;
             }
-            if (item.effect.energy) {
-                state.energy = Math.min(state.energy + item.effect.energy, 100);
-                showNotification(`Энергия +${item.effect.energy}!`);
-                state.inventory = state.inventory.filter(i => i.name !== item.name);
+            if (state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name]) {
+                showNotification("Задание на кулдауне!");
+                return;
             }
-            if (item.effect.mood) {
-                state.mood = Math.min(state.mood + item.effect.mood, 100);
-                showNotification(`Настроение +${item.effect.mood}!`);
+            if (task.action) task.action();
+            state.energy -= task.energy;
+            let pay = task.pay;
+            if (state.balance < 0) {
+                const repayment = Math.min(pay, -state.balance);
+                state.balance += repayment;
+                showNotification(`Погашено долга: $${repayment}`);
+                pay -= repayment;
             }
+            state.balance += pay;
+            state.socialTaskCooldowns[task.name] = Date.now() + task.cooldown;
+            showNotification(`Задание "${task.name}" выполнено! +$${pay}`);
+            playSound("cashSound");
+            createCoinAnimation();
+            updateStatus();
+            saveGame();
+            render();
         }
 
         function buyItem(item) {
@@ -1295,22 +1007,26 @@
             state.balance -= item.price;
             state.inventory.push(item);
             showNotification(`Куплено: ${item.name} за $${item.price.toLocaleString()}!`);
-
-            if (item.autoUse && item.effect) {
-                if (item.effect.hungerSatisfied && state.hunger < 50 && Date.now() > state.hungerSatisfiedUntil) {
-                    activateItem(item);
-                    state.inventory = state.inventory.filter(i => i.name !== item.name);
-                } else if (item.effect.energy && state.energy < 50) {
-                    activateItem(item);
+            if (item.effect) {
+                if (item.effect.energy) {
+                    state.energy = Math.min(state.energy + item.effect.energy, 100);
+                    showNotification(`Энергия +${item.effect.energy}!`);
+                }
+                if (item.effect.hungerSatisfied) {
+                    state.hungerSatisfiedUntil = Date.now() + item.effect.hungerSatisfied;
+                    state.hunger = 100;
+                    showNotification(`Сытость на ${item.effect.hungerSatisfied / 60000} минут!`);
+                }
+                if (item.effect.mood) {
+                    state.mood = Math.min(state.mood + item.effect.mood, 100);
+                    showNotification(`Настр +${item.effect.mood}!`);
                 }
             }
-
             playSound("cashSound");
             const itemDiv = Array.from(document.getElementById("shopList").children)
                 .find(div => div.querySelector("button").textContent.includes(item.name));
             if (itemDiv) itemDiv.classList.add("purchased");
             updateStatus();
-            sendToGoogleSheets();
             saveGame();
             render();
         }
@@ -1326,7 +1042,6 @@
             showNotification("Бизнес открыт! +$1,000/сек!");
             playSound("cashSound");
             updateStatus();
-            sendToGoogleSheets();
             saveGame();
             render();
         }
@@ -1342,7 +1057,6 @@
             showNotification(`Бизнес прокачан! +$${state.businessLevel * 1000}/сек!`);
             playSound("cashSound");
             updateStatus();
-            sendToGoogleSheets();
             saveGame();
             render();
         }
@@ -1371,13 +1085,12 @@
             showNotification(outcome);
             playSound("cashSound");
             updateStatus();
-            sendToGoogleSheets();
             saveGame();
             render();
         }
 
         function transferCurrency() {
-            const recipientId = document.getElementById("recipientId").value.trim();
+            const recipientId = document.getElementById("recipientId").value;
             const amount = parseInt(document.getElementById("transferAmount").value);
             if (!recipientId || isNaN(amount) || amount <= 0) {
                 showNotification("Введите корректные данные!");
@@ -1391,34 +1104,15 @@
                 showNotification("Нельзя отправить деньги самому себе!");
                 return;
             }
-            let recipientFound = false;
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('riseToRichesState_') && key !== 'riseToRichesState') {
-                    try {
-                        const recipientState = JSON.parse(localStorage.getItem(key));
-                        if (recipientState.playerId === recipientId) {
-                            state.balance -= amount;
-                            recipientState.pendingTransfers = recipientState.pendingTransfers || [];
-                            recipientState.pendingTransfers.push({
-                                senderPlayerId: state.playerId,
-                                amount: amount
-                            });
-                            localStorage.setItem(`riseToRichesState_${recipientId}`, JSON.stringify(recipientState));
-                            showNotification(`Переведено $${amount} игроку ID ${recipientId}!`);
-                            recipientFound = true;
-                            sendToGoogleSheets();
-                            break;
-                        }
-                    } catch (e) {
-                        console.warn(`Ошибка чтения ${key}: ${e}`);
-                    }
-                }
-            }
-            if (!recipientFound) {
-                showNotification("Игрок не найден!");
-                return;
-            }
+            state.balance -= amount;
+            const recipientState = JSON.parse(localStorage.getItem('riseToRichesState_' + recipientId)) || {};
+            recipientState.pendingTransfers = recipientState.pendingTransfers || [];
+            recipientState.pendingTransfers.push({
+                senderId: state.playerId,
+                amount: amount
+            });
+            localStorage.setItem('riseToRichesState_' + recipientId, JSON.stringify(recipientState));
+            showNotification(`Переведено $${amount} игроку ${recipientId}!`);
             playSound("cashSound");
             saveGame();
             render();
@@ -1427,7 +1121,7 @@
         function checkDebt() {
             if (state.balance < 0 && !state.debtRepaymentActive) {
                 state.debtRepaymentActive = true;
-                showNotification("Долг! Заработок идет на его погашение.");
+                showNotification("Долг! Заработок на его погашение.");
             } else if (state.balance >= 0 && state.debtRepaymentActive) {
                 state.debtRepaymentActive = false;
                 showNotification("Долг погашен!");
@@ -1438,22 +1132,23 @@
             const notification = document.getElementById("notification");
             notification.textContent = message;
             notification.classList.add("show");
-            setTimeout(() => notification.classList.remove("show"), 3000);
+            setTimeout(() => {
+                notification.classList.remove("show");
+                notification.textContent = "";
+            }, 3000);
         }
 
         function playSound(soundId) {
             const sound = document.getElementById(soundId);
-            if (sound) {
-                sound.currentTime = 0;
-                sound.play().catch(e => console.warn("Ошибка воспроизведения звука:", e));
-            }
+            sound.currentTime = 0;
+            sound.play().catch(() => {});
         }
 
         function createCoinAnimation() {
             const coin = document.createElement("div");
             coin.className = "coin-animation";
             coin.style.left = `${Math.random() * (window.innerWidth - 32)}px`;
-            coin.style.top = `${window.innerHeight - 100}px`;
+            coin.style.top = `${window.innerHeight - 64}px`;
             document.body.appendChild(coin);
             setTimeout(() => coin.remove(), 800);
         }
@@ -1461,21 +1156,43 @@
         function gameTick() {
             const now = Date.now();
             const deltaTime = (now - state.lastTick) / 1000;
-            state.lastTick = now;
 
-            state.energy = Math.min(state.energy + 0.1 * deltaTime, 100);
-            if (Date.now() > state.hungerSatisfiedUntil) {
-                state.hunger = Math.max(state.hunger - 0.5 * deltaTime, 0);
+            if (state.energy < 100) {
+                state.energy += (10 / 300) * deltaTime;
+                if (state.energy > 100) state.energy = 100;
             }
-            state.mood = Math.max(state.mood - 0.2 * deltaTime, 0);
+
+            if (Date.now() > state.hungerSatisfiedUntil) {
+                if (state.hunger > 0) {
+                    state.hunger -= 0.0333 * deltaTime;
+                    if (state.hunger < 0) state.hunger = 0;
+                    if (state.hunger < 30) {
+                        showNotification("Голоден! Купи еду.");
+                    }
+                }
+            } else {
+                state.hunger = 100;
+            }
+
+            if (state.mood < 100) {
+                state.mood += 0.0167 * deltaTime;
+                if (state.mood > 100) state.mood = 100;
+            }
 
             if (state.businessOwned) {
-                const businessIncome = state.businessLevel * 1000 * deltaTime;
-                state.balance += businessIncome;
-                if (businessIncome >= 1000) {
-                    showNotification(`Доход от бизнеса: $${Math.floor(businessIncome)}`);
-                    playSound("cashSound");
+                let income = state.businessLevel * 1000 * deltaTime;
+                if (state.balance < 0) {
+                    const repayment = Math.min(income, -state.balance);
+                    state.balance += repayment;
+                    showNotification(`Погашено долга: $${Math.floor(repayment)}`);
+                    income -= repayment;
                 }
+                state.balance += income;
+            }
+
+            if (state.hourlyIncome > 0) {
+                const hourlyIncome = (state.hourlyIncome / 3600) * deltaTime;
+                state.balance += hourlyIncome;
             }
 
             if (state.isWorking && state.currentTask) {
@@ -1485,13 +1202,20 @@
                 }
             }
 
-            state.activeItems = state.activeItems.filter(item => item.expiresAt > now);
-
             checkDebt();
             updateStatus();
+            state.lastTick = now;
             saveGame();
             render();
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            enterFullscreen();
+            localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
+            loadGame();
+            render();
+            setInterval(gameTick, 1000);
+        });
     </script>
 </body>
 </html>
