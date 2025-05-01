@@ -158,6 +158,7 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
             z-index: 1000;
             transition: transform 0.2s, background 0.2s;
         }
@@ -447,14 +448,12 @@
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
-            User: исправь. доведи все до идеала. и дай мне полный исходный код. вот прям полный при полный. и ничего больше мне не пиши. только полный и исправленный а самое главное безошибочный код
-
-        <div class="tab-row">
-            <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
-            <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
-            <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
-            <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
-        </div>
+            <div class="tab-row">
+                <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+                <button class="tab-button" onclick="showSection('friendsContainer')">Друзья</button>
+            </div>
         </div>
     </div>
 
@@ -607,7 +606,8 @@
             username: "",
             referralCodeLocked: false,
             walletAddress: "",
-            activeItems: []
+            activeItems: [],
+            completedSocialTasks: []
         };
 
         const statuses = [
@@ -630,7 +630,7 @@
                 tasks: [
                     { name: "Убрать улицу", pay: 50, energy: 10, duration: 60000, image: "clean_street.png" },
                     { name: "Помыть окна", pay: 60, energy: 10, duration: 70000, image: "wash_windows.png" },
-                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000, image: "clean_carpets.PNG" },
+                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000, image: "clean_carpets.png" },
                     { name: "Вынести мусор", pay: 40, energy: 10, duration: 50000, image: "take_trash.png" }
                 ]
             },
@@ -699,7 +699,10 @@
                     { name: "Опубликовать пост", pay: 1000, energy: 10, duration: 80000, image: "post_content.png" },
                     { name: "Снять сторис", pay: 800, energy: 10, duration: 70000, image: "shoot_stories.png" },
                     { name: "Провести прямой эфир", pay: 1200, energy: 10, duration: 90000, image: "live_stream.png" },
-                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000, image: "share_link.png" }
+                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000, image: "share_link.png" },
+                    { name: "Подписаться на Matrixon STD", pay: 50, energy: 5, duration: 10000, image: "telegram.png", social: true, url: "https://t.me/matrixonstd" },
+                    { name: "Подписаться на канал CEO", pay: 50, energy: 5, duration: 10000, image: "telegram.png", social: true, url: "https://t.me/Safiyev_Marat" },
+                    { name: "Подписаться на OneCoinTON", pay: 50, energy: 5, duration: 10000, image: "telegram.png", social: true, url: "https://t.me/onecointon" }
                 ]
             },
             crypto: {
@@ -795,12 +798,14 @@
                     });
                     state.pendingTransfers = [];
                     state.activeItems = state.activeItems.filter(item => item.expiresAt > Date.now());
+                    state.completedSocialTasks = state.completedSocialTasks || [];
                 } catch (e) {
                     console.warn("Ошибка загрузки состояния: ", e);
                 }
             } else {
                 state.playerId = generateUniqueId();
                 state.referralCode = generateReferralCode();
+                state.completedSocialTasks = [];
             }
             if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
                 state.telegramUserId = window.Telegram.WebApp.initDataUnsafe.user.id.toString();
@@ -1003,9 +1008,17 @@
                         desc.textContent = `$${task.pay}, ${task.energy} энергии`;
                         const button = document.createElement("button");
                         button.textContent = task.name;
-                        button.disabled = state.energy < task.energy || state.isWorking || state.hunger < 30;
+                        const isSocialTaskCompleted = task.social && state.completedSocialTasks.includes(task.name);
+                        const isOnCooldown = task.social && state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name];
+                        button.disabled = state.energy < task.energy || state.isWorking || state.hunger < 30 || isSocialTaskCompleted || isOnCooldown;
                         button.classList.toggle('active', state.currentTask && state.currentTask.name === task.name);
-                        button.onclick = () => startJobTask(task);
+                        button.onclick = () => task.social ? startSocialTask(task) : startJobTask(task);
+                        if (isSocialTaskCompleted) {
+                            button.textContent = `${task.name} (Выполнено)`;
+                        } else if (isOnCooldown) {
+                            const remainingTime = Math.ceil((state.socialTaskCooldowns[task.name] - Date.now()) / 1000);
+                            button.textContent = `${task.name} (${remainingTime}с)`;
+                        }
                         itemDiv.appendChild(img);
                         itemDiv.appendChild(desc);
                         itemDiv.appendChild(button);
@@ -1083,7 +1096,7 @@
                 ? "Лидерборд пуст"
                 : topPlayers.map((player, index) => `
                     <div class="leaderboard-item">
-                        ${index + 1}. ${player.username} (${player.walletAddress.slice(0, 6)}...${player.walletAddress.slice(-4)}) | $${player.balance.toLocaleString()}
+                        ${index + 1}. ${player.username} (${player.walletAddress}) | $${player.balance.toLocaleString()}
                     </div>
                 `).join("");
 
@@ -1189,6 +1202,42 @@
             render();
         }
 
+        function startSocialTask(task) {
+            if (state.isWorking) {
+                showNotification("Уже выполняешь задание!");
+                return;
+            }
+            if (state.energy < task.energy) {
+                showNotification("Недостаточно энергии!");
+                return;
+            }
+            if (state.hunger < 30 && Date.now() > state.hungerSatisfiedUntil) {
+                showNotification("Ты слишком голоден для работы!");
+                return;
+            }
+            if (state.completedSocialTasks.includes(task.name)) {
+                showNotification("Это задание уже выполнено!");
+                return;
+            }
+            if (state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name]) {
+                showNotification("Задание на перезарядке!");
+                return;
+            }
+
+            window.open(task.url, '_blank');
+            state.isWorking = true;
+            state.currentTask = task;
+            state.taskStartTime = Date.now();
+            state.energy -= task.energy;
+            state.mood = Math.max(0, state.mood - 3);
+
+            showNotification(`Начато: ${task.name} (${Math.floor(task.duration / 1000)}с)`);
+            playSound("clickSound");
+
+            saveGame();
+            render();
+        }
+
         function pauseJob() {
             if (!state.isWorking || !state.currentJob) return;
             const fine = state.currentJob.fine;
@@ -1250,6 +1299,11 @@
                 pay -= repayment;
             }
             state.balance += pay;
+
+            if (task.social && !state.completedSocialTasks.includes(task.name)) {
+                state.completedSocialTasks.push(task.name);
+                state.socialTaskCooldowns[task.name] = Date.now() + 24 * 60 * 60 * 1000; // 24 часа
+            }
 
             if (state.referredBy) {
                 let referrerFound = false;
@@ -1521,45 +1575,25 @@
                 if (state.balance < 0) {
                     const repayment = Math.min(income, -state.balance);
                     state.balance += repayment;
-                    showNotification(`Погашено долга: $${Math.floor(repayment)}`);
+                    showNotification(`Погашено долга: $${repayment}`);
                     income -= repayment;
                 }
                 state.balance += income;
             }
 
-            if (state.hourlyIncome > 0) {
-                const hourlyIncome = (state.hourlyIncome / 3600) * deltaTime;
-                state.balance += hourlyIncome;
-            }
-
             if (state.isWorking && state.currentTask) {
-                if (state.energy <= 0) {
-                    state.isWorking = false;
-                    state.currentTask = null;
-                    state.taskStartTime = 0;
-                    showNotification("Энергия закончилась! Работа остановлена.");
-                } else {
-                    const elapsed = now - state.taskStartTime;
-                    if (elapsed >= state.currentTask.duration) {
-                        completeJobTask(state.currentTask);
-                    }
+                const elapsed = Date.now() - state.taskStartTime;
+                if (elapsed >= state.currentTask.duration) {
+                    completeJobTask(state.currentTask);
                 }
             }
-
-            state.activeItems = state.activeItems.filter(item => {
-                if (item.expiresAt <= now) {
-                    showNotification(`${item.name} истек!`);
-                    state.inventory = state.inventory.filter(i => i.name !== item.name);
-                    return false;
-                }
-                return true;
-            });
 
             checkDebt();
             updateStatus();
-            state.lastTick = now;
             saveGame();
             render();
+
+            state.lastTick = now;
         }
     </script>
 </body>
