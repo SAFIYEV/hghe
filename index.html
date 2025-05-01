@@ -356,11 +356,7 @@
     </style>
 </head>
 <body>
-    <div class="mobile-only" id="mobileOnly">
-        <h1>Игра доступна только на мобильных устройствах!</h1>
-        <p>Откройте игру через Telegram на вашем смартфоне.</p>
-    </div>
-
+    
     <button class="leaderboard-button" onclick="showSection('leaderboardContainer')">🏆 Лидерборд</button>
     <button class="wallet-button" onclick="connectWallet()">🔗 TON Кошелёк</button>
 
@@ -555,18 +551,14 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbx0t3esGuVR1sDuAHWQ1pknrdSeSM0x9qSJ4BIu2mmOSA95ZMq0bAZG6QaUVxIL55pl/exec';
         const tonConnect = new window.TON_CONNECT.TonConnect();
 
-        function isMobileDevice() {
-            if (window.Telegram?.WebApp) {
-                return true;
-            }
-            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
             const ua = navigator.userAgent.toLowerCase();
             const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(ua);
             return isTouch || isMobileUA;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            if (!isMobileDevice()) {
+            if (false) {
                 document.getElementById('mobileOnly').style.display = 'flex';
                 document.querySelectorAll('.game-container, .job-container, .task-container, .shop-container, .business-container, .inventory-container, .casino-container, .transfer-container, .friends-container, .leaderboard-container').forEach(el => {
                     el.style.display = 'none';
@@ -581,7 +573,7 @@
                 window.Telegram.WebApp.BackButton.onClick(() => showSection('mainContainer'));
                 window.Telegram.WebApp.BackButton.show();
             }
-            enterFullscreen();
+            
             loadGame();
             render();
             setInterval(gameTick, 1000);
@@ -795,13 +787,7 @@
             return Math.random().toString(36).substr(2, 8);
         }
 
-        function enterFullscreen() {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch(err => {
-                    console.warn(`Fullscreen error: ${err.message}`);
-                });
-            }
-        }
+                }
 
         function loadGame() {
             const savedState = localStorage.getItem('riseToRichesState');
