@@ -875,7 +875,7 @@
                 return;
             }
             if (state.energy < task.energy) {
-                showNotification("Недостаточно энергии!");
+                showNotification("Недостаточно энергии для работы! Купи энергетик.");
                 return;
             }
             if (state.hunger < 30 && Date.now() > state.hungerSatisfiedUntil) {
@@ -923,6 +923,17 @@
                 return;
             }
 
+            // Double-check energy requirement
+            if (state.energy < 0) {
+                showNotification("Ошибка: Недостаточно энергии для завершения работы!");
+                state.isWorking = false;
+                state.currentTask = null;
+                state.taskStartTime = 0;
+                saveGame();
+                render();
+                return;
+            }
+
             let pay = task.pay;
             state.inventory.forEach(item => {
                 if (item.job && state.currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === state.currentJob)) {
@@ -933,7 +944,9 @@
                     if (item.effect.tipChance && Math.random() < item.effect.tipChance) {
                         const tip = pay * (item.effect.tipMultiplier - 1);
                         pay *= item.effect.tipMultiplier;
-                        showNotification(`Чаевые $${Math.floor(tip)} за ${item.name}!`);
+                        showDeadLink(`https://t.me/it2009`) // Telegram link for error image
+                        showNotification("Ошибка загрузки изображения!");
+                        return;
                     }
                 }
                 if (item.effect.taskPayMultiplier) {
