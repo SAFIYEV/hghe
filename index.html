@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rise to Riches</title>
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -270,6 +271,13 @@
             100% { transform: translateY(-80px); opacity: 0; }
         }
 
+        .wallet-button {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 3000;
+        }
+
         @media (max-width: 360px) {
             h1 { font-size: 1.2em; }
             .game-container, .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
@@ -281,10 +289,12 @@
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
             .shop-list, .job-list, .task-list { grid-template-columns: 1fr; }
+            .wallet-button { top: 8px; left: 8px; }
         }
     </style>
 </head>
 <body>
+    <div class="wallet-button" id="ton-connect"></div>
     <div class="game-container active" id="mainContainer">
         <h1>Rise to Riches</h1>
         <div class="stats">
@@ -433,6 +443,11 @@
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://safiyev.github.io/manigest/manifest.json',
+            buttonRootId: 'ton-connect'
+        });
+
         let state = {
             balance: 0,
             energy: 100,
@@ -469,98 +484,98 @@
         const jobs = {
             cleaner: {
                 name: "Уборщик",
-                pay: 50,
+                pay: 0.05,
                 unlock: 0,
-                hourly: 1,
-                fine: 10,
+                hourly: 0.01,
+                fine: 0.02,
                 image: "cleaner.png",
                 tasks: [
-                    { name: "Убрать улицу", pay: 50, energy: 10, duration: 60000, image: "clean_street.png" },
-                    { name: "Помыть окна", pay: 60, energy: 10, duration: 70000, image: "wash_windows.png" },
-                    { name: "Почистить ковры", pay: 70, energy: 10, duration: 80000, image: "clean_carpets.png" },
-                    { name: "Вынести мусор", pay: 40, energy: 10, duration: 50000, image: "take_trash.png" }
+                    { name: "Убрать улицу", pay: 0.05, energy: 10, duration: 60000, image: "clean_street.png" },
+                    { name: "Помыть окна", pay: 0.06, energy: 10, duration: 70000, image: "wash_windows.png" },
+                    { name: "Почистить ковры", pay: 0.07, energy: 10, duration: 80000, image: "clean_carpets.png" },
+                    { name: "Вынести мусор", pay: 0.04, energy: 10, duration: 50000, image: "take_trash.png" }
                 ]
             },
             courier: {
                 name: "Курьер",
-                pay: 100,
+                pay: 0.10,
                 unlock: 0,
-                hourly: 5,
-                fine: 20,
+                hourly: 0.02,
+                fine: 0.05,
                 image: "courier.png",
                 tasks: [
-                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 60000, image: "deliver_package.png" },
-                    { name: "Развести еду", pay: 120, energy: 10, duration: 70000, image: "deliver_food.png" },
-                    { name: "Доставить пиццу", pay: 110, energy: 10, duration: 65000, image: "deliver_pizza.png" }
+                    { name: "Доставить посылку", pay: 0.10, energy: 10, duration: 60000, image: "deliver_package.png" },
+                    { name: "Развести еду", pay: 0.12, energy: 10, duration: 70000, image: "deliver_food.png" },
+                    { name: "Доставить пиццу", pay: 0.11, energy: 10, duration: 65000, image: "deliver_pizza.png" }
                 ]
             },
             postman: {
                 name: "Почтальон",
-                pay: 80,
+                pay: 0.08,
                 unlock: 1000,
-                hourly: 3,
-                fine: 15,
+                hourly: 0.015,
+                fine: 0.04,
                 image: "postman.png",
                 tasks: [
-                    { name: "Разнести письма", pay: 80, energy: 10, duration: 60000, image: "deliver_letters.png" },
-                    { name: "Доставить посылку", pay: 100, energy: 10, duration: 70000, image: "deliver_package_post.png" },
-                    { name: "Раздать газеты", pay: 70, energy: 10, duration: 55000, image: "deliver_newspapers.png" },
-                    { name: "Отправить заказное письмо", pay: 90, energy: 10, duration: 65000, image: "send_registered.png" }
+                    { name: "Разнести письма", pay: 0.08, energy: 10, duration: 60000, image: "deliver_letters.png" },
+                    { name: "Доставить посылку", pay: 0.10, energy: 10, duration: 70000, image: "deliver_package_post.png" },
+                    { name: "Раздать газеты", pay: 0.07, energy: 10, duration: 55000, image: "deliver_newspapers.png" },
+                    { name: "Отправить заказное письмо", pay: 0.09, energy: 10, duration: 65000, image: "send_registered.png" }
                 ]
             },
             taxi: {
                 name: "Таксист",
-                pay: 150,
+                pay: 0.15,
                 unlock: 5000,
-                hourly: 10,
-                fine: 30,
+                hourly: 0.03,
+                fine: 0.08,
                 image: "taxi.png",
                 tasks: [
-                    { name: "Отвезти пассажира", pay: 150, energy: 10, duration: 80000, image: "drive_passenger.png" },
-                    { name: "Доехать до аэропорта", pay: 200, energy: 10, duration: 90000, image: "drive_airport.png" },
-                    { name: "Подвезти в центр", pay: 170, energy: 10, duration: 85000, image: "drive_center.png" },
-                    { name: "Ночной рейс", pay: 250, energy: 15, duration: 100000, image: "night_ride.png" }
+                    { name: "Отвезти пассажира", pay: 0.15, energy: 10, duration: 80000, image: "drive_passenger.png" },
+                    { name: "Доехать до аэропорта", pay: 0.20, energy: 10, duration: 90000, image: "drive_airport.png" },
+                    { name: "Подвезти в центр", pay: 0.17, energy: 10, duration: 85000, image: "drive_center.png" },
+                    { name: "Ночной рейс", pay: 0.25, energy: 15, duration: 100000, image: "night_ride.png" }
                 ]
             },
             freelancer: {
                 name: "Фрилансер",
-                pay: 300,
+                pay: 0.30,
                 unlock: 10000,
-                hourly: 20,
-                fine: 50,
+                hourly: 0.05,
+                fine: 0.10,
                 image: "freelancer.png",
                 tasks: [
-                    { name: "Написать статью", pay: 300, energy: 10, duration: 90000, image: "write_article.png" },
-                    { name: "Сделать логотип", pay: 350, energy: 10, duration: 95000, image: "design_logo.png" },
-                    { name: "Создать сайт", pay: 400, energy: 10, duration: 100000, image: "build_website.png" }
+                    { name: "Написать статью", pay: 0.30, energy: 10, duration: 90000, image: "write_article.png" },
+                    { name: "Сделать логотип", pay: 0.35, energy: 10, duration: 95000, image: "design_logo.png" },
+                    { name: "Создать сайт", pay: 0.40, energy: 10, duration: 100000, image: "build_website.png" }
                 ]
             },
             influencer: {
                 name: "Инфлюенсер",
-                pay: 1000,
+                pay: 0.50,
                 unlock: 50000,
-                hourly: 50,
-                fine: 100,
+                hourly: 0.10,
+                fine: 0.20,
                 image: "influencer.png",
                 tasks: [
-                    { name: "Опубликовать пост", pay: 1000, energy: 10, duration: 80000, image: "post_content.png" },
-                    { name: "Снять сторис", pay: 800, energy: 10, duration: 70000, image: "shoot_stories.png" },
-                    { name: "Провести прямой эфир", pay: 1200, energy: 10, duration: 90000, image: "live_stream.png" },
-                    { name: "Поделиться ссылкой", pay: 500, energy: 5, duration: 60000, image: "share_link.png" }
+                    { name: "Опубликовать пост", pay: 0.50, energy: 10, duration: 80000, image: "post_content.png" },
+                    { name: "Снять сторис", pay: 0.40, energy: 10, duration: 70000, image: "shoot_stories.png" },
+                    { name: "Провести прямой эфир", pay: 0.60, energy: 10, duration: 90000, image: "live_stream.png" },
+                    { name: "Поделиться ссылкой", pay: 0.25, energy: 5, duration: 60000, image: "share_link.png" }
                 ]
             },
             crypto: {
                 name: "Криптотрейдер",
-                pay: 5000,
+                pay: 1.00,
                 unlock: 100000,
-                hourly: 100,
-                fine: 200,
+                hourly: 0.20,
+                fine: 0.50,
                 image: "crypto.png",
                 tasks: [
-                    { name: "Купить биткоин", pay: 100000, energy: 10, duration: 100000, image: "buy_bitcoin.png" },
-                    { name: "Продать NFT", pay: 6000, energy: 10, duration: 110000, image: "sell_nft.png" },
-                    { name: "Майнить эфир", pay: 5500, energy: 10, duration: 105000, image: "mine_ether.png" },
-                    { name: "Проанализировать рынок", pay: 4500, energy: 10, duration: 95000, image: "analyze_market.png" }
+                    { name: "Купить биткоин", pay: 1.00, energy: 10, duration: 100000, image: "buy_bitcoin.png" },
+                    { name: "Продать NFT", pay: 0.80, energy: 10, duration: 110000, image: "sell_nft.png" },
+                    { name: "Майнить эфир", pay: 0.90, energy: 10, duration: 105000, image: "mine_ether.png" },
+                    { name: "Проанализировать рынок", pay: 0.70, energy: 10, duration: 95000, image: "analyze_market.png" }
                 ]
             }
         };
@@ -568,7 +583,7 @@
         const socialTasks = [
             {
                 name: "Подписаться на Telegram",
-                pay: 50,
+                pay: 0.05,
                 energy: 5,
                 cooldown: 300000,
                 action: () => {
@@ -581,7 +596,7 @@
             },
             {
                 name: "Поделиться в соцсетях",
-                pay: 100,
+                pay: 0.10,
                 energy: 10,
                 cooldown: 600000,
                 action: () => {
@@ -590,7 +605,7 @@
             },
             {
                 name: "Пригласить друга",
-                pay: 200,
+                pay: 0.20,
                 energy: 15,
                 cooldown: 86400000,
                 action: () => {
@@ -617,11 +632,11 @@
         ];
 
         const achievements = [
-            { name: "Первый заработок", desc: "Заработай $100", condition: () => state.balance >= 100, reward: { balance: 50 } },
+            { name: "Первый заработок", desc: "Заработай $100", condition: () => state.balance >= 100, reward: { balance: 0.05 } },
             { name: "Работяга", desc: "Стань Работягой", condition: () => state.status === "Работяга", reward: { energy: 20 } },
-            { name: "Бизнесмен", desc: "Открой бизнес", condition: () => state.businessOwned, reward: { balance: 1000 } },
-            { name: "Миллионер", desc: "Стань Миллионером", condition: () => state.status === "Миллионер", reward: { balance: 100000 } },
-            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 500 } }
+            { name: "Бизнесмен", desc: "Открой бизнес", condition: () => state.businessOwned, reward: { balance: 1.00 } },
+            { name: "Миллионер", desc: "Стань Миллионером", condition: () => state.status === "Миллионер", reward: { balance: 100.00 } },
+            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 0.50 } }
         ];
 
         if (window.Telegram?.WebApp) {
@@ -690,7 +705,7 @@
             ['mainContainer', 'jobContainer', 'taskContainer', 'shopContainer', 'businessContainer', 'inventoryContainer', 'casinoContainer', 'transferContainer'].forEach(id => {
                 const section = document.getElementById(id);
                 section.classList.toggle('active', id === sectionId);
-                Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active', btn.onclick.toString().includes(sectionId)));
+                Array.from(section.querySelectorAll('.tab-button')).forEach(btn => btn.classList.toggle('active(Resource temporarily unavailable) btn.onclick.toString().includes(sectionId)));
             });
             if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.BackButton[sectionId === 'mainContainer' ? 'hide' : 'show']();
@@ -712,7 +727,7 @@
         }
 
         function render() {
-            document.getElementById("balance").textContent = state.balance.toLocaleString();
+            document.getElementById("balance").textContent = state.balance.toFixed(2);
             document.getElementById("status").textContent = state.status;
             document.getElementById("energy").textContent = Math.floor(state.energy);
             document.getElementById("hunger").textContent = Math.floor(state.hunger);
@@ -730,7 +745,7 @@
                 img.alt = job.name;
                 img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
                 const desc = document.createElement("p");
-                desc.textContent = `З/П: $${job.pay}, Час: $${job.hourly}`;
+                desc.textContent = `З/П: $${job.pay.toFixed(2)}, Час: $${job.hourly.toFixed(2)}`;
                 const button = document.createElement("button");
                 button.textContent = job.unlock > 0 ? `${job.name} ($${job.unlock.toLocaleString()})` : job.name;
                 button.disabled = state.balance < job.unlock || (state.currentJob && state.currentJob.name === job.name);
@@ -751,7 +766,7 @@
                     const remainingTime = Math.max(0, Math.floor((state.currentTask.duration - (Date.now() - state.taskStartTime)) / 1000));
                     taskList.innerHTML = `<div style="text-align: center; color: #FFD700; font-size: 0.9em;">Выполняется: ${state.currentTask.name} (${remainingTime}с)</div>`;
                     const pauseButton = document.createElement("button");
-                    pauseButton.textContent = `Приостановить (штраф $${state.currentJob.fine})`;
+                    pauseButton.textContent = `Приостановить (штраф $${state.currentJob.fine.toFixed(2)})`;
                     pauseButton.onclick = pauseJob;
                     taskList.appendChild(pauseButton);
                 } else {
@@ -763,7 +778,7 @@
                         img.alt = task.name;
                         img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
                         const desc = document.createElement("p");
-                        desc.textContent = `$${task.pay}, ${task.energy} энергии`;
+                        desc.textContent = `$${task.pay.toFixed(2)}, ${task.energy} энергии`;
                         const button = document.createElement("button");
                         button.textContent = task.name;
                         button.disabled = state.energy < task.energy || state.isWorking || state.hunger < 30;
@@ -907,7 +922,7 @@
             state.isWorking = false;
             state.currentTask = null;
             state.taskStartTime = 0;
-            showNotification(`Работа приостановлена! Штраф: $${fine}`);
+            showNotification(`Работа приостановлена! Штраф: $${fine.toFixed(2)}`);
             playSound("clickSound");
             saveGame();
             render();
@@ -923,7 +938,6 @@
                 return;
             }
 
-            // Double-check energy requirement
             if (state.energy < 0) {
                 showNotification("Ошибка: Недостаточно энергии для завершения работы!");
                 state.isWorking = false;
@@ -944,9 +958,7 @@
                     if (item.effect.tipChance && Math.random() < item.effect.tipChance) {
                         const tip = pay * (item.effect.tipMultiplier - 1);
                         pay *= item.effect.tipMultiplier;
-                        showDeadLink(`https://t.me/it2009`) // Telegram link for error image
-                        showNotification("Ошибка загрузки изображения!");
-                        return;
+                        showNotification(`Чаевые $${tip.toFixed(2)} за ${item.name}!`);
                     }
                 }
                 if (item.effect.taskPayMultiplier) {
@@ -958,17 +970,17 @@
                 pay *= 0.75;
                 showNotification("Голод снижает доход!");
             }
-            pay = Math.floor(pay);
+            pay = Number(pay.toFixed(2));
 
             if (state.balance < 0) {
                 const repayment = Math.min(pay, -state.balance);
                 state.balance += repayment;
-                showNotification(`Погашено долга: $${repayment}`);
+                showNotification(`Погашено долга: $${repayment.toFixed(2)}`);
                 pay -= repayment;
             }
             state.balance += pay;
 
-            showNotification(`Завершено: ${task.name}! +$${pay}`);
+            showNotification(`Завершено: ${task.name}! +$${pay.toFixed(2)}`);
             playSound("cashSound");
             createCoinAnimation();
 
@@ -995,12 +1007,12 @@
             if (state.balance < 0) {
                 const repayment = Math.min(pay, -state.balance);
                 state.balance += repayment;
-                showNotification(`Погашено долга: $${repayment}`);
+                showNotification(`Погашено долга: $${repayment.toFixed(2)}`);
                 pay -= repayment;
             }
             state.balance += pay;
             state.socialTaskCooldowns[task.name] = Date.now() + task.cooldown;
-            showNotification(`Задание "${task.name}" выполнено! +$${pay}`);
+            showNotification(`Задание "${task.name}" выполнено! +$${pay.toFixed(2)}`);
             playSound("cashSound");
             createCoinAnimation();
             updateStatus();
@@ -1052,7 +1064,7 @@
             state.balance -= 50000;
             state.businessOwned = true;
             state.businessLevel = 1;
-            showNotification("Бизнес открыт! +$1,000/сек!");
+            showNotification("Бизнес открыт! +$10/30мин!");
             playSound("cashSound");
             updateStatus();
             saveGame();
@@ -1067,7 +1079,7 @@
             }
             state.balance -= cost;
             state.businessLevel += 1;
-            showNotification(`Бизнес прокачан! +$${state.businessLevel * 1000}/сек!`);
+            showNotification(`Бизнес прокачан! +$${10 * state.businessLevel}/30мин!`);
             playSound("cashSound");
             updateStatus();
             saveGame();
@@ -1085,9 +1097,9 @@
             if (rand < 45) {
                 const winAmount = bet * 2;
                 state.balance += winAmount;
-                outcome = `Выиграл $${winAmount.toLocaleString()}!`;
+                outcome = `Выиграл $${winAmount.toFixed(2)}!`;
             } else if (rand < 85) {
-                outcome = `Проиграл $${bet.toLocaleString()}!`;
+                outcome = `Проиграл $${bet.toFixed(2)}!`;
             } else if (rand < 95) {
                 state.balance = Math.max(0, state.balance - bet * 2);
                 outcome = "Крупный проигрыш!";
@@ -1104,7 +1116,7 @@
 
         function transferCurrency() {
             const recipientId = document.getElementById("recipientId").value;
-            const amount = parseInt(document.getElementById("transferAmount").value);
+            const amount = parseFloat(document.getElementById("transferAmount").value);
             if (!recipientId || isNaN(amount) || amount <= 0) {
                 showNotification("Введите корректные данные!");
                 return;
@@ -1125,7 +1137,7 @@
                 amount: amount
             });
             localStorage.setItem('riseToRichesState_' + recipientId, JSON.stringify(recipientState));
-            showNotification(`Переведено $${amount} игроку ${recipientId}!`);
+            showNotification(`Переведено $${amount.toFixed(2)} игроку ${recipientId}!`);
             playSound("cashSound");
             saveGame();
             render();
@@ -1193,11 +1205,11 @@
             }
 
             if (state.businessOwned) {
-                let income = state.businessLevel * 1000 * deltaTime;
+                let income = (state.businessLevel * 10 / 1800) * deltaTime;
                 if (state.balance < 0) {
                     const repayment = Math.min(income, -state.balance);
                     state.balance += repayment;
-                    showNotification(`Погашено долга: $${Math.floor(repayment)}`);
+                    showNotification(`Погашено долга: $${repayment.toFixed(2)}`);
                     income -= repayment;
                 }
                 state.balance += income;
