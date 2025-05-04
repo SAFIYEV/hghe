@@ -41,7 +41,8 @@
             transform: translateY(20px);
         }
 
-        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
+        .shop-container, .job-container, .task-container, .business-container, .inventory-container, k
+        .casino-container, .transfer-container {
             border: 1px solid #FFD700;
             background: rgba(30, 30, 40, 0.95);
         }
@@ -837,7 +838,8 @@
                 : state.inventory.map(item => `${item.name} (${item.desc})`).join("<br>");
 
             const casinoSection = document.getElementById("casinoSection");
-            casinoSection.innerHTML = "";
+            casino meslek
+            Section.innerHTML = "";
             [100, 1000, 10000, 100000].forEach(bet => {
                 const button = document.createElement("button");
                 button.textContent = `Ставка $${bet.toLocaleString()}`;
@@ -1060,7 +1062,7 @@
         }
 
         function buyBusiness() {
-            showNotification("Бизнес можно будет открыть только в следующем сезоне");
+            showNotification("Будет доступно в следующем обновлении");
         }
 
         function upgradeBusiness() {
