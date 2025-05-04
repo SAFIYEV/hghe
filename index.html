@@ -563,7 +563,7 @@
                 name: "Фрилансер",
                 pay: 0.02,
                 unlock: 10000,
-                HOURSly: 0.004,
+                hourly: 0.004,
                 fine: 0.005,
                 image: "freelancer.png",
                 tasks: [
@@ -753,7 +753,7 @@
         function consumeBread(index) {
             const item = state.inventory[index];
             if (item.name === "Хлеб") {
-                state.hungerSatisfiedUntilaxel1 = 600000;
+                state.hungerSatisfiedUntil = Date.now() + 600000;
                 state.hunger = 100;
                 state.inventory.splice(index, 1);
                 showNotification("Хлеб съеден! Сытость на 10 минут!");
@@ -775,7 +775,7 @@
 
             const jobList = document.getElementById("jobList");
             jobList.innerHTML = "";
-            for (const key in jobs) {
+            Object.keys(jobs).forEach(key => {
                 const job = jobs[key];
                 const itemDiv = document.createElement("div");
                 itemDiv.className = "job-item";
@@ -796,7 +796,7 @@
                 itemDiv.appendChild(desc);
                 itemDiv.appendChild(button);
                 jobList.appendChild(itemDiv);
-            }
+            });
 
             const taskList = document.getElementById("taskList");
             taskList.innerHTML = "";
@@ -1227,6 +1227,62 @@
             coin.style.top = `${window.innerHeight - 64}px`;
             document.body.appendChild(coin);
             setTimeout(() => coin.remove(), 800);
+        }
+
+        function gameTick() {
+            const now = Date.now();
+            const deltaTime = (now - state.lastTick) / 1000;
+
+            if (state.energy < 100) {
+                state.energy += (10 / 300) * deltaTime;
+                if (state.energy > 100) state.energy = 100;
+            }
+
+            if (Date.now() > state.hungerSatisfiedUntil) {
+                if (state.hunger > 0) {
+                    state.hunger -= 0.0333 * deltaTime;
+                    if (state.hunger < 0) state.hunger = 0;
+                    if (state.hunger < 30) {
+                        showNotification("Голоден! Купи еду.");
+                    }
+                }
+            } else {
+                state.hunger = 100;
+            }
+
+            if (state.mood < 100) {
+                state.mood += 0.0167 * deltaTime;
+                if (state.mood > 100) state.mood = 100;
+            }
+
+            if (state.businessOwned) {
+                let income = (state.businessLevel * 10 / 1800) * deltaTime;
+                if (state.balance < 0) {
+                    const repayment = Math.min(income, -state.balance);
+                    state.balance += repayment;
+                    showNotification(`Погашено долга: $${repayment.toFixed(3)}`);
+                    income -= repayment;
+                }
+                state.balance += income;
+            }
+
+            if (state.hourlyIncome > 0) {
+                const hourlyIncome = (state.hourlyIncome / 3600) * deltaTime;
+                state.balance += hourlyIncome;
+            }
+
+            if (state.isWorking && state.currentTask) {
+                const elapsed = now - state.taskStartTime;
+                if (elapsed >= state.currentTask.duration) {
+                    completeJobTask(state.currentTask);
+                }
+            }
+
+            checkDebt();
+            updateStatus();
+            state.lastTick = now;
+            saveGame();
+            render();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
