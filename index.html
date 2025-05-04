@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rise to Riches</title>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js"></script>
     <style>
         body {
             margin: 0;
@@ -291,7 +289,6 @@
             .stat { font-size: 0.75em; }
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
-            .shop-list, .job-list, .task-list { grid-template-columns: 1fr; }
             .wallet-button { top: 8px; }
         }
     </style>
@@ -431,7 +428,6 @@
                 <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
                 <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
                 <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
-                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
                 <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
@@ -446,21 +442,6 @@
     <audio id="cashSound" src="cash.mp3"></audio>
 
     <script>
-        // Firebase configuration (replace with your Firebase project config)
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
         const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
             manifestUrl: 'https://safiyev.github.io/manigest/manifest.json',
             buttonRootId: 'ton-connect'
@@ -476,7 +457,7 @@
             taskStartTime: 0,
             businessOwned: false,
             businessLevel: 0,
-            inventory: {}, // Changed to object: { "Хлеб": { count: 5, effect: {...}, reusable: true }, ... }
+            inventory: [],
             status: "Бомж",
             debtRepaymentActive: false,
             isWorking: false,
@@ -487,8 +468,7 @@
             lastTick: Date.now(),
             playerId: generateUniqueId(),
             hourlyIncome: 0,
-            pendingTransfers: [],
-            walletAddress: null
+            pendingTransfers: []
         };
 
         const statuses = [
@@ -636,18 +616,18 @@
         const shopItems = [
             { name: "Хлеб", price: 5, desc: "Снимает голод на 10 минут", effect: { hungerSatisfied: 600000 }, image: "bread.png", reusable: true },
             { name: "Энергетик", price: 20, desc: "Восстанавливает 50 энергии", effect: { energy: 50 }, image: "energy_drink.png", reusable: true },
-            { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png", reusable: false },
-            { name: "Кроссовки", price: 200, desc: "Задания +10% дохода", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png", reusable: false },
-            { name: "Велосипед", price: 500, desc: "Доставка +50% чаевых", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png", reusable: false },
-            { name: "Машина (Лада)", price: 5000, desc: "Такси +50% дохода", effect: { taskPayMultiplier: 1.5 }, job: "taxi", image: "lada.png", reusable: false },
-            { name: "Ноутбук", price: 10000, desc: "Фриланс +30% дохода", effect: { payMultiplier: 1.3 }, job: "freelancer", image: "laptop.png", reusable: false },
-            { name: "Камера", price: 20000, desc: "Контент +40% дохода", effect: { payMultiplier: 1.4 }, job: "influencer", image: "camera.png", reusable: false },
-            { name: "Машина (BMW)", price: 50000, desc: "Такси +100% дохода", effect: { taskPayMultiplier: 2 }, job: "taxi", image: "bmw.png", reusable: false },
-            { name: "Квартира", price: 50000, desc: "Настроение +20", effect: { mood: 20 }, image: "apartment.png", reusable: false },
-            { name: "Дом", price: 200000, desc: "Настроение +30", effect: { mood: 30 }, image: "house.png", reusable: false },
-            { name: "Бассейн", price: 500000, desc: "Настроение +40", effect: { mood: 40 }, image: "pool.png", reusable: false },
-            { name: "Яхта", price: 1000000, desc: "Настроение +50", effect: { mood: 50 }, image: "yacht.png", reusable: false },
-            { name: "Частный самолет", price: 5000000, desc: "Настроение +60", effect: { mood: 60 }, image: "jet.png", reusable: false }
+            { name: "Метла", price: 100, desc: "Уборка +20% дохода", effect: { payMultiplier: 1.2 }, job: "cleaner", image: "broom.png" },
+            { name: "Кроссовки", price: 200, desc: "Задания +10% дохода", effect: { taskPayMultiplier: 1.1 }, image: "sneakers.png" },
+            { name: "Велосипед", price: 500, desc: "Доставка +50% чаевых", effect: { tipChance: 0.5, tipMultiplier: 1.5 }, job: "courier", image: "bike.png" },
+            { name: "Машина (Лада)", price: 5000, desc: "Такси +50% дохода", effect: { taskPayMultiplier: 1.5 }, job: "taxi", image: "lada.png" },
+            { name: "Ноутбук", price: 10000, desc: "Фриланс +30% дохода", effect: { payMultiplier: 1.3 }, job: "freelancer", image: "laptop.png" },
+            { name: "Камера", price: 20000, desc: "Контент +40% дохода", effect: { payMultiplier: 1.4 }, job: "influencer", image: "camera.png" },
+            { name: "Машина (BMW)", price: 50000, desc: "Такси +100% дохода", effect: { taskPayMultiplier: 2 }, job: "taxi", image: "bmw.png" },
+            { name: "Квартира", price: 50000, desc: "Настроение +20", effect: { mood: 20 }, image: "apartment.png" },
+            { name: "Дом", price: 200000, desc: "Настроение +30", effect: { mood: 30 }, image: "house.png" },
+            { name: "Бассейн", price: 500000, desc: "Настроение +40", effect: { mood: 40 }, image: "pool.png" },
+            { name: "Яхта", price: 1000000, desc: "Настроение +50", effect: { mood: 50 }, image: "yacht.png" },
+            { name: "Частный самолет", price: 5000000, desc: "Настроение +60", effect: { mood: 60 }, image: "jet.png" }
         ];
 
         const achievements = [
@@ -655,7 +635,7 @@
             { name: "Работяга", desc: "Стань Работягой", condition: () => state.status === "Работяга", reward: { energy: 20 } },
             { name: "Бизнесмен", desc: "Открой бизнес", condition: () => state.businessOwned, reward: { balance: 0.10 } },
             { name: "Миллионер", desc: "Стань Миллионером", condition: () => state.status === "Миллионер", reward: { balance: 10.00 } },
-            { name: "Шопоголик", desc: "Купи 5 предметов", condition: () => Object.keys(state.inventory).length >= 5, reward: { balance: 0.05 } }
+            { name: "Шопоголик", desc: "Купи 5 предмет, desc: "Купи 5 предметов", condition: () => state.inventory.length >= 5, reward: { balance: 0.05 } }
         ];
 
         if (window.Telegram?.WebApp) {
@@ -718,46 +698,6 @@
                     console.warn("Ошибка сохранения: ", e);
                 }
             }
-        }
-
-        function saveToDatabase() {
-            if (!state.playerId) return;
-            const walletInfo = tonConnectUI.wallet;
-            state.walletAddress = walletInfo ? walletInfo.account.address : null;
-            const playerData = {
-                status: state.status,
-                balance: state.balance,
-                walletAddress: state.walletAddress,
-                lastUpdated: Date.now()
-            };
-            database.ref(`players/${state.playerId}/data`).set(playerData).catch(err => {
-                console.warn("Ошибка сохранения в БД: ", err);
-            });
-        }
-
-        function awardPlayer(playerId, amount) {
-            if (!playerId || amount <= 0) {
-                console.warn("Некорректные данные для награды");
-                return;
-            }
-            database.ref(`players/${playerId}/data`).transaction(data => {
-                if (data) {
-                    data.balance = (data.balance || 0) + amount;
-                    data.lastUpdated = Date.now();
-                }
-                return data;
-            }).then(() => {
-                if (playerId === state.playerId) {
-                    state.balance += amount;
-                    showNotification(`Получена награда: $${amount.toFixed(3)}!`);
-                    playSound("cashSound");
-                    saveGame();
-                    render();
-                }
-                console.log(`Награда $${amount} выдана игроку ${playerId}`);
-            }).catch(err => {
-                console.warn("Ошибка выдачи награды: ", err);
-            });
         }
 
         function showSection(sectionId) {
@@ -863,12 +803,12 @@
                 const img = document.createElement("img");
                 img.src = item.image;
                 img.alt = item.name;
-                img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAA Search for: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
+                img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
                 const desc = document.createElement("p");
                 desc.textContent = item.desc;
                 const button = document.createElement("button");
                 button.textContent = `${item.name} ($${item.price.toLocaleString()})`;
-                button.disabled = state.balance < item.price || (!item.reusable && state.inventory[item.name]);
+                button.disabled = state.balance < item.price || (!item.reusable && state.inventory.some(i => i.name === item.name));
                 button.onclick = () => buyItem(item);
                 itemDiv.appendChild(img);
                 itemDiv.appendChild(desc);
@@ -890,14 +830,9 @@
             businessSection.appendChild(upgradeButton);
 
             const inventoryList = document.getElementById("inventoryList");
-            const inventoryItems = Object.entries(state.inventory)
-                .filter(([_, item]) => item.count > 0 || !item.reusable)
-                .sort(([a], [b]) => a.localeCompare(b));
-            inventoryList.innerHTML = inventoryItems.length === 0
+            inventoryList.innerHTML = state.inventory.length === 0
                 ? "Пусто"
-                : inventoryItems.map(([name, item]) => {
-                    return item.reusable ? `${name} x${item.count}` : `${name} (${item.desc})`;
-                }).join("<br>");
+                : state.inventory.map(item => `${item.name} (${item.desc})`).join("<br>");
 
             const casinoSection = document.getElementById("casinoSection");
             casinoSection.innerHTML = "";
@@ -926,7 +861,6 @@
                 state.status = newStatus;
                 showNotification(`Новый статус: ${state.status}!`);
                 playSound("cashSound");
-                saveToDatabase();
             }
             if (state.balance >= 10000000 && !state.achievements.includes("Миллионер")) {
                 showNotification("Ты миллионер! $10,000,000!");
@@ -995,35 +929,6 @@
             render();
         }
 
-        function consumeItem(itemName) {
-            const item = state.inventory[itemName];
-            if (!item || item.count <= 0) return false;
-            item.count -= 1;
-            if (item.count === 0 && item.reusable) {
-                delete state.inventory[itemName];
-            }
-            if (item.effect) {
-                if (item.effect.energy) {
-                    state.energy = Math.min(state.energy + item.effect.energy, 100);
-                    showNotification(`Энергия +${item.effect.energy}!`);
-                }
-                if (item.effect.hungerSatisfied) {
-                    state.hungerSatisfiedUntil = Date.now() + item.effect.hungerSatisfied;
-                    state.hunger = 100;
-                    showNotification(`Сытость на ${item.effect.hungerSatisfied / 60000} минут!`);
-                }
-                if (item.effect.mood) {
-                    state.mood = Math.min(state.mood + item.effect.mood, 100);
-                    showNotification(`Настр +${item.effect.mood}!`);
-                }
-            }
-            showNotification(`Использовано: ${itemName}`);
-            playSound("clickSound");
-            saveGame();
-            render();
-            return true;
-        }
-
         function completeJobTask(task) {
             if (!state.isWorking || state.currentTask !== task) {
                 state.isWorking = false;
@@ -1045,7 +950,7 @@
             }
 
             let pay = task.pay;
-            Object.values(state.inventory).forEach(item => {
+            state.inventory.forEach(item => {
                 if (item.job && state.currentJob && item.job === Object.keys(jobs).find(key => jobs[key] === state.currentJob)) {
                     if (item.effect.payMultiplier) {
                         pay *= item.effect.payMultiplier;
@@ -1085,7 +990,6 @@
             state.taskStartTime = 0;
             updateStatus();
             saveGame();
-            saveToDatabase();
             render();
         }
 
@@ -1114,7 +1018,6 @@
             createCoinAnimation();
             updateStatus();
             saveGame();
-            saveToDatabase();
             render();
         }
 
@@ -1123,59 +1026,40 @@
                 showNotification("Не хватает денег!");
                 return;
             }
-            if (!item.reusable && state.inventory[item.name]) {
+            if (!item.reusable && state.inventory.some(i => i.name === item.name)) {
                 showNotification("Уже куплено!");
                 return;
             }
             state.balance -= item.price;
-            if (item.reusable) {
-                if (state.inventory[item.name]) {
-                    state.inventory[item.name].count += 1;
-                } else {
-                    state.inventory[item.name] = {
-                        name: item.name,
-                        count: 1,
-                        effect: item.effect,
-                        reusable: true,
-                        desc: item.desc,
-                        job: item.job
-                    };
-                }
-            } else {
-                state.inventory[item.name] = {
-                    name: item.name,
-                    count: 1,
-                    effect: item.effect,
-                    reusable: false,
-                    desc: item.desc,
-                    job: item.job
-                };
-            }
+            state.inventory.push(item);
             showNotification(`Куплено: ${item.name} за $${item.price.toLocaleString()}!`);
+            if (item.effect) {
+                if (item.effect.energy) {
+                    state.energy = Math.min(state.energy + item.effect.energy, 100);
+                    showNotification(`Энергия +${item.effect.energy}!`);
+                }
+                if (item.effect.hungerSatisfied) {
+                    state.hungerSatisfiedUntil = Date.now() + item.effect.hungerSatisfied;
+                    state.hunger = 100;
+                    showNotification(`Сытость на ${item.effect.hungerSatisfied / 60000} минут!`);
+                }
+                if (item.effect.mood) {
+                    state.mood = Math.min(state.mood + item.effect.mood, 100);
+                    showNotification(`Настр +${item.effect.mood}!`);
+                }
+            }
             playSound("cashSound");
             const itemDiv = Array.from(document.getElementById("shopList").children)
                 .find(div => div.querySelector("button").textContent.includes(item.name));
             if (itemDiv) itemDiv.classList.add("purchased");
             updateStatus();
             saveGame();
-            saveToDatabase();
             render();
         }
 
         function buyBusiness() {
-            if (state.balance < 50000 || state.businessOwned) {
-                showNotification(state.businessOwned ? "Бизнес уже есть!" : "Не хватает денег!");
-                return;
-            }
-            state.balance -= 50000;
-            state.businessOwned = true;
-            state.businessLevel = 1;
-            showNotification("Бизнес открыт! +$10/30мин!");
-            playSound("cashSound");
-            updateStatus();
-            saveGame();
-            saveToDatabase();
-            render();
+            showNotification("Вы сможете открыть свой бизнес в следующем обновлении!");
+            playSound("clickSound");
         }
 
         function upgradeBusiness() {
@@ -1190,7 +1074,6 @@
             playSound("cashSound");
             updateStatus();
             saveGame();
-            saveToDatabase();
             render();
         }
 
@@ -1219,7 +1102,6 @@
             playSound("cashSound");
             updateStatus();
             saveGame();
-            saveToDatabase();
             render();
         }
 
@@ -1249,7 +1131,6 @@
             showNotification(`Переведено $${amount.toFixed(3)} игроку ${recipientId}!`);
             playSound("cashSound");
             saveGame();
-            saveToDatabase();
             render();
         }
 
@@ -1288,79 +1169,12 @@
             setTimeout(() => coin.remove(), 800);
         }
 
-        function gameTick() {
-            const now = Date.now();
-            const deltaTime = (now - state.lastTick) / 1000;
-
-            if (state.energy < 100) {
-                state.energy += (10 / 300) * deltaTime;
-                if (state.energy > 100) state.energy = 100;
-            }
-
-            if (Date.now() > state.hungerSatisfiedUntil) {
-                if (state.hunger > 0) {
-                    state.hunger -= 0.0333 * deltaTime;
-                    if (state.hunger < 0) state.hunger = 0;
-                    if (state.hunger < 30) {
-                        // Auto-consume food (e.g., Хлеб)
-                        if (state.inventory["Хлеб"] && state.inventory["Хлеб"].count > 0) {
-                            consumeItem("Хлеб");
-                        } else {
-                            showNotification("Голоден! Купи еду.");
-                        }
-                    }
-                }
-            } else {
-                state.hunger = 100;
-            }
-
-            if (state.mood < 100) {
-                state.mood += 0.0167 * deltaTime;
-                if (state.mood > 100) state.mood = 100;
-            }
-
-            if (state.businessOwned) {
-                let income = (state.businessLevel * 10 / 1800) * deltaTime;
-                if (state.balance < 0) {
-                    const repayment = Math.min(income, -state.balance);
-                    state.balance += repayment;
-                    showNotification(`Погашено долга: $${repayment.toFixed(3)}`);
-                    income -= repayment;
-                }
-                state.balance += income;
-            }
-
-            if (state.hourlyIncome > 0) {
-                const hourlyIncome = (state.hourlyIncome / 3600) * deltaTime;
-                state.balance += hourlyIncome;
-            }
-
-            if (state.isWorking && state.currentTask) {
-                const elapsed = now - state.taskStartTime;
-                if (elapsed >= state.currentTask.duration) {
-                    completeJobTask(state.currentTask);
-                }
-            }
-
-            checkDebt();
-            updateStatus();
-            state.lastTick = now;
-            saveGame();
-            saveToDatabase();
-            render();
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             enterFullscreen();
             localStorage.setItem('riseToRichesState_' + state.playerId, JSON.stringify(state));
             loadGame();
             render();
             setInterval(gameTick, 1000);
-            // Listen for wallet connection
-            tonConnectUI.onStatusChange(wallet => {
-                state.walletAddress = wallet ? wallet.account.address : null;
-                saveToDatabase();
-            });
         });
     </script>
 </body>
