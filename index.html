@@ -334,7 +334,7 @@
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -352,7 +352,7 @@
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -363,6 +363,19 @@
         <h1>Задания</h1>
         <div class="task-list" id="taskList"></div>
         <button class="tab-button" style="margin-top: 10px;" onclick="showSection('jobContainer')">Назад к работам</button>
+        <div class="tabs">
+            <div class="tab-row">
+                <button class="tab-button" onclick="showSection('mainContainer')">Главная</button>
+                <button class="tab-button" onclick="showSection('jobContainer')">Работа</button>
+                <button class="tab-button" onclick="showSection('shopContainer')">Магазин</button>
+                <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
+            </div>
+            <div class="tab-row">
+                <button class="tab-button active" onclick="showSection('taskContainer')">Задания</button>
+                <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
+                <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
+            </div>
+        </div>
     </div>
 
     <div class="shop-container" id="shopContainer">
@@ -376,7 +389,7 @@
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -394,7 +407,7 @@
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
-                <button class="tab-button active" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button active" onclick="showSection('taskContainer')">Задания</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -412,7 +425,7 @@
                 <button class="tab-button active" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -430,7 +443,7 @@
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
                 <button class="tab-button active" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -452,7 +465,7 @@
                 <button class="tab-button" onclick="showSection('inventoryContainer')">Инвентарь</button>
             </div>
             <div class="tab-row">
-                <button class="tab-button" onclick="showSection('businessContainer')">Бизнес</button>
+                <button class="tab-button" onclick="showSection('taskContainer')">Задания</button>
                 <button class="tab-button" onclick="showSection('casinoContainer')">Казино</button>
                 <button class="tab-button active" onclick="showSection('transferContainer')">Перевод</button>
             </div>
@@ -632,6 +645,58 @@
                 cooldown: 86400000,
                 action: () => {
                     showNotification("Приглашайте друзей через Telegram!");
+                }
+            },
+            {
+                name: "Подписаться на SADLAHAY CODE",
+                pay: 10,
+                energy: 5,
+                cooldown: 86400000,
+                action: () => {
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/it2009');
+                    } else {
+                        window.open('https://t.me/it2009', '_blank');
+                    }
+                }
+            },
+            {
+                name: "Подписаться на Matrixon STD",
+                pay: 10,
+                energy: 5,
+                cooldown: 86400000,
+                action: () => {
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/matrixonstd');
+                    } else {
+                        window.open('https://t.me/matrixonstd', '_blank');
+                    }
+                }
+            },
+            {
+                name: "Подписаться на ONECODE crypto",
+                pay: 10,
+                energy: 5,
+                cooldown: 86400000,
+                action: () => {
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/onecointon');
+                    } else {
+                        window.open('https://t.me/onecointon', '_blank');
+                    }
+                }
+            },
+            {
+                name: "Подписаться на CryptoWorld",
+                pay: 10,
+                energy: 5,
+                cooldown: 86400000,
+                action: () => {
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/itworld2022');
+                    } else {
+                        window.open('https://t.me/itworld2022', '_blank');
+                    }
                 }
             }
         ];
@@ -828,9 +893,47 @@
                         itemDiv.appendChild(button);
                         taskList.appendChild(itemDiv);
                     });
+                    // Добавляем социальные задания
+                    socialTasks.forEach(task => {
+                        const itemDiv = document.createElement("div");
+                        itemDiv.className = "task-item";
+                        const img = document.createElement("img");
+                        img.src = "telegram.png"; // Предполагаемый путь к иконке Telegram
+                        img.alt = task.name;
+                        img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
+                        const desc = document.createElement("p");
+                        desc.textContent = `$${task.pay.toFixed(3)}, ${task.energy} энергии`;
+                        const button = document.createElement("button");
+                        button.textContent = task.name;
+                        button.disabled = state.energy < task.energy || (state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name]);
+                        button.onclick = () => doSocialTask(task);
+                        itemDiv.appendChild(img);
+                        itemDiv.appendChild(desc);
+                        itemDiv.appendChild(button);
+                        taskList.appendChild(itemDiv);
+                    });
                 }
             } else {
                 taskList.innerHTML = '<div style="text-align: center; font-size: 0.9em;">Выберите работу</div>';
+                // Показываем социальные задания даже без выбранной работы
+                socialTasks.forEach(task => {
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = "task-item";
+                    const img = document.createElement("img");
+                    img.src = "telegram.png";
+                    img.alt = task.name;
+                    img.onerror = () => { img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8nxqhAAAABnRSTlMA/wD/AP83WBt9AAAAIklEQVR4nGNgGAWjYBSMglEwCkZBKxgFo2AUjIJRMAoGABF3A7JAZa9gAAAAAElFTkSuQmCC'; };
+                    const desc = document.createElement("p");
+                    desc.textContent = `$${task.pay.toFixed(3)}, ${task.energy} энергии`;
+                    const button = document.createElement("button");
+                    button.textContent = task.name;
+                    button.disabled = state.energy < task.energy || (state.socialTaskCooldowns[task.name] && Date.now() < state.socialTaskCooldowns[task.name]);
+                    button.onclick = () => doSocialTask(task);
+                    itemDiv.appendChild(img);
+                    itemDiv.appendChild(desc);
+                    itemDiv.appendChild(button);
+                    taskList.appendChild(itemDiv);
+                });
             }
 
             const shopList = document.getElementById("shopList");
@@ -859,15 +962,15 @@
             if (state.businessSectionUpdated) {
                 businessSection.innerHTML = `<div style="text-align: center; font-size: 0.9em;">Вы сможете открыть свой бизнес в следующем обновлении</div>`;
             } else {
-                const buyButton = document.createElement("button");
-                buyButton.textContent = "Открыть бизнес ($50,000)";
-                buyButton.disabled = state.balance < 50000 || state.businessOwned;
-                buyButton.onclick = buyBusiness;
+                // const buyButton = document.createElement("button");
+                // buyButton.textContent = "Открыть бизнес ($50,000)";
+                // buyButton.disabled = state.balance < 50000 || state.businessOwned;
+                // buyButton.onclick = buyBusiness;
                 const upgradeButton = document.createElement("button");
                 upgradeButton.textContent = `Улучшить бизнес ($${100000 * state.businessLevel})`;
                 upgradeButton.disabled = !state.businessOwned || state.balance < (100000 * state.businessLevel) || state.businessLevel >= 5;
                 upgradeButton.onclick = upgradeBusiness;
-                businessSection.appendChild(buyButton);
+                // businessSection.appendChild(buyButton);
                 businessSection.appendChild(upgradeButton);
             }
 
