@@ -41,8 +41,7 @@
             transform: translateY(20px);
         }
 
-        .shop-container, .job-container, .task-container, .business-container, .inventory-container, k
-        .casino-container, .transfer-container {
+        .shop-container, .job-container, .task-container, .business-container, .inventory-container, .casino-container, .transfer-container {
             border: 1px solid #FFD700;
             background: rgba(30, 30, 40, 0.95);
         }
@@ -218,6 +217,26 @@
             font-size: 0.85em;
             color: #D1D5DB;
             text-align: center;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .inventory-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .inventory-item button {
+            padding: 5px 10px;
+            font-size: 0.8em;
+            background: linear-gradient(135deg, #FFD700, #DAA520);
+            color: #1A1A1A;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
         }
 
         .transfer input {
@@ -274,9 +293,9 @@
 
         .wallet-button {
             position: fixed;
-            top: 50%;
+            top: 16px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             z-index: 3000;
         }
 
@@ -291,7 +310,7 @@
             .tab-button { font-size: 0.7em; padding: 6px; }
             .shop-item img, .job-item img, .task-item img { width: 48px; height: 48px; }
             .shop-list, .job-list, .task-list { grid-template-columns: 1fr; }
-            .wallet-button { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+            .wallet-button { top: 8px; left: 50%; transform: translateX(-50%); }
         }
     </style>
 </head>
@@ -471,7 +490,8 @@
             lastTick: Date.now(),
             playerId: generateUniqueId(),
             hourlyIncome: 0,
-            pendingTransfers: []
+            pendingTransfers: [],
+            businessSectionUpdated: false
         };
 
         const statuses = [
@@ -543,7 +563,7 @@
                 name: "Фрилансер",
                 pay: 0.02,
                 unlock: 10000,
-                hourly: 0.004,
+                HOURSly: 0.004,
                 fine: 0.005,
                 image: "freelancer.png",
                 tasks: [
@@ -730,6 +750,21 @@
             });
         }
 
+        function consumeBread(index) {
+            const item = state.inventory[index];
+            if (item.name === "Хлеб") {
+                state.hungerSatisfiedUntilaxel1 = 600000;
+                state.hunger = 100;
+                state.inventory.splice(index, 1);
+                showNotification("Хлеб съеден! Сытость на 10 минут!");
+                playSound("clickSound");
+                saveGame();
+                render();
+            } else {
+                showNotification("Это нельзя съесть!");
+            }
+        }
+
         function render() {
             document.getElementById("balance").textContent = state.balance.toFixed(3);
             document.getElementById("status").textContent = state.status;
@@ -821,25 +856,44 @@
 
             const businessSection = document.getElementById("businessSection");
             businessSection.innerHTML = "";
-            const buyButton = document.createElement("button");
-            buyButton.textContent = "Открыть бизнес ($50,000)";
-            buyButton.disabled = state.balance < 50000 || state.businessOwned;
-            buyButton.onclick = buyBusiness;
-            const upgradeButton = document.createElement("button");
-            upgradeButton.textContent = `Улучшить бизнес ($${100000 * state.businessLevel})`;
-            upgradeButton.disabled = !state.businessOwned || state.balance < (100000 * state.businessLevel) || state.businessLevel >= 5;
-            upgradeButton.onclick = upgradeBusiness;
-            businessSection.appendChild(buyButton);
-            businessSection.appendChild(upgradeButton);
+            if (state.businessSectionUpdated) {
+                businessSection.innerHTML = `<div style="text-align: center; font-size: 0.9em;">Вы сможете открыть свой бизнес в следующем обновлении</div>`;
+            } else {
+                const buyButton = document.createElement("button");
+                buyButton.textContent = "Открыть бизнес ($50,000)";
+                buyButton.disabled = state.balance < 50000 || state.businessOwned;
+                buyButton.onclick = buyBusiness;
+                const upgradeButton = document.createElement("button");
+                upgradeButton.textContent = `Улучшить бизнес ($${100000 * state.businessLevel})`;
+                upgradeButton.disabled = !state.businessOwned || state.balance < (100000 * state.businessLevel) || state.businessLevel >= 5;
+                upgradeButton.onclick = upgradeBusiness;
+                businessSection.appendChild(buyButton);
+                businessSection.appendChild(upgradeButton);
+            }
 
             const inventoryList = document.getElementById("inventoryList");
-            inventoryList.innerHTML = state.inventory.length === 0
-                ? "Пусто"
-                : state.inventory.map(item => `${item.name} (${item.desc})`).join("<br>");
+            inventoryList.innerHTML = "";
+            if (state.inventory.length === 0) {
+                inventoryList.innerHTML = "Пусто";
+            } else {
+                state.inventory.forEach((item, index) => {
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = "inventory-item";
+                    const nameSpan = document.createElement("span");
+                    nameSpan.textContent = `${item.name} (${item.desc})`;
+                    itemDiv.appendChild(nameSpan);
+                    if (item.name === "Хлеб") {
+                        const useButton = document.createElement("button");
+                        useButton.textContent = "Съесть";
+                        useButton.onclick = () => consumeBread(index);
+                        itemDiv.appendChild(useButton);
+                    }
+                    inventoryList.appendChild(itemDiv);
+                });
+            }
 
             const casinoSection = document.getElementById("casinoSection");
-            casino meslek
-            Section.innerHTML = "";
+            casinoSection.innerHTML = "";
             [100, 1000, 10000, 100000].forEach(bet => {
                 const button = document.createElement("button");
                 button.textContent = `Ставка $${bet.toLocaleString()}`;
@@ -1062,7 +1116,10 @@
         }
 
         function buyBusiness() {
-            showNotification("Будет доступно в следующем обновлении");
+            state.businessSectionUpdated = true;
+            showNotification("Бизнес можно будет открыть только в следующем сезоне");
+            saveGame();
+            render();
         }
 
         function upgradeBusiness() {
@@ -1170,62 +1227,6 @@
             coin.style.top = `${window.innerHeight - 64}px`;
             document.body.appendChild(coin);
             setTimeout(() => coin.remove(), 800);
-        }
-
-        function gameTick() {
-            const now = Date.now();
-            const deltaTime = (now - state.lastTick) / 1000;
-
-            if (state.energy < 100) {
-                state.energy += (10 / 300) * deltaTime;
-                if (state.energy > 100) state.energy = 100;
-            }
-
-            if (Date.now() > state.hungerSatisfiedUntil) {
-                if (state.hunger > 0) {
-                    state.hunger -= 0.0333 * deltaTime;
-                    if (state.hunger < 0) state.hunger = 0;
-                    if (state.hunger < 30) {
-                        showNotification("Голоден! Купи еду.");
-                    }
-                }
-            } else {
-                state.hunger = 100;
-            }
-
-            if (state.mood < 100) {
-                state.mood += 0.0167 * deltaTime;
-                if (state.mood > 100) state.mood = 100;
-            }
-
-            if (state.businessOwned) {
-                let income = (state.businessLevel * 10 / 1800) * deltaTime;
-                if (state.balance < 0) {
-                    const repayment = Math.min(income, -state.balance);
-                    state.balance += repayment;
-                    showNotification(`Погашено долга: $${repayment.toFixed(3)}`);
-                    income -= repayment;
-                }
-                state.balance += income;
-            }
-
-            if (state.hourlyIncome > 0) {
-                const hourlyIncome = (state.hourlyIncome / 3600) * deltaTime;
-                state.balance += hourlyIncome;
-            }
-
-            if (state.isWorking && state.currentTask) {
-                const elapsed = now - state.taskStartTime;
-                if (elapsed >= state.currentTask.duration) {
-                    completeJobTask(state.currentTask);
-                }
-            }
-
-            checkDebt();
-            updateStatus();
-            state.lastTick = now;
-            saveGame();
-            render();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
